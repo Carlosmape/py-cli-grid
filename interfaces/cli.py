@@ -10,12 +10,17 @@ class CommandLineInterface(Interface):
     strItem = '·'
     strNPC = 'O'
     strDoor = '*'
-    #
+
+    # Constructor
     def __init__(self):
         print("Welcome to your CLI Adventure")
         print("Initializing interface")
         super().__init__()
-        self.maxFrameRate=2
+        self.maxFrameRate=1
+        #Get shell size
+        size=os.get_terminal_size()
+        self.width=size.columns
+        self.height=size.lines
     
     def render(self, frame: Frame):
         if os.name in ('nt', 'dos'):
