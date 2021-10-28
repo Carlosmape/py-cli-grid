@@ -24,7 +24,7 @@ class Menu():
 
 class MenuLoadGame():
     def __init__(self, title, query, options):
-        super().__init__(title, query, options):
+        super().__init__(title, query, options)
 
 ##########
 # Frame class
