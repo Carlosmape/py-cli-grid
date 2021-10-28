@@ -1,8 +1,10 @@
 from app import *
+from interfaces import cli
 
 #########
 # Run App
+# Interface should be changed
 #########
-interface = CommandLineInterface()
+interface = cli.CommandLineInterface()
 app = App(interface)
 app.run()
