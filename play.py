@@ -1,10 +1,10 @@
-from app import *
-from interfaces import cli
+from engine.app import *
+from interfaces.cli import *
 
 #########
 # Run App
 # Interface should be changed
 #########
-interface = cli.CommandLineInterface()
+interface = CommandLineInterface()
 app = App(interface)
 app.run()

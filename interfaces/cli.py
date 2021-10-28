@@ -1,4 +1,4 @@
-from interface import *
+from engine.interface import *
 ##########
 # CLI Interface
 ##########
