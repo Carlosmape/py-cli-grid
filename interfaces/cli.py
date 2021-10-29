@@ -43,13 +43,13 @@ class CommandLineInterface(Interface):
 
     def doAction(self, action: bytes, player: PlayerCharachter):
         if action == (b'w' or  b'W'):
-            player.move_north()
+            player.move_north(self.last_frame.room)
         elif action == (b'a' or b'A'):
-            player.move_west()
+            player.move_west(self.last_frame.room)
         elif action == (b's' or b'S'):
-            player.move_south()
+            player.move_south(self.last_frame.room)
         elif action == (b'd' or b'D'):
-            player.move_east()
+            player.move_east(self.last_frame.room)
         elif action == b'\x03':
             #TODO temporary. It should raise a exit menu asking for confirmation and save game and so on
             exit() 
