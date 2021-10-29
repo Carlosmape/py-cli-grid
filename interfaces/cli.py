@@ -1,5 +1,10 @@
 from engine.interface import *
-from msvcrt import getch
+
+if os.name in ('nt', 'dos'):
+    from msvcrt import getch
+else:
+    import getch
+
 ##########
 # CLI Interface
 ##########
