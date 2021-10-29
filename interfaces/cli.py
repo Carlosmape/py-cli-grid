@@ -22,6 +22,9 @@ class CommandLineInterface(Interface):
         self.width=size.columns
         self.height=size.lines
     
+    def readUserAction(self):
+        return input()
+
     def render(self, frame: Frame):
         if os.name in ('nt', 'dos'):
             os.system('cls')
@@ -29,15 +32,6 @@ class CommandLineInterface(Interface):
             os.system('clear')
         
         print(self.convertToString(frame))
-
-    def displayMenu(self, menu: Menu):
-        bSelectedOption = False
-        while bSelectedOption == False:
-            self.render(Frame(None, None, menu))
-            sOption = input()
-            bSelectedOption = menu.isValidOption(sOption)
-                
-        return sOption
 
     def convertToString(self, frame: Frame):
         stringFrame = str()
