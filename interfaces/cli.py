@@ -22,7 +22,7 @@ class CommandLineInterface(Interface):
         print("Welcome to your CLI Adventure")
         print("Initializing interface")
         super().__init__()
-        self.maxFrameRate=1
+        self.maxFrameRate=2
         #Get shell size
         size=os.get_terminal_size()
         self.width=size.columns
@@ -43,6 +43,9 @@ class CommandLineInterface(Interface):
             player.move_south()
         elif action == (b'd' or b'D'):
             player.move_east()
+        elif action == b'\x03':
+            #TODO temporary. It should raise a exit menu asking for confirmation and save game and so on
+            exit() 
 
     def render(self, frame: Frame):
         if os.name in ('nt', 'dos'):
