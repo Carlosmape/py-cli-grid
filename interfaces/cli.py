@@ -64,7 +64,7 @@ class CommandLineInterface(Interface):
             for i in range(0, frame.room.height):
                 stringFrame += "\n"+self.strVWall
                 for j in range(0, frame.room.width):
-                    if frame.player.position == Position(i,j):
+                    if frame.player.position == Position(j,i):
                         stringFrame += self.strPlayer
                     else:
                         stringFrame += ' '
