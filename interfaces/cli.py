@@ -69,23 +69,23 @@ class CommandLineInterface(Interface):
             stringFrame += ("%s - Health: %s\n") % (frame.player.name, frame.player.health)
         #Render room
         if frame.room:
-            stringFrame += "\n"
-            stringFrame += " " + "-" * (frame.room.width)
+            stringFrame += "\n" + "-" * (frame.room.width)
             #Note: its needed to draw inversed due to 
             #console works from top to down
+            print(frame.room.height, "x", frame.room.width)
             for y in range(frame.room.height, 0, -1):
-                for x in range(0, frame.room.width):
+                for x in range(0, frame.room.width, 1):
                     if frame.player.position == Position(x,y):
                         stringFrame += self.strPlayer
                     elif frame.room.doors.position == Position(x,y):
                         stringFrame += self.strDoor
-                    elif x == 1:
+                    elif x == 0:
                         stringFrame += "\n"+self.strVWall
-                    elif x == frame.room.width:
+                    elif x == frame.room.width-1:
                         stringFrame += self.strVWall
                     else:
                         stringFrame += ' '
-            stringFrame += "\n" + " " +"-" * (frame.room.width)
+            stringFrame += "\n" + "-" * (frame.room.width)
         #Render Menu
         if frame.menu:
             stringFrame += "-->" + frame.menu.title
