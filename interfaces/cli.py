@@ -64,15 +64,17 @@ class CommandLineInterface(Interface):
         if frame.room:
             stringFrame += "\n"
             stringFrame += " " + "-" * (frame.room.width)
-            for i in range(0, frame.room.height):
-                for j in range(0, frame.room.width):
-                    if frame.player.position == Position(j,i):
+            #Note: its needed to draw inversed due to 
+            #console works from top to down
+            for y in range(frame.room.height, 0, -1):
+                for x in range(0, frame.room.width):
+                    if frame.player.position == Position(x,y):
                         stringFrame += self.strPlayer
-                    elif frame.room.doors.position == Position(j,i):
+                    elif frame.room.doors.position == Position(x,y):
                         stringFrame += self.strDoor
-                    elif j == 1:
+                    elif x == 1:
                         stringFrame += "\n"+self.strVWall
-                    elif j == frame.room.width:
+                    elif x == frame.room.width:
                         stringFrame += self.strVWall
                     else:
                         stringFrame += ' '
