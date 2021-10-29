@@ -34,6 +34,16 @@ class CommandLineInterface(Interface):
         else:
             return getch()
 
+    def doAction(self, action, player: PlayerCharachter):
+        if action == (b'w' or  b'W'):
+            player.move_north()
+        elif action == (b'a' or b'A'):
+            player.move_west()
+        elif action == (b's' or b'S'):
+            player.move_south()
+        elif action == (b'd' or b'D'):
+            player.move_east()
+
     def render(self, frame: Frame):
         if os.name in ('nt', 'dos'):
             os.system('cls')
