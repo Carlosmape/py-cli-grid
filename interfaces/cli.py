@@ -1,9 +1,16 @@
 from engine.interface import *
 
-if os.name in ('nt', 'dos'):
-    from msvcrt import getch
-else:
-    import getch
+###
+class keyboard():
+    @staticmethod
+    def read():
+        if os.name in ('nt', 'dos'):
+            from msvcrt import getch
+            return getch()
+        else:
+            import sys
+            from readchar import readchar
+            return bytes(readchar(), sys.getfilesystemencoding())
 
 ##########
 # CLI Interface
@@ -32,9 +39,9 @@ class CommandLineInterface(Interface):
         if blocking:
             return input()
         else:
-            return getch()
+            return keyboard.read()
 
-    def doAction(self, action, player: PlayerCharachter):
+    def doAction(self, action: bytes, player: PlayerCharachter):
         if action == (b'w' or  b'W'):
             player.move_north()
         elif action == (b'a' or b'A'):
