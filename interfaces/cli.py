@@ -1,4 +1,5 @@
 from engine.interface import *
+from msvcrt import getch
 ##########
 # CLI Interface
 ##########
@@ -22,8 +23,11 @@ class CommandLineInterface(Interface):
         self.width=size.columns
         self.height=size.lines
     
-    def readUserAction(self):
-        return input()
+    def readUserAction(self, blocking: bool = False):
+        if blocking:
+            return input()
+        else:
+            return getch()
 
     def render(self, frame: Frame):
         if os.name in ('nt', 'dos'):
