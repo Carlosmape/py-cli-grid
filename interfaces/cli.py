@@ -63,16 +63,20 @@ class CommandLineInterface(Interface):
         #Render room
         if frame.room:
             stringFrame += "\n"
-            stringFrame += "-" * (frame.room.width + 2)
+            stringFrame += " " + "-" * (frame.room.width)
             for i in range(0, frame.room.height):
-                stringFrame += "\n"+self.strVWall
                 for j in range(0, frame.room.width):
                     if frame.player.position == Position(j,i):
                         stringFrame += self.strPlayer
+                    elif frame.room.doors.position == Position(j,i):
+                        stringFrame += self.strDoor
+                    elif j == 1:
+                        stringFrame += "\n"+self.strVWall
+                    elif j == frame.room.width:
+                        stringFrame += self.strVWall
                     else:
                         stringFrame += ' '
-                stringFrame += self.strVWall
-            stringFrame += "\n" + "-" * (frame.room.width + 2)
+            stringFrame += "\n" + " " +"-" * (frame.room.width)
         #Render Menu
         if frame.menu:
             stringFrame += "-->" + frame.menu.title
