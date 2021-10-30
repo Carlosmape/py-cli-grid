@@ -41,7 +41,7 @@ class CommandLineInterface(Interface):
         else:
             return keyboard.read()
 
-    def doAction(self, action: bytes, player: PlayerCharachter):
+    def doAction(self, action: bytes, player: PlayerCharacter):
         if action == (b'w' or  b'W'):
             player.move_north(self.last_frame.room)
         elif action == (b'a' or b'A'):
@@ -77,8 +77,11 @@ class CommandLineInterface(Interface):
             for y in range(frame.room.height, -1, -1):
                 stringFrame += self.strLimit
                 for x in range(0, frame.room.width+1, 1):
-                    if frame.player.position == Position(x,y):
+                    current_position = Position(x,y)
+                    if frame.player.position == current_position:
                         stringFrame += self.strPlayer
+                    elif frame.npcs[0].position == current_position:
+                        stringFrame += self.strNPC
                     elif Position(x,y) in frame.room.doors:
                         stringFrame += self.strDoor
                     elif Position(x,y) in frame.room.items:
