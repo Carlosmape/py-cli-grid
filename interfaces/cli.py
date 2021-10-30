@@ -116,7 +116,7 @@ class CommandLineInterface(Interface):
             frame_str += "\n Items (%s): " % len(frame.room.items)
             for pos,item in frame.room.items.items(): frame_str += " (%s,%s)" % (pos.X, pos.Y)
             frame_str += "\n NPCs (%s): " % len(frame.npcs)
-            for pos,npc in frame.npcs: frame_str += " (%s,%s)" % (pos.X, pos.Y)
+            for npc in frame.npcs: frame_str += " (%s,%s)" % (npc.position.X, npc.position.Y)
             frame_str += "\n Walls (%s): " % len(frame.room.walls)
             for pos,walls in frame.room.walls.items(): frame_str += " (%s,%s)" % (pos.X, pos.Y)
 
