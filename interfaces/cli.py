@@ -61,7 +61,6 @@ class CommandLineInterface(Interface):
             os.system('cls')
         else:
             os.system('clear')
-        
         print(self.convertToString(frame))
 
     def convertToString(self, frame: Frame):
