@@ -1,5 +1,8 @@
-from engine.interface import *
-
+import os
+from engine.interface import Interface
+from engine.frame import Frame
+from engine.characters.PlayerCharacter import PlayerCharacter
+from engine.defines import Position
 ###
 class keyboard():
     @staticmethod
@@ -23,6 +26,7 @@ class CommandLineInterface(Interface):
     strWall = '█'
     strTopLimit = '▄'
     strBotLimit = '▀'
+
     # Constructor
     def __init__(self):
         print("Welcome to your CLI Adventure")
@@ -34,7 +38,7 @@ class CommandLineInterface(Interface):
         size=os.get_terminal_size()
         self.width=size.columns
         self.height=size.lines
-    
+   
     def readUserAction(self, blocking: bool = False):
         if blocking:
             return input()
@@ -42,7 +46,7 @@ class CommandLineInterface(Interface):
             return keyboard.read()
 
     def doAction(self, action: bytes, player: PlayerCharacter):
-        if action == (b'w' or  b'W'):
+        if action == (b'w' or b'W'):
             player.move_north(self.last_frame.room)
         elif action == (b'a' or b'A'):
             player.move_west(self.last_frame.room)
@@ -53,8 +57,7 @@ class CommandLineInterface(Interface):
         elif action == (b' '):
             print("Action button pushed")
         elif action == b'\x03':
-            #TODO temporary. It should raise a exit menu asking for confirmation and save game and so on
-            exit() 
+            exit()
 
     def render(self, frame: Frame):
         if os.name in ('nt', 'dos'):
@@ -131,7 +134,7 @@ class CommandLineInterface(Interface):
     def __message_str(self, frame: Frame):
         strFrame = str()
         if frame.msgQueue:
-            strFrame += "\nWORLD: " + msgQueue.pop()
+            strFrame += "\nWORLD: " + frame.msgQueue.pop()
 
         return strFrame
 
