@@ -111,12 +111,14 @@ class CommandLineInterface(Interface):
                 frame_str += self.strWall + "\n"
             frame_str += self.strBotLimit * (3+frame.room.width)
             frame_str +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
-            frame_str += "\n Doors: "
+            frame_str += "\n Doors (%s): " % len(frame.room.doors)
             for pos,door in frame.room.doors.items(): frame_str += " (%s,%s)" % (pos.X, pos.Y)
-            frame_str += "\n Items: "
+            frame_str += "\n Items (%s): " % len(frame.room.items)
             for pos,item in frame.room.items.items(): frame_str += " (%s,%s)" % (pos.X, pos.Y)
-            frame_str += "\n NPCs: "
+            frame_str += "\n NPCs (%s): " % len(frame.npcs)
             for pos,npc in frame.npcs: frame_str += " (%s,%s)" % (pos.X, pos.Y)
+            frame_str += "\n Walls (%s): " % len(frame.room.walls)
+            for pos,walls in frame.room.walls.items(): frame_str += " (%s,%s)" % (pos.X, pos.Y)
 
         return frame_str
 
