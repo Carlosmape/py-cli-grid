@@ -61,13 +61,13 @@ class CommandLineInterface(Interface):
             os.system('cls')
         else:
             os.system('clear')
-        print(self.convertToString(frame))
+        print(self.__frame_str(frame))
 
-    def convertToString(self, frame: Frame):
+    def __frame_str(self, frame: Frame):
         strFrame = str()
-        #Display PJ information
+        # Display PJ information
         strFrame += self.__player_str(frame)
-        # Render room
+        # Render roomw
         strFrame += self.__room_str(frame)
         # Render Menu
         strFrame += self.__menu_str(frame)
