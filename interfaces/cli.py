@@ -64,74 +64,74 @@ class CommandLineInterface(Interface):
         print(self.convertToString(frame))
 
     def convertToString(self, frame: Frame):
-        stringFrame = str()
+        strFrame = str()
         #Display PJ information
-        stringFrame += self.__player_str(frame)
+        strFrame += self.__player_str(frame)
         # Render room
-        stringFrame += self.__room_str(frame)
+        strFrame += self.__room_str(frame)
         # Render Menu
-        stringFrame += self.__menu_str(frame)
+        strFrame += self.__menu_str(frame)
         # Render queued messages
-        stringFrame += self.__message_str(frame)
+        strFrame += self.__message_str(frame)
 
-        return stringFrame
+        return strFrame
 
     def __player_str(self, frame: Frame):
-        stringFrame = str()
+        strFrame = str()
         if frame.player:
-            stringFrame += ("%s Position(%s,%s)") % (frame.player.name, frame.player.position.posX, frame.player.position.posY)
-            stringFrame += ("\n\t♥: %s Agility: %s") % (frame.player.health, frame.player.agility)
-        return stringFrame
+            strFrame += ("%s Position(%s,%s)") % (frame.player.name, frame.player.position.posX, frame.player.position.posY)
+            strFrame += ("\n\t♥: %s Agility: %s") % (frame.player.health, frame.player.agility)
+        return strFrame
 
     def __room_str(self, frame: Frame):
-        stringFrame = str()
+        strFrame = str()
         if frame.room:
             # Its needed to draw inverted due to console works from top to down
-            stringFrame += "\n" + (self.strTopLimit* (3+frame.room.width)) + "\n"
+            strFrame += "\n" + (self.strTopLimit* (3+frame.room.width)) + "\n"
             for y in range(frame.room.height, -1, -1):
-                stringFrame += self.strWall
+                strFrame += self.strWall
                 for x in range(0, frame.room.width+1, 1):
                     current_position = Position(x,y)
                     if frame.player.position == current_position:
-                        stringFrame += self.strPlayer
+                        strFrame += self.strPlayer
                     elif frame.get_npc(current_position):
-                        stringFrame += self.strNPC
+                        strFrame += self.strNPC
                     elif current_position in frame.room.doors:
-                        stringFrame += self.strDoor
+                        strFrame += self.strDoor
                     elif current_position in frame.room.items:
-                        stringFrame += self.strItem
+                        strFrame += self.strItem
                     elif current_position in frame.room.walls:
-                        stringFrame += self.strWall
+                        strFrame += self.strWall
                     else:
-                        stringFrame += ' '
+                        strFrame += ' '
 
-                stringFrame += self.strWall + "\n"
-            stringFrame += self.strBotLimit * (3+frame.room.width)
-            stringFrame +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
-            stringFrame += "\n Doors: "
-            for pos,door in frame.room.doors.items(): stringFrame += " (%s,%s)" % (pos.posX, pos.posY)
-            stringFrame += "\n Items: "
-            for pos,item in frame.room.items.items(): stringFrame += " (%s,%s)" % (pos.posX, pos.posY)
-            stringFrame += "\n NPCs: "
-            for pos,npc in frame.npcs: stringFrame += " (%s,%s)" % (pos.posX, pos.posY)
+                strFrame += self.strWall + "\n"
+            strFrame += self.strBotLimit * (3+frame.room.width)
+            strFrame +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
+            strFrame += "\n Doors: "
+            for pos,door in frame.room.doors.items(): strFrame += " (%s,%s)" % (pos.posX, pos.posY)
+            strFrame += "\n Items: "
+            for pos,item in frame.room.items.items(): strFrame += " (%s,%s)" % (pos.posX, pos.posY)
+            strFrame += "\n NPCs: "
+            for pos,npc in frame.npcs: strFrame += " (%s,%s)" % (pos.posX, pos.posY)
 
-        return stringFrame
+        return strFrame
 
     def __menu_str(self, frame: Frame):
-        stringFrame = str()
+        strFrame = str()
         if frame.menu:
-            stringFrame += "-->" + frame.menu.title
+            strFrame += "-->" + frame.menu.title
             if frame.menu.options:
                 for option in frame.menu.options:
-                    stringFrame += "\n %s - %s" % (frame.menu.options.index(option), option)
-            stringFrame += "\n" + frame.menu.query
+                    strFrame += "\n %s - %s" % (frame.menu.options.index(option), option)
+            strFrame += "\n" + frame.menu.query
 
-        return stringFrame
+        return strFrame
 
     def __message_str(self, frame: Frame):
-        stringFrame = str()
+        strFrame = str()
         if frame.msgQueue:
-            stringFrame += "\nWORLD: " + msgQueue.pop()
+            strFrame += "\nWORLD: " + msgQueue.pop()
 
-        return stringFrame
+        return strFrame
 
