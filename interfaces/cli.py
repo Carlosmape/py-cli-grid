@@ -17,12 +17,11 @@ class keyboard():
 ##########
 class CommandLineInterface(Interface):
     # Ascii icons
-    strVWall = '|'
-    strHWall = '-'
     strPlayer = '#'
     strItem = '·'
     strNPC = 'O'
-    strDoor = '*'
+    strDoor = '▲'
+    strLimit = '█'
 
     # Constructor
     def __init__(self):
@@ -66,26 +65,27 @@ class CommandLineInterface(Interface):
         stringFrame = str()
         #Display PJ information
         if frame.player:
-            stringFrame += ("%s - Health: %s\n") % (frame.player.name, frame.player.health)
+            stringFrame += ("%s Position(%s,%s)") % (frame.player.name, frame.player.position.posX, frame.player.position.posY)
+            stringFrame += ("\n\t♥: %s Agility: %s") % (frame.player.health, frame.player.agility)
         #Render room
         if frame.room:
-            stringFrame += "\n" + "-" * (frame.room.width)
             #Note: its needed to draw inversed due to 
             #console works from top to down
-            print(frame.room.height, "x", frame.room.width)
-            for y in range(frame.room.height, 0, -1):
-                for x in range(0, frame.room.width, 1):
+            stringFrame += "\n" + (self.strLimit * (3+frame.room.width)) + "\n"
+            for y in range(frame.room.height, -1, -1):
+                stringFrame += self.strLimit
+                for x in range(0, frame.room.width+1, 1):
                     if frame.player.position == Position(x,y):
                         stringFrame += self.strPlayer
                     elif frame.room.doors.position == Position(x,y):
                         stringFrame += self.strDoor
-                    elif x == 0:
-                        stringFrame += "\n"+self.strVWall
-                    elif x == frame.room.width-1:
-                        stringFrame += self.strVWall
                     else:
                         stringFrame += ' '
-            stringFrame += "\n" + "-" * (frame.room.width)
+
+                stringFrame += self.strLimit + "\n"
+            stringFrame += self.strLimit * (3+frame.room.width)
+            stringFrame +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
+            stringFrame += "Door(%sx%s)" %(frame.room.doors.position.posX, frame.room.doors.position.posY)
         #Render Menu
         if frame.menu:
             stringFrame += "-->" + frame.menu.title
