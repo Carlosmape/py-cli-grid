@@ -80,7 +80,7 @@ class CommandLineInterface(Interface):
                     current_position = Position(x,y)
                     if frame.player.position == current_position:
                         stringFrame += self.strPlayer
-                    elif frame.npcs[0].position == current_position:
+                    elif frame.get_npc(current_position):
                         stringFrame += self.strNPC
                     elif current_position in frame.room.doors:
                         stringFrame += self.strDoor
