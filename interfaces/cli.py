@@ -20,7 +20,7 @@ class CommandLineInterface(Interface):
     strItem = 'º'
     strNPC = 'O'
     strDoor = '▲'
-    strLimit = '█'
+    strWall = '█'
     strTopLimit = '▄'
     strBotLimit = '▀'
     # Constructor
@@ -75,7 +75,7 @@ class CommandLineInterface(Interface):
             #console works from top to down
             stringFrame += "\n" + (self.strTopLimit* (3+frame.room.width)) + "\n"
             for y in range(frame.room.height, -1, -1):
-                stringFrame += self.strLimit
+                stringFrame += self.strWall
                 for x in range(0, frame.room.width+1, 1):
                     current_position = Position(x,y)
                     if frame.player.position == current_position:
@@ -86,10 +86,12 @@ class CommandLineInterface(Interface):
                         stringFrame += self.strDoor
                     elif current_position in frame.room.items:
                         stringFrame += self.strItem
+                    elif current_position in frame.room.walls:
+                        stringFrame += self.strWall
                     else:
                         stringFrame += ' '
 
-                stringFrame += self.strLimit + "\n"
+                stringFrame += self.strWall + "\n"
             stringFrame += self.strBotLimit * (3+frame.room.width)
             stringFrame +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
             for position,door in frame.room.doors.items(): stringFrame += "Door(%sx%s) " % (position.posX, position.posY)
