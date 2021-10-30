@@ -49,6 +49,8 @@ class CommandLineInterface(Interface):
             player.move_south(self.last_frame.room)
         elif action == (b'd' or b'D'):
             player.move_east(self.last_frame.room)
+        elif action == (b' '):
+            player.actionMenu(self.last_frame.room)
         elif action == b'\x03':
             #TODO temporary. It should raise a exit menu asking for confirmation and save game and so on
             exit() 
@@ -77,9 +79,9 @@ class CommandLineInterface(Interface):
                 for x in range(0, frame.room.width+1, 1):
                     if frame.player.position == Position(x,y):
                         stringFrame += self.strPlayer
-                    elif frame.room.doors.position == Position(x,y):
+                    elif Position(x,y) in frame.room.doors:
                         stringFrame += self.strDoor
-                    elif frame.room.items.position == Position(x,y):
+                    elif Position(x,y) in frame.room.items:
                         stringFrame += self.strItem
                     else:
                         stringFrame += ' '
@@ -87,7 +89,7 @@ class CommandLineInterface(Interface):
                 stringFrame += self.strLimit + "\n"
             stringFrame += self.strLimit * (3+frame.room.width)
             stringFrame +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
-            stringFrame += "Door(%sx%s)" %(frame.room.doors.position.posX, frame.room.doors.position.posY)
+            for position,door in frame.room.doors.items(): stringFrame += "Door(%sx%s) " % (position.posX, position.posY)
         #Render Menu
         if frame.menu:
             stringFrame += "-->" + frame.menu.title
