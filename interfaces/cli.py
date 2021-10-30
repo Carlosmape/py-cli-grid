@@ -11,7 +11,6 @@ class keyboard():
             import sys
             from readchar import readchar
             return bytes(readchar(), sys.getfilesystemencoding())
-
 ##########
 # CLI Interface
 ##########
@@ -22,13 +21,15 @@ class CommandLineInterface(Interface):
     strNPC = 'O'
     strDoor = '▲'
     strLimit = '█'
-
+    strTopLimit = '▄'
+    strBotLimit = '▀'
     # Constructor
     def __init__(self):
         print("Welcome to your CLI Adventure")
         print("Initializing interface")
         super().__init__()
-        self.maxFrameRate=2
+        self.maxFrameRate=5
+        self.show_action_menu = False
         #Get shell size
         size=os.get_terminal_size()
         self.width=size.columns
@@ -50,7 +51,7 @@ class CommandLineInterface(Interface):
         elif action == (b'd' or b'D'):
             player.move_east(self.last_frame.room)
         elif action == (b' '):
-            player.actionMenu(self.last_frame.room)
+            print("Action button pushed")
         elif action == b'\x03':
             #TODO temporary. It should raise a exit menu asking for confirmation and save game and so on
             exit() 
@@ -73,7 +74,7 @@ class CommandLineInterface(Interface):
         if frame.room:
             #Note: its needed to draw inversed due to 
             #console works from top to down
-            stringFrame += "\n" + (self.strLimit * (3+frame.room.width)) + "\n"
+            stringFrame += "\n" + (self.strTopLimit* (3+frame.room.width)) + "\n"
             for y in range(frame.room.height, -1, -1):
                 stringFrame += self.strLimit
                 for x in range(0, frame.room.width+1, 1):
@@ -87,7 +88,7 @@ class CommandLineInterface(Interface):
                         stringFrame += ' '
 
                 stringFrame += self.strLimit + "\n"
-            stringFrame += self.strLimit * (3+frame.room.width)
+            stringFrame += self.strBotLimit * (3+frame.room.width)
             stringFrame +=  "\n Room("+str(frame.room.height) + "x" +str(frame.room.width) + ")"
             for position,door in frame.room.doors.items(): stringFrame += "Door(%sx%s) " % (position.posX, position.posY)
         #Render Menu
