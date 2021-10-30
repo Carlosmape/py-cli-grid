@@ -18,7 +18,7 @@ class keyboard():
 class CommandLineInterface(Interface):
     # Ascii icons
     strPlayer = '#'
-    strItem = '·'
+    strItem = 'º'
     strNPC = 'O'
     strDoor = '▲'
     strLimit = '█'
@@ -79,6 +79,8 @@ class CommandLineInterface(Interface):
                         stringFrame += self.strPlayer
                     elif frame.room.doors.position == Position(x,y):
                         stringFrame += self.strDoor
+                    elif frame.room.items.position == Position(x,y):
+                        stringFrame += self.strItem
                     else:
                         stringFrame += ' '
 
