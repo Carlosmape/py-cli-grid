@@ -1,5 +1,7 @@
-from engine.app import *
-from interfaces.cli import *
+#!/bin/python
+
+from engine.app import App
+from interfaces.cli import CommandLineInterface
 
 #########
 # Run App
