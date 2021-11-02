@@ -1,18 +1,24 @@
 import os
-from engine.interface import Interface
-from engine.frame import Frame
+import sys
+
+try:
+    from msvcrt import getch
+except ImportError:
+    from readchar import readchar
+
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines import Position
+from engine.frame import Frame
+from engine.interface import Interface
+
+
 ###
 class keyboard():
     @staticmethod
     def read():
         if os.name in ('nt', 'dos'):
-            from msvcrt import getch
             return getch()
         else:
-            import sys
-            from readchar import readchar
             return bytes(readchar(), sys.getfilesystemencoding())
 ##########
 # CLI Interface
@@ -139,4 +145,3 @@ class CommandLineInterface(Interface):
             frame_str += "\nWORLD: " + frame.msgQueue.pop()
 
         return frame_str
-

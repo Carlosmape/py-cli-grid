@@ -1,12 +1,12 @@
 #!/bin/python
 
-from engine.app import App
+from engine.app import Engine
 from interfaces.cli import CommandLineInterface
 
 #########
-# Run App
+# Run Engine
 # Interface should be changed
 #########
 interface = CommandLineInterface()
-app = App(interface)
-app.run()
+engine = Engine(interface)
+engine.run()
