@@ -117,7 +117,6 @@ class CommandLineInterface(Interface):
                 frame_str += self.strWall + "\n"
             frame_str += self.strBotLimit * (3+frame.room.width)
 
-            frame_str += "\n" + str(frame.room)
             frame_str += "\n NPCs (%s): " % len(frame.npcs)
             for npc in frame.npcs: frame_str += " (%s,%s)" % (npc.position.X, npc.position.Y)
 
