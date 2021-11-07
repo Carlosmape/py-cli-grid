@@ -138,6 +138,6 @@ class CommandLineInterface(Interface):
     def __message_str(self, frame: Frame):
         frame_str = str()
         if frame.msgQueue:
-            frame_str += "\nWORLD: " + frame.msgQueue.pop()
+            frame_str += "\n " + frame.msgQueue.pop()
 
         return frame_str
