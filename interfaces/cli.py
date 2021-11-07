@@ -38,12 +38,12 @@ class CommandLineInterface(Interface):
         print("Welcome to your CLI Adventure")
         print("Initializing interface")
         super().__init__()
-        self.maxFrameRate=5
+        self.maxFrameRate = 5
         self.show_action_menu = False
         # Get shell size
-        size=os.get_terminal_size()
-        self.width=size.columns
-        self.height=size.lines
+        size = os.get_terminal_size()
+        self.width = size.columns
+        self.height = size.lines
    
     def readUserAction(self, blocking: bool = False):
         if blocking:
@@ -52,12 +52,8 @@ class CommandLineInterface(Interface):
             return keyboard.read()
 
     def doAction(self, action: bytes, player: PlayerCharacter):
-        if player.menu and player.menu.isValidOption(action):
-            print("Do action menu")
-            player.menu = None
-        else:
-            player.menu = None
-
+        print("doAction", player.menu, str(action))
+        
         if action == (b'w' or b'W'):
             player.move_north(self.last_frame.room)
         elif action == (b'a' or b'A'):
@@ -134,7 +130,7 @@ class CommandLineInterface(Interface):
             frame_str += "\n-->" + frame.menu.title
             if frame.menu.options:
                 for option in frame.menu.options:
-                    frame_str += "\n %s - %s" % (frame.menu.options.index(option), option)
+                    frame_str += " (%s)%s" % (frame.menu.options.index(option), option)
             frame_str += "\n" + frame.menu.query
 
         return frame_str
