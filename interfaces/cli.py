@@ -63,7 +63,7 @@ class CommandLineInterface(Interface):
         elif action == (b'd' or b'D'):
             player.move_east(self.last_frame.room)
         elif action == (b' '):
-            self.last_frame.menu = player.actionMenu(self.last_frame.room)
+            self.last_frame.menu = player.active_action_menu(self.last_frame.room)
         elif action == b'\x03':
             exit()
 
