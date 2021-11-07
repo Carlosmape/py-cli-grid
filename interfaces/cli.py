@@ -80,10 +80,11 @@ class CommandLineInterface(Interface):
         frame_str += self.__player_str(frame)
         # Render roomw
         frame_str += self.__room_str(frame)
-        # Render Menu
-        frame_str += self.__menu_str(frame)
         # Render queued messages
         frame_str += self.__message_str(frame)
+        # Render Menu
+        frame_str += self.__menu_str(frame)
+
 
         return frame_str
 
