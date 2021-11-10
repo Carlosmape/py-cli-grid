@@ -7,7 +7,7 @@ except ImportError:
     from readchar import readchar
 
 from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines import Position
+from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import Interface
 
