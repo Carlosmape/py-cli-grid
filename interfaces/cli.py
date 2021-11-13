@@ -79,7 +79,7 @@ class CommandLineInterface(Interface):
         # Display PJ information
         frame_str += self.__player_str(frame)
         # Render roomw
-        #frame_str += self.__room_str(frame)
+        frame_str += self.__room_str(frame)
         # Render queued messages
         frame_str += self.__message_str(frame)
         # Render Menu
