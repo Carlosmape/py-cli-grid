@@ -50,11 +50,12 @@ class CommandLineInterface(Interface):
 
     # Constructor
     def __init__(self):
+
         self.clear()
-        print("Welcome to your CLI Adventure")
         print("Initializing interface")
         print(CommandLineInterface.strManSword)
-        time.sleep(2)
+        print("Welcome to your CLI Adventure")
+        time.sleep(0.5)
 
         super().__init__()
         self.maxFrameRate = 5
