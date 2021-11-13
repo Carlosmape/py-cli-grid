@@ -3,7 +3,7 @@ import sys
 import time
 
 from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines.defines import Position
+from engine.defines.defines import BodyParts, Position
 from engine.frame import Frame
 from engine.interface import Interface
 from engine.items.interactives.containeritem import container_item
@@ -40,13 +40,13 @@ class CommandLineInterface(Interface):
     strTopLimit = '▄'
     strBotLimit = '▀'
     # stuff
-    strManSword =  "\n\                      (T) "
-    strManSword += "\n \      O        _  0   |   "
-    strManSword += "\n  \   o(U)o }   / \(Y)==o   "
-    strManSword += "\n   M_/ | | \|} { º } |  |   "
-    strManSword += "\n       |_|  }   \_/___\ |   "
-    strManSword += "\n       v v         V V  |   "
-    strManSword += "\n      _l l_       _| |_ |   "
+    strManSword =  "\n\                      (T)"
+    strManSword += "\n \      O        _  0   | "
+    strManSword += "\n  \   ó(w)ò }   / \(Y)==o "
+    strManSword += "\n  (D_/ | | \|} { º } |  | "
+    strManSword += "\n      .|_|. }   \_/___\ | "
+    strManSword += "\n       v v         V V  | "
+    strManSword += "\n      _l l_       _| |_ | "
 
     # Constructor
     def __init__(self):
@@ -114,8 +114,24 @@ class CommandLineInterface(Interface):
     def __player_str(self, frame: Frame):
         frame_str = str()
         if frame.player:
+            # Name and position
             frame_str += ("\n%s (%s,%s) lv: %s") % (frame.player.name, frame.player.position.X, frame.player.position.Y, frame.player.level)
-            frame_str += ("\n\tHealth: %s Agil: %s Stren: %s ") % (frame.player.health, frame.player.agility, frame.player.streng)
+            # Player status
+            frame_str += ("\n\tHealth: %s Agil: %s Stren: %s ") %\
+                    (frame.player.get_health(), frame.player.get_agility(), frame.player.get_strength())
+            # Player equipment
+            frame_str += "\nEquipment:\n\t"
+            frame_str += "Head(%s) "% (frame.player.items[BodyParts.head] or '')
+            frame_str += "Shoulders(%s) "% (frame.player.items[BodyParts.shoulder] or '')
+            frame_str += "Arms(%s) "% (frame.player.items[BodyParts.arms] or '')
+            frame_str += "Chest(%s) "% (frame.player.items[BodyParts.chest] or '')
+            frame_str += "Hands(%s) "% (frame.player.items[BodyParts.hands] or '')
+            frame_str += "Back(%s) "% (frame.player.items[BodyParts.back] or '')
+            frame_str += "Core(%s) "% (frame.player.items[BodyParts.core] or '')
+            frame_str += "Legs(%s) "% (frame.player.items[BodyParts.legs] or '')
+            frame_str += "Feets(%s) "% (frame.player.items[BodyParts.feets] or '')
+
+
         return frame_str
 
     def __room_str(self, frame: Frame):
