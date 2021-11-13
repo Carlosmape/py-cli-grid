@@ -99,10 +99,10 @@ class CommandLineInterface(Interface):
 
     def __frame_str(self, frame: Frame):
         frame_str = str()
+        # Render roomw
+        frame_str += self.__room_str(frame)       
         # Display PJ information
         frame_str += self.__player_str(frame)
-        # Render roomw
-        frame_str += self.__room_str(frame)
         # Render queued messages
         frame_str += self.__message_str(frame)
         # Render Menu
@@ -114,7 +114,7 @@ class CommandLineInterface(Interface):
     def __player_str(self, frame: Frame):
         frame_str = str()
         if frame.player:
-            frame_str += ("%s (%s,%s) lv: %s") % (frame.player.name, frame.player.position.X, frame.player.position.Y, frame.player.level)
+            frame_str += ("\n%s (%s,%s) lv: %s") % (frame.player.name, frame.player.position.X, frame.player.position.Y, frame.player.level)
             frame_str += ("\n\tHealth: %s Agil: %s Stren: %s ") % (frame.player.health, frame.player.agility, frame.player.streng)
         return frame_str
 
