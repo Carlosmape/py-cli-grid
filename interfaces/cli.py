@@ -1,16 +1,18 @@
 import os
 import sys
-
-try:
-    from msvcrt import getch
-except ImportError:
-    from readchar import readchar
+import time
 
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import Interface
+from engine.items.interactives.containeritem import container_item
+from engine.items.interactives.WearableItem import WearableItem
 
+try:
+    from msvcrt import getch
+except ImportError:
+    from readchar import readchar
 
 ###
 class keyboard():
@@ -26,17 +28,34 @@ class keyboard():
 class CommandLineInterface(Interface):
     # Ascii icons
     strPlayer = '#'
-    strItem = 'º'
-    strNPC = 'O'
-    strDoor = '▲'
+    strItem = '\''
+    strWearable = 'ª'
+    strContainer = 'º'
+    strNPC = 'Ö'
+    strNPC1 = 'Ô'
+    strNPC2 = 'Ò'
+    strNPC3 = 'Ó'
+    strDoor = '░'
     strWall = '█'
     strTopLimit = '▄'
     strBotLimit = '▀'
+    # stuff
+    strManSword =  "\n\                      (T) "
+    strManSword += "\n \      O        _  0   |   "
+    strManSword += "\n  \   o(U)o }   / \(Y)==o   "
+    strManSword += "\n   M_/ | | \|} { º } |  |   "
+    strManSword += "\n       |_|  }   \_/___\ |   "
+    strManSword += "\n       v v         V V  |   "
+    strManSword += "\n      _l l_       _| |_ |   "
 
     # Constructor
     def __init__(self):
+        self.clear()
         print("Welcome to your CLI Adventure")
         print("Initializing interface")
+        print(CommandLineInterface.strManSword)
+        time.sleep(2)
+
         super().__init__()
         self.maxFrameRate = 5
         self.show_action_menu = False
@@ -44,7 +63,8 @@ class CommandLineInterface(Interface):
         size = os.get_terminal_size()
         self.width = size.columns
         self.height = size.lines
-   
+
+
     def readUserAction(self, blocking: bool = False):
         if blocking:
             return input()
@@ -67,11 +87,14 @@ class CommandLineInterface(Interface):
         elif action == b'\x03':
             exit()
 
-    def render(self, frame: Frame):
+    def clear(self):
         if os.name in ('nt', 'dos'):
             os.system('cls')
         else:
             os.system('clear')
+
+    def render(self, frame: Frame):
+        self.clear()
         print(self.__frame_str(frame))
 
     def __frame_str(self, frame: Frame):
@@ -111,7 +134,13 @@ class CommandLineInterface(Interface):
                     elif current_position in frame.room.doors:
                         frame_str += self.strDoor
                     elif current_position in frame.room.items:
-                        frame_str += self.strItem
+                        item = frame.room.item(current_position)
+                        if isinstance(item, WearableItem):
+                            frame_str += self.strWearable
+                        elif isinstance(item, container_item):
+                            frame_str += self.strContainer
+                        else:
+                            frame_str += self.strItem
                     elif current_position in frame.room.walls:
                         frame_str += self.strWall
                     else:
