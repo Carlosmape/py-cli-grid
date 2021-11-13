@@ -8,6 +8,7 @@ from engine.frame import Frame
 from engine.interface import Interface
 from engine.items.interactives.containeritem import container_item
 from engine.items.interactives.WearableItem import WearableItem
+from engine.world.area_types import area_types
 
 try:
     from msvcrt import getch
@@ -138,6 +139,8 @@ class CommandLineInterface(Interface):
     def __room_str(self, frame: Frame):
         frame_str = str()
         if frame.room:
+            # Print area type
+            frame_str += "Area: " + area_types.NAMES[frame.room.type]
             # Its needed to draw inverted due to console works from top to down
             frame_str += "\n" + (self.strTopLimit* (3+frame.room.width)) + "\n"
             for y in range(frame.room.height, -1, -1):
