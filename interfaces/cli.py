@@ -77,15 +77,15 @@ class CommandLineInterface(Interface):
         print("doAction", player.menu, str(action))
         
         if action == (b'w' or b'W'):
-            player.move_north(self.last_frame.room)
+            player.move_north(self.last_frame.area)
         elif action == (b'a' or b'A'):
-            player.move_west(self.last_frame.room)
+            player.move_west(self.last_frame.area)
         elif action == (b's' or b'S'):
-            player.move_south(self.last_frame.room)
+            player.move_south(self.last_frame.area)
         elif action == (b'd' or b'D'):
-            player.move_east(self.last_frame.room)
+            player.move_east(self.last_frame.area)
         elif action == (b' '):
-            self.last_frame.menu = player.active_action_menu(self.last_frame.room)
+            self.last_frame.menu = player.active_action_menu(self.last_frame.area)
         elif action == b'\x03':
             exit()
 
@@ -101,8 +101,8 @@ class CommandLineInterface(Interface):
 
     def __frame_str(self, frame: Frame):
         frame_str = str()
-        # Render roomw
-        frame_str += self.__room_str(frame)       
+        # Render areaw
+        frame_str += self.__area_str(frame)       
         # Display PJ information
         frame_str += self.__player_str(frame)
         # Render queued messages
@@ -136,38 +136,38 @@ class CommandLineInterface(Interface):
 
         return frame_str
 
-    def __room_str(self, frame: Frame):
+    def __area_str(self, frame: Frame):
         frame_str = str()
-        if frame.room:
+        if frame.area:
             # Print area type
-            frame_str += "Area: " + area_types.NAMES[frame.room.type]
+            frame_str += "Area: " + area_types.NAMES[frame.area.type]
             # Its needed to draw inverted due to console works from top to down
-            frame_str += "\n" + (self.strTopLimit* (3+frame.room.width)) + "\n"
-            for y in range(frame.room.height, -1, -1):
+            frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n"
+            for y in range(frame.area.height, -1, -1):
                 frame_str += self.strWall
-                for x in range(0, frame.room.width+1, 1):
+                for x in range(0, frame.area.width+1, 1):
                     current_position = Position(x,y)
                     if frame.player.position == current_position:
                         frame_str += self.strPlayer
                     elif frame.get_npc(current_position):
                         frame_str += self.strNPC
-                    elif current_position in frame.room.doors:
+                    elif current_position in frame.area.doors:
                         frame_str += self.strDoor
-                    elif current_position in frame.room.items:
-                        item = frame.room.item(current_position)
+                    elif current_position in frame.area.items:
+                        item = frame.area.item(current_position)
                         if isinstance(item, WearableItem):
                             frame_str += self.strWearable
                         elif isinstance(item, container_item):
                             frame_str += self.strContainer
                         else:
                             frame_str += self.strItem
-                    elif current_position in frame.room.walls:
+                    elif current_position in frame.area.walls:
                         frame_str += self.strWall
                     else:
                         frame_str += ' '
 
                 frame_str += self.strWall + "\n"
-            frame_str += self.strBotLimit * (3+frame.room.width)
+            frame_str += self.strBotLimit * (3+frame.area.width)
 
             frame_str += "\n NPCs (%s): " % len(frame.npcs)
             for npc in frame.npcs: frame_str += " (%s,%s)" % (npc.position.X, npc.position.Y)
