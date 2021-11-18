@@ -64,16 +64,17 @@ class CommandLineInterface(Interface):
             return keyboard.getch()
 
     def doAction(self, action: bytes, player: PlayerCharacter):
-        
-        if action == (b'w' or b'W'):
+        if action:
+            print("PlayerAction", action)
+        if action == ('w' or 'W'):
             player.move_north(self.last_frame.area)
-        elif action == (b'a' or b'A'):
+        elif action == ('a' or 'A'):
             player.move_west(self.last_frame.area)
-        elif action == (b's' or b'S'):
+        elif action == ('s' or 'S'):
             player.move_south(self.last_frame.area)
-        elif action == (b'd' or b'D'):
+        elif action == ('d' or 'D'):
             player.move_east(self.last_frame.area)
-        elif action == (b' '):
+        elif action == (' '):
             self.last_frame.menu = player.active_action_menu(self.last_frame.area)
         elif action == b'\x03':
             exit()
