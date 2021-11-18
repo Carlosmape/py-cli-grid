@@ -9,16 +9,20 @@ from engine.items.interactives.containeritem import container_item
 from engine.items.interactives.WearableItem import WearableItem
 from engine.world.area_types import area_types
 
+from .colors import style
 from .KBHit import KBHit
 
 keyboard = KBHit()
+
+# System call
+os.system("")
 
 ##########
 # CLI Interface
 ##########
 class CommandLineInterface(Interface):
     # Ascii icons
-    strPlayer = '#'
+    strPlayer =  '#'
     strItem = '\''
     strWearable = 'ª'
     strContainer = 'º'
@@ -30,6 +34,7 @@ class CommandLineInterface(Interface):
     strWall = '█'
     strTopLimit = '▄'
     strBotLimit = '▀'
+    strNone = ' '
     # stuff
     strManSword =  "\n\                      (T)"
     strManSword += "\n \      O        _  0   | "
@@ -49,7 +54,7 @@ class CommandLineInterface(Interface):
         time.sleep(0.5)
 
         super().__init__()
-        self.max_frame_rate = 5
+        self.max_frame_rate = 10
         self.show_action_menu = False
         # Get shell size
         size = os.get_terminal_size()
@@ -104,27 +109,32 @@ class CommandLineInterface(Interface):
         return frame_str
 
     def __player_str(self, frame: Frame):
-        frame_str = str()
-        if frame.player:
+        pj_str = "\n"
+        if frame.player: 
+            pj = frame.player
             # Name and position
-            frame_str += ("\n%s (%s,%s) lv: %s") % (frame.player.name, frame.player.position.X, frame.player.position.Y, frame.player.level)
+            pj_str += style.CBOLD + ("\n%s (%s)") % (pj.name, pj.level) + style.CEND
             # Player status
-            frame_str += ("\n\tHealth: %s Agil: %s Stren: %s ") %\
-                    (frame.player.get_health(), frame.player.get_agility(), frame.player.get_strength())
+            strHP = self.strWall * pj.get_health()
+            strHP += self.strDoor * (pj.get_max_health() - pj.get_health())
+            pj_str += style.CRED + "\n HP: " + strHP
+            pj_str += style.CYELLOW + "\n Agillity:" + str(pj.get_agility())
+            pj_str += style.CGREEN + "\n Strength: " + str(pj.get_strength())
+            pj_str += style.CBLUE2 + "\n Speed: " + str(round(pj.get_speed(),2)) + style.CEND
             # Player equipment
-            frame_str += "\nEquipment:\n\t"
-            frame_str += "Head(%s) "% (frame.player.items[BodyParts.head] or '')
-            frame_str += "Shoulders(%s) "% (frame.player.items[BodyParts.shoulder] or '')
-            frame_str += "Arms(%s) "% (frame.player.items[BodyParts.arms] or '')
-            frame_str += "Chest(%s) "% (frame.player.items[BodyParts.chest] or '')
-            frame_str += "Hands(%s) "% (frame.player.items[BodyParts.hands] or '')
-            frame_str += "Back(%s) "% (frame.player.items[BodyParts.back] or '')
-            frame_str += "Core(%s) "% (frame.player.items[BodyParts.core] or '')
-            frame_str += "Legs(%s) "% (frame.player.items[BodyParts.legs] or '')
-            frame_str += "Feets(%s) "% (frame.player.items[BodyParts.feets] or '')
+            pj_str += style.CBOLD + "\nEquipment:" + style.CEND
+            pj_str += "\n Head: " + str(pj.items[BodyParts.head] or '-')
+            pj_str += "\n Shoulders: " + str(pj.items[BodyParts.shoulder] or '-')
+            pj_str += "\n Arms: " + str(pj.items[BodyParts.arms] or '-')
+            pj_str += "\n Chest: " + str(pj.items[BodyParts.chest] or '-')
+            pj_str += "\n Hands: " + str(pj.items[BodyParts.hands] or '-')
+            pj_str += "\n Back: " + str(pj.items[BodyParts.back] or '-')
+            pj_str += "\n Core: " + str(pj.items[BodyParts.core] or '-')
+            pj_str += "\n Legs: " + str(pj.items[BodyParts.legs] or '-')
+            pj_str += "\n Feets: " + str(pj.items[BodyParts.feets] or '-')
+            pj_str += style.CEND
 
-
-        return frame_str
+        return pj_str
 
     def __area_str(self, frame: Frame):
         frame_str = str()
@@ -132,7 +142,8 @@ class CommandLineInterface(Interface):
             # Print area type
             frame_str += "Area: " + area_types.NAMES[frame.area.type]
             # Its needed to draw inverted due to console works from top to down
-            frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n"
+            frame_str += style.CBLACK
+            frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n" + style.CBEIGEBG
             for y in range(frame.area.height, -1, -1):
                 frame_str += self.strWall
                 for x in range(0, frame.area.width+1, 1):
@@ -154,12 +165,12 @@ class CommandLineInterface(Interface):
                     elif current_position in frame.area.walls:
                         frame_str += self.strWall
                     else:
-                        frame_str += ' '
+                        frame_str += self.strNone
 
                 frame_str += self.strWall + "\n"
-            frame_str += self.strBotLimit * (3+frame.area.width)
+            frame_str += style.CBLACKBG + self.strBotLimit * (3+frame.area.width) + style.CEND + " \n"
 
-            frame_str += "\n NPCs (%s): " % len(frame.npcs)
+            frame_str += "NPCs (%s): " % len(frame.npcs)
             for npc in frame.npcs: frame_str += " (%s,%s)" % (npc.position.X, npc.position.Y)
 
         return frame_str
