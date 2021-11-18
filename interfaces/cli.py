@@ -1,5 +1,4 @@
 import os
-import sys
 import time
 
 from engine.characters.PlayerCharacter import PlayerCharacter
@@ -10,19 +9,10 @@ from engine.items.interactives.containeritem import container_item
 from engine.items.interactives.WearableItem import WearableItem
 from engine.world.area_types import area_types
 
-try:
-    from msvcrt import getch
-except ImportError:
-    from readchar import readchar
+from .KBHit import KBHit
 
-###
-class keyboard():
-    @staticmethod
-    def read():
-        if os.name in ('nt', 'dos'):
-            return getch()
-        else:
-            return bytes(readchar(), sys.getfilesystemencoding())
+keyboard = KBHit()
+
 ##########
 # CLI Interface
 ##########
@@ -59,7 +49,7 @@ class CommandLineInterface(Interface):
         time.sleep(0.5)
 
         super().__init__()
-        self.maxFrameRate = 5
+        self.max_frame_rate = 5
         self.show_action_menu = False
         # Get shell size
         size = os.get_terminal_size()
@@ -70,11 +60,10 @@ class CommandLineInterface(Interface):
     def readUserAction(self, blocking: bool = False):
         if blocking:
             return input()
-        else:
-            return keyboard.read()
+        elif keyboard.kbhit():
+            return keyboard.getch()
 
     def doAction(self, action: bytes, player: PlayerCharacter):
-        print("doAction", player.menu, str(action))
         
         if action == (b'w' or b'W'):
             player.move_north(self.last_frame.area)
