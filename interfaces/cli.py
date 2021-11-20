@@ -113,7 +113,7 @@ class CommandLineInterface(Interface):
         if frame.player: 
             pj = frame.player
             # Name and position
-            pj_str += style.CBOLD + ("\n%s (%s)") % (pj.name, pj.level) + style.CEND
+            pj_str += style.CBOLD + ("\n%s (%s)") % (pj.name, pj.get_level()) + style.CEND
             # Player status
             strHP = self.strWall * pj.get_health()
             strHP += self.strDoor * (pj.get_max_health() - pj.get_health())
