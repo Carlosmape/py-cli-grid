@@ -56,6 +56,7 @@ class CommandLineInterface(Interface):
         super().__init__()
         self.max_frame_rate = 10
         self.show_action_menu = False
+        self.mesg_showed_times = 0
         # Get shell size
         size = os.get_terminal_size()
         self.width = size.columns
@@ -113,7 +114,7 @@ class CommandLineInterface(Interface):
         if frame.player: 
             pj = frame.player
             # Name and position
-            pj_str += style.CBOLD + ("\n%s (%s)") % (pj.name, pj.get_level()) + style.CEND
+            pj_str += style.CBOLD + ("\n%s (%s)>") % (pj.name, pj.get_level()) + style.CEND
             # Player status
             strHP = self.strWall * pj.get_health()
             strHP += self.strDoor * (pj.get_max_health() - pj.get_health())
@@ -122,7 +123,7 @@ class CommandLineInterface(Interface):
             pj_str += style.CGREEN + "\n Strength: " + str(pj.get_strength())
             pj_str += style.CBLUE2 + "\n Speed: " + str(round(pj.get_speed(),2)) + style.CEND
             # Player equipment
-            pj_str += style.CBOLD + "\nEquipment:" + style.CEND
+            pj_str += style.CBOLD + "\nEquipment>" + style.CEND
             pj_str += "\n Head: " + str(pj.items[BodyParts.head] or '-')
             pj_str += "\n Shoulders: " + str(pj.items[BodyParts.shoulder] or '-')
             pj_str += "\n Arms: " + str(pj.items[BodyParts.arms] or '-')
@@ -140,7 +141,7 @@ class CommandLineInterface(Interface):
         frame_str = str()
         if frame.area:
             # Print area type
-            frame_str += "Area: " + area_types.NAMES[frame.area.type]
+            frame_str += "Area: " + area_types.NAMES[frame.area.type] + ">"
             # Its needed to draw inverted due to console works from top to down
             frame_str += style.CBLACK
             frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n" + style.CBEIGEBG
@@ -187,8 +188,8 @@ class CommandLineInterface(Interface):
         return frame_str
 
     def __message_str(self, frame: Frame):
-        frame_str = str()
-        if frame.msgQueue:
-            frame_str += "\n " + frame.msgQueue.pop()
-
-        return frame_str
+        frame_str = "\n"+ style.CBOLD + "Log> "
+        if len(frame.get_msg()) > 0:
+            for msg in frame.get_msg():
+                frame_str += "\n " + msg
+        return frame_str + style.CEND
