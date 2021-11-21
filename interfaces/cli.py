@@ -111,8 +111,8 @@ class CommandLineInterface(Interface):
         return frame_str
 
     def __player_str(self, frame: Frame):
-        pj_str = "\n"
-        if frame.player: 
+        pj_str = str()
+        if frame.player:
             pj = frame.player
             # Name and position
             pj_str += style.CBOLD + ("\n%s (%s)>") % (pj.name, pj.get_level()) + style.CEND
@@ -138,7 +138,12 @@ class CommandLineInterface(Interface):
             pj_str += "\n Legs: " + str(pj.items[BodyParts.legs] or '-')
             pj_str += "\n Feets: " + str(pj.items[BodyParts.feets] or '-')
             pj_str += style.CEND
-
+            # Quests
+            if pj.quests:
+                pj_str += "\n" + style.CBOLD + "Quest>"
+                for q in pj.quests:
+                    if not q.objective.done:
+                        pj_str += "\n " + q.name + ": " + q.description
         return pj_str
 
     def __area_str(self, frame: Frame):
@@ -179,24 +184,19 @@ class CommandLineInterface(Interface):
     def __menu_str(self, frame: Frame):
         frame_str = str()
         if frame.menu:
-            frame_str += "\n-->" + frame.menu.title
+            frame_str += style.CBOLD + "\n-->" + frame.menu.title
             if frame.menu.options:
                 for option in frame.menu.options:
                     frame_str += " (%s)%s" % (frame.menu.options.index(option), option)
-            frame_str += "\n" + frame.menu.query
+            frame_str += "\n" + frame.menu.query + style.CEND
 
         return frame_str
 
     def __message_str(self, frame: Frame):
-        # Quests
-        frame_str = "\n" + style.CBOLD + "Quest>"
-        if frame.player and frame.player.quests:
-            for q in frame.player.quests:
-                if not q.objective.done:
-                    frame_str += "\n " + q.name + ": " + q.description
+        frame_str = str()
         # Log messages
-        frame_str += "\n"+ style.CBOLD + "Log> "
         if len(frame.get_msg()) > 0:
+            frame_str += "\n"+ style.CBOLD + "Log> "
             for msg in frame.get_msg():
                 frame_str += "\n " + msg
         return frame_str + style.CEND
