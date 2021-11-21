@@ -54,7 +54,7 @@ class CommandLineInterface(Interface):
         time.sleep(0.5)
 
         super().__init__()
-        self.max_frame_rate = 10
+        self.max_frame_rate = 24
         self.show_action_menu = False
         self.mesg_showed_times = 0
         # Get shell size
@@ -117,8 +117,11 @@ class CommandLineInterface(Interface):
             # Name and position
             pj_str += style.CBOLD + ("\n%s (%s)>") % (pj.name, pj.get_level()) + style.CEND
             # Player status
+            strXP = self.strWall * pj.stats.experience()
+            strXP += self.strDoor * pj.stats.remain_experience()
+            pj_str += style.CVIOLET + "\n XP: " + strXP
             strHP = self.strWall * pj.get_health()
-            strHP += self.strDoor * (pj.get_max_health() - pj.get_health())
+            strHP += self.strDoor * (pj.get_max_health() - pj.get_health()) 
             pj_str += style.CRED + "\n HP: " + strHP
             pj_str += style.CYELLOW + "\n Agillity:" + str(pj.get_agility())
             pj_str += style.CGREEN + "\n Strength: " + str(pj.get_strength())
