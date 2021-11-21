@@ -70,8 +70,6 @@ class CommandLineInterface(Interface):
             return keyboard.getch()
 
     def doAction(self, action: bytes, player: PlayerCharacter):
-        if action:
-            print("PlayerAction", action)
         if action == ('w' or 'W'):
             player.move_north(self.last_frame.area)
         elif action == ('a' or 'A'):
@@ -92,13 +90,16 @@ class CommandLineInterface(Interface):
             os.system('clear')
 
     def render(self, frame: Frame):
-        self.clear()
-        print(self.__frame_str(frame))
+        frame_str = self.__frame_str(frame)
+        lines = frame_str.count('\n') + 1
+        # Add console size to fit in whole console
+        frame_str += "\n" * (self.height - lines)
+        print(frame_str, end='\r')
 
     def __frame_str(self, frame: Frame):
         frame_str = str()
         # Render areaw
-        frame_str += self.__area_str(frame)       
+        frame_str += self.__area_str(frame)
         # Display PJ information
         frame_str += self.__player_str(frame)
         # Render queued messages
@@ -144,9 +145,9 @@ class CommandLineInterface(Interface):
             frame_str += "Area: " + area_types.NAMES[frame.area.type] + ">"
             # Its needed to draw inverted due to console works from top to down
             frame_str += style.CBLACK
-            frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n" + style.CBEIGEBG
+            frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n"
             for y in range(frame.area.height, -1, -1):
-                frame_str += self.strWall
+                frame_str += style.CBEIGEBG + style.CBLACK + self.strWall
                 for x in range(0, frame.area.width+1, 1):
                     current_position = Position(x,y)
                     if frame.player.position == current_position:
@@ -167,12 +168,8 @@ class CommandLineInterface(Interface):
                         frame_str += self.strWall
                     else:
                         frame_str += self.strNone
-
-                frame_str += self.strWall + "\n"
-            frame_str += style.CBLACKBG + self.strBotLimit * (3+frame.area.width) + style.CEND + " \n"
-
-            frame_str += "NPCs (%s): " % len(frame.npcs)
-            for npc in frame.npcs: frame_str += " (%s,%s)" % (npc.position.X, npc.position.Y)
+                frame_str += self.strWall + style.CEND + "\n"
+            frame_str += style.CBLACKBG + style.CBLACK + self.strBotLimit * (3+frame.area.width) + style.CEND
 
         return frame_str
 
