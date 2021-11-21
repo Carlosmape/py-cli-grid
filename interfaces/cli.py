@@ -188,7 +188,14 @@ class CommandLineInterface(Interface):
         return frame_str
 
     def __message_str(self, frame: Frame):
-        frame_str = "\n"+ style.CBOLD + "Log> "
+        # Quests
+        frame_str = "\n" + style.CBOLD + "Quest(s)>"
+        if frame.player and frame.player.quests:
+            for q in frame.player.quests:
+                if not q.objective.done:
+                    frame_str += "\n (Q) " + q.name + ": " + q.description
+        # Log messages
+        frame_str += "\n"+ style.CBOLD + "Log> "
         if len(frame.get_msg()) > 0:
             for msg in frame.get_msg():
                 frame_str += "\n " + msg
