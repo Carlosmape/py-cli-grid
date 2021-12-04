@@ -31,6 +31,7 @@ class CommandLineInterface(Interface):
     strNPC2 = 'Ò'
     strNPC3 = 'Ó'
     strDoor = '░'
+    strEmptyBar = '▒'
     strWall = '█'
     strTopLimit = '▄'
     strBotLimit = '▀'
@@ -118,12 +119,14 @@ class CommandLineInterface(Interface):
             pj_str += style.CBOLD + ("\n%s (%s)>") % (pj.name, pj.get_level()) + style.CEND
             # Player status
             strXP = self.strWall * pj.stats.experience()
-            strXP += self.strDoor * pj.stats.remain_experience()
-            pj_str += style.CVIOLET + "\n XP: " + strXP
+            strXP += self.strEmptyBar * pj.stats.remain_experience()
+            pj_str += style.CVIOLET + "\n XP(%s/%s)\t" %(pj.stats.experience(), pj.stats.experience()+pj.stats.remain_experience())
+            pj_str += strXP
             strHP = self.strWall * pj.get_health()
-            strHP += self.strDoor * (pj.get_max_health() - pj.get_health()) 
-            pj_str += style.CRED + "\n HP: " + strHP
-            pj_str += style.CYELLOW + "\n Agillity:" + str(pj.get_agility())
+            strHP += self.strEmptyBar * (pj.get_max_health() - pj.get_health()) 
+            pj_str += style.CRED + "\n HP(%s/%s)\t" %(pj.get_health(), pj.get_max_health())
+            pj_str += strHP
+            pj_str += style.CYELLOW + "\n Agility:" + str(pj.get_agility())
             pj_str += style.CGREEN + "\n Strength: " + str(pj.get_strength())
             pj_str += style.CBLUE2 + "\n Speed: " + str(round(pj.get_speed(),2)) + style.CEND
             # Player equipment
@@ -140,17 +143,19 @@ class CommandLineInterface(Interface):
             pj_str += style.CEND
             # Quests
             if pj.quests:
-                pj_str += "\n" + style.CBOLD + "Quest>"
+                pj_str += "\n" + style.CBOLD + "Quest>" + style.CEND
                 for q in pj.quests:
                     if not q.objective.done:
-                        pj_str += "\n " + q.name + ": " + q.description
+                        pj_str += "\n " + q.name 
+                        pj_str += " "
+                        pj_str += q.description
         return pj_str
 
     def __area_str(self, frame: Frame):
         frame_str = str()
         if frame.area:
             # Print area type
-            frame_str += "Area: " + area_types.NAMES[frame.area.type] + ">"
+            frame_str += style.CBOLD + "Area: " + area_types.NAMES[frame.area.type] + ">" + style.CEND
             # Its needed to draw inverted due to console works from top to down
             frame_str += style.CBLACK
             frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n"
