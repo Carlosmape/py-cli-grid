@@ -24,9 +24,9 @@ if os.name == 'nt':
 
 # Posix (Linux, OS X)
 else:
+    import atexit
     import sys
     import termios
-    import atexit
     from select import select
 
 
