@@ -4,7 +4,7 @@ import time
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts, Position
 from engine.frame import Frame
-from engine.interface import Interface
+from engine.interface import GUI
 from engine.items.interactives.containeritem import container_item
 from engine.items.interactives.WearableItem import WearableItem
 from engine.world.area_types import area_types
@@ -20,7 +20,7 @@ os.system("")
 ##########
 # CLI Interface
 ##########
-class CommandLineInterface(Interface):
+class CommandLineInterface(GUI):
     # Ascii icons
     strPlayer =  '#'
     strItem = '\''
