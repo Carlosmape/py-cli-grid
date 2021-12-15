@@ -7,6 +7,7 @@ from engine.frame import Frame
 from engine.interface import GUI
 from engine.items.interactives.containeritem import container_item
 from engine.items.interactives.WearableItem import WearableItem
+from engine.menu import MenuPause
 from engine.world.area_types import area_types
 
 from .colors import style
@@ -71,7 +72,9 @@ class CommandLineInterface(GUI):
             return keyboard.getch()
 
     def doAction(self, action: bytes, player: PlayerCharacter):
-        if action == ('w' or 'W'):
+        if not self.last_frame:
+            return
+        elif action == ('w' or 'W'):
             player.move_north(self.last_frame.area)
         elif action == ('a' or 'A'):
             player.move_west(self.last_frame.area)
@@ -80,9 +83,9 @@ class CommandLineInterface(GUI):
         elif action == ('d' or 'D'):
             player.move_east(self.last_frame.area)
         elif action == (' '):
-            self.last_frame.menu = player.active_action_menu(self.last_frame.area)
-        elif action == b'\x03':
-            exit()
+            player.active_action_menu(self.last_frame.area)
+        elif action and ord(action) == 27:
+            player.active_pause_menu()
 
     def clear(self):
         if os.name in ('nt', 'dos'):
