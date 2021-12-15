@@ -97,6 +97,23 @@ class CommandLineInterface(GUI):
         frame_str += "\n" * (self.height - lines)
         print(frame_str, end='\r')
 
+    def manage_exceptions(self, ex: BaseException):
+
+        # Call super method without return to avoid game exit
+        super().manage_exceptions(ex)
+
+        # If KeyboardInterrupt do not exit the game
+        if isinstance(ex, KeyboardInterrupt):
+            return False
+
+        # Show exception info
+        else:
+            msg = "An error ocurrer during the game\n"
+            msg += str(ex.with_traceback()) + "\n"
+            msg += "Aborting the game execution"
+            input(msg)
+            return True
+
     def __frame_str(self, frame: Frame):
         frame_str = str()
         # Render areaw
