@@ -1,5 +1,6 @@
 import os
 import time
+from traceback import format_exc
 
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts, Position
@@ -102,7 +103,7 @@ class CommandLineInterface(GUI):
 
     def manage_exceptions(self, ex: BaseException):
 
-        # Call super method without return to avoid game exit
+        # Call super method without return to avoid premature game exit
         super().manage_exceptions(ex)
 
         # If KeyboardInterrupt do not exit the game
@@ -112,7 +113,7 @@ class CommandLineInterface(GUI):
         # Show exception info
         else:
             msg = "An error ocurrer during the game\n"
-            msg += str(ex.with_traceback()) + "\n"
+            msg += str(format_exc()) + "\n"
             msg += "Aborting the game execution"
             input(msg)
             return True

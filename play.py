@@ -1,5 +1,4 @@
 #!/bin/python
-
 from engine.engine import Engine
 from interfaces.cli import CommandLineInterface
 
