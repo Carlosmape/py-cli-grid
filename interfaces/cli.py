@@ -26,8 +26,8 @@ class CommandLineInterface(GUI):
     # Ascii icons
     strPlayer =  '#'
     strItem = '\''
-    strWearable = 'ª'
-    strContainer = 'º'
+    strWearable = 'º'
+    strContainer = '¤'
     strNPC = 'Ö'
     strNPC1 = 'Ô'
     strNPC2 = 'Ò'
@@ -64,13 +64,15 @@ class CommandLineInterface(GUI):
     # Constructor
     def __init__(self):
 
+        #Super initialization
         self.clear()
         print(CommandLineInterface.strTittle)
-        print("\tInitializing interface")
-        print("\tWelcome to your CLI Adventure")
+        print("\n\t   Initializing interface")
+        print("\n\tWelcome to your CLI Adventure")
         super().__init__()
         time.sleep(1)
 
+        # Own configuration
         self.clear()
         print(CommandLineInterface.strManSword)
         self.max_frame_rate = 24
@@ -85,6 +87,9 @@ class CommandLineInterface(GUI):
         self.width = size.columns
         self.height = size.lines
         time.sleep(0.5)
+
+        # Clean user actions
+        self.readUserAction();
 
     def readUserAction(self, blocking: bool = False):
         if blocking:
