@@ -11,8 +11,8 @@ from engine.items.interactives.WearableItem import WearableItem
 from engine.menu import MenuPause
 from engine.world.area_types import area_types
 
-from .colors import style
-from .KBHit import KBHit
+from colors import style
+from KBHit import KBHit
 
 keyboard = KBHit()
 
@@ -85,7 +85,7 @@ class CommandLineInterface(GUI):
         print(CommandLineInterface.strWomanSword)
         size = os.get_terminal_size()
         self.width = size.columns
-        self.height = size.lines
+        self.height = size.lines - 1
         time.sleep(0.5)
 
         # Clean user actions
@@ -193,7 +193,7 @@ class CommandLineInterface(GUI):
         pj_str = "\n" + style.CBOLD + "[> Equipment <]\n" + style.CEND
         # Prepare each part text
         strHead = " Head(" + str(pj.items[BodyParts.head] or '-') + ") "
-        strShoulder = " Shoulders(" + str(pj.items[BodyParts.shoulder] or '') + ") "
+        strShoulder = " Shoulders(" + str(pj.items[BodyParts.shoulder] or '-') + ") "
         strChest = " Chest(" + str(pj.items[BodyParts.chest] or '-') + ") "
         strBack = " Back(" + str(pj.items[BodyParts.back] or '-') + ") "
         strArms = " Arms(" + str(pj.items[BodyParts.arms] or '-') + ") "

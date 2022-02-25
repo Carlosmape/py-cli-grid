@@ -1,6 +1,10 @@
 #!/bin/python
+import sys
+
+
+sys.path.append('../../')
 from engine.engine import Engine
-from interfaces.cli import CommandLineInterface
+from interface import CommandLineInterface
 
 #########
 # Run Engine
