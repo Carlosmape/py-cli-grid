@@ -57,8 +57,15 @@ class AreaBox(CommandLineBox):
         if not frame.area or not frame.player:
             return
         items = []
-        for y in range(0, self.objects_per_col):
-            for x in range(0, self.objects_per_row):
+        
+        #Calculate frame of the area to render
+        posh_from = max(0, int(frame.player.position.Y-self.objects_per_col/2))
+        posw_from = max(0, int(frame.player.position.X-self.objects_per_row/2))
+        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2))
+        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2))
+
+        for y in range(posh_from, posh_to):
+            for x in range(posw_from, posw_to):
                 current_pos = Position(x,y)
                 if frame.player.position == current_pos:
                     items.append(self.render_engine.render_player(frame.player))
@@ -76,14 +83,35 @@ class AreaBox(CommandLineBox):
         return items
 
 
-    def get_content_string(self, objects):
+    def get_content_string(self, objects, frame: Frame):
+ 
+        
+        posh_from = max(0, int(frame.player.position.Y-self.objects_per_col/2))
+        posw_from = max(0, int(frame.player.position.X-self.objects_per_row/2))
+        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2))
+        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2))
+        frame_width = posw_to - posw_from
+        frame_height = posh_to - posh_from
+
+        print(posh_from, posh_to)
+        print(posw_from, posw_to)
+        print(self.objects_per_row, self.objects_per_col)
+        print(frame.area.width, frame.area.height)
+        print(frame_width, frame_height)
+        #input()
+        self.width_margin = int((self.width - frame_width*self.scale_width)/2)
+        self.height_margin = int((self.height - frame_height*self.scale_height)/2)
+
+        self.objects_in_area = frame_width*frame_height
+
         if len(objects) != self.objects_in_area:
             raise Exception("AreaBox::get_content_string: Received unexpected objects number %d/%d"%(len(objects),self.objects_in_area))
 
         string = "\n"*self.height_margin
         free_spaces = style.CEND + " " * self.width_margin
-        for y in reversed(range(0, self.objects_per_col)):
-            items = objects[y*self.objects_per_row:(y*self.objects_per_row+self.objects_per_row)]
+
+        for y in reversed(range(0, frame_height)):
+            items = objects[y*frame_width:(y*frame_width+frame_width)]
 
             #draw this row of objects
             str_row = ''
@@ -166,7 +194,7 @@ class CommandLineInterface(GUI):
         # Get Area
         composed_area = self.area_container.retrieve_objects(frame)
         if composed_area:
-            str_gui += self.area_container.get_content_string(composed_area)
+            str_gui += self.area_container.get_content_string(composed_area, frame)
 
         # Get Menu
         composed_menu = self.render_menu(frame.menu)
@@ -205,8 +233,8 @@ class CommandLineInterface(GUI):
             player.active_action_menu(self.last_frame.area)
         elif action and ord(action) == 27:
             player.active_pause_menu()
-        elif action == None:
-            player.no_move(self.last_frame.area)
+        #elif action == None:
+        #    player.no_move(self.last_frame.area)
 
     def clear(self):
         if os.name in ('nt', 'dos'):
