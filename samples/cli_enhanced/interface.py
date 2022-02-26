@@ -59,10 +59,19 @@ class AreaBox(CommandLineBox):
         items = []
         
         #Calculate frame of the area to render
+        if frame.player.position.Y-self.objects_per_col/2 < 0:
+            desfase = self.objects_per_col + (frame.player.position.Y-self.objects_per_col/2)
+        else:
+            desfase = 0
         posh_from = max(0, int(frame.player.position.Y-self.objects_per_col/2))
+        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2+desfase))
+
+        if frame.player.position.X-self.objects_per_row/2 < 0:
+            desfase = self.objects_per_row - frame.player.position.X-self.objects_per_row/2 
+        else:
+            desfase = 0       
         posw_from = max(0, int(frame.player.position.X-self.objects_per_row/2))
-        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2))
-        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2))
+        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2+desfase))
 
         for y in range(posh_from, posh_to):
             for x in range(posw_from, posw_to):
@@ -85,11 +94,20 @@ class AreaBox(CommandLineBox):
 
     def get_content_string(self, objects, frame: Frame):
  
-        
+        #Calculate frame of the area to render
+        if frame.player.position.Y-self.objects_per_col/2 < 0:
+            desfase = self.objects_per_col + (frame.player.position.Y-self.objects_per_col/2)
+        else:
+            desfase = 0
         posh_from = max(0, int(frame.player.position.Y-self.objects_per_col/2))
+        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2+desfase))
+
+        if frame.player.position.X-self.objects_per_row/2 < 0:
+            desfase = self.objects_per_row - frame.player.position.X-self.objects_per_row/2 
+        else:
+            desfase = 0       
         posw_from = max(0, int(frame.player.position.X-self.objects_per_row/2))
-        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2))
-        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2))
+        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2+desfase))
         frame_width = posw_to - posw_from
         frame_height = posh_to - posh_from
 
