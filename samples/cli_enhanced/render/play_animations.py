@@ -1,6 +1,8 @@
 
 import os
+import sys
 from time import sleep, time
+sys.path.append("../../../") # added!
 from pj_render import character_render
 from env_render import env_render
 
@@ -11,11 +13,11 @@ pj_render2.update_equipment(True, True, True)
 pj_render3 = character_render()
 pj_render3.update_equipment(True, False, False)
 
-grass_render1 = env_render(False)
-grass_render2 = env_render(False)
-grass_render3 = env_render(False)
-flower_render1 = env_render(True)
-flower_render2 = env_render(True)
+grass_render1 = env_render()
+grass_render2 = env_render()
+grass_render3 = env_render()
+flower_render1 = env_render()
+flower_render2 = env_render()
 
 pjrendered = []
 pjrendered_sword = []
@@ -70,9 +72,19 @@ while (True):
     print(" ======="*3)
    
     print("Environment: flowers iddle")
-    print(flower_render1.render()[0], flower_render2.render()[0])
+    print(" ======="*3)
+    print("|"+flower_render1.render()[0]+"|"+flower_render2.render()[0]+"|") 
+    print("|"+flower_render1.render()[1]+"|"+flower_render2.render()[1]+"|") 
+    print("|"+flower_render1.render()[2]+"|"+flower_render2.render()[2]+"|") 
+    print(" ======="*3)
+
     print("Environment: grass iddle")
-    print(grass_render1.render()[0], grass_render2.render()[0], grass_render3.render()[0])
+    print(" ======="*3)
+    print("|"+grass_render1.render()[0]+"|"+grass_render2.render()[0]+"|"+grass_render3.render()[0]+"|") 
+    print("|"+grass_render1.render()[1]+"|"+grass_render2.render()[1]+"|"+grass_render3.render()[1]+"|") 
+    print("|"+grass_render1.render()[2]+"|"+grass_render2.render()[2]+"|"+grass_render3.render()[2]+"|") 
+    print(" ======="*3)
+
 
     print('\n' * int(os.get_terminal_size().lines-11), end='\r')
     sleep(1/25)

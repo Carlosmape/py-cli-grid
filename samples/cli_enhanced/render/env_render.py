@@ -1,25 +1,31 @@
-from random import randint
+from random import randint, random
 from time import time
-from base_render import base_render
+from .base_render import base_render
+from .colors import style
 
 class env_render(base_render):
-    
-    grass0 =  ['·´·', '´·´', '·´´']
-    grass1 =  [',.,', ',,,', '.,.']
-    grass2 =  ['¨´¨', '´¨´','¨´´']
+    # Defined grass types. Take care about MAX_STEPS
+    grass_types = [
+        ['·´·','´·´','·´´','..´','´´.','´¨´'],
+        [',.,',',,,','.,.','..,','.,.',',,.'],
+        ['¨´¨','´¨´','¨´´','¨¨´','´¨´','´´´'],
+        [' ´¨','´ ´','¨´ ',' ¨´','´ ´','´´ '],
+        [' .,',', ,','., ',' .,','. .',',, '],
+        [',. ',',, ','., ',' .,',' ,.',' ,.'],
+        [',  ','.  ',' , ',' . ','  .','  ,'],
+        ['· ·','´ ´','· ´','. ´','´ .',' ¨´'],
+        ['º  ','´  ',' · ',' º ','  ·','  ´'],
+        [',ý,','.ŷ,','.ỳ.',',v.',';v.','.ÿ.'],
+        [',w,','.ẅ,','.ẃ.',',ŵ.',',ẁ,','.v.']
+    ]
 
-    flower0 =  [',ý,', '.ÿ,', '.v.']
-    flower1 =  [',w,', '.ẅ,', '.ẃ.']
+    MAX_STEPS = 6
 
-    MAX_STEPS = 3
-
-    def __init__(self, flower = True):
-        super().__init__(3,1)
-        self.is_flower = flower
-        if not flower:
-            self.type = randint(0,2)
-        else:
-            self.type = randint(0,1)
+    def __init__(self):
+        super().__init__(7,3)
+        self.type = randint(0,len(env_render.grass_types)-1)
+        self.height_pos = randint(0,self._frame_height-1)
+        self._animation_step = env_render.MAX_STEPS * random()
 
     def render(self):
         composed_env = []
@@ -33,21 +39,24 @@ class env_render(base_render):
             curr_step = env_render.MAX_STEPS - 1 - int(self._animation_step)
         else:
             curr_step = int(self._animation_step)
-        
+
+        # Fill 3x5 frame with empty spaces
+        for i in range(0, self._frame_height):
+            composed_env.append(" "*self._frame_width)
+
         # Compose the environment element
-        if self.is_flower:
-            if self.type == 0:
-                composed_env.append(self._fill_frame(env_render.flower0[curr_step]))
-            else:
-                composed_env.append(self._fill_frame(env_render.flower1[curr_step]))
-        else:
-            if self.type == 0:
-                composed_env.append(self._fill_frame(env_render.grass0[curr_step]))
-            elif self.type == 1:
-                composed_env.append(self._fill_frame(env_render.grass1[curr_step]))
-            else:
-                composed_env.append(self._fill_frame(env_render.grass2[curr_step]))
+        composed_env[self.height_pos] = self.get_grass_type(curr_step)
 
-        self._animation_step += 1/(2*env_render.MAX_STEPS)
-        return composed_env
-
+        self._animation_step += 1/(6*env_render.MAX_STEPS)
+        return self.fill_color(composed_env)
+   
+    def get_grass_type(self, step:int):
+        """Returns corresponding grass type filled to _frame_width"""
+        # Compose the environment element
+        return "  " + env_render.grass_types[self.type][step] + "  "
+    
+    def fill_color(self, frame):
+        """Fills frame with background and colors the grass elements"""
+        for i in range(0,self._frame_height):
+            frame[i] = style.CBEIGEBG2+ style.CBEIGE+frame[i] + style.CEND
+        return frame

@@ -1,5 +1,5 @@
 import random
-from base_render import base_render
+from .base_render import base_render
 
 class character_render(base_render):
     heads_iddle =   ["ó","ü","ô", "ö", "a", "e"]
