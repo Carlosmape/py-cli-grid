@@ -1,6 +1,8 @@
 from random import randint
 from engine.characters.Base import Character
+from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
+from engine.defines.Actions import Action
 from engine.defines.defines import BodyParts
 from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import ImpassableItem
@@ -9,6 +11,7 @@ from engine.menu import Menu
 from .pj_render import character_render
 from .env_render import env_render
 from .wall_render import wall_render
+from .item_render import item_render
 from .colors import style
 
 class render_engine():
@@ -31,18 +34,19 @@ class render_engine():
             if isinstance(item, ImpassableItem):
                 self._rendered_objects[item] = wall_render()
             else:
-                self._rendered_objects[item] = env_render()
+                self._rendered_objects[item] = item_render()
         return self._rendered_objects[item].render()
     
-    def render_character(self, pj: Character):
+    def render_character(self, pj: NoPlayerCharacter):
         if pj not in self._rendered_objects:
             self._rendered_objects[pj] = character_render()
 
-        self._rendered_objects[pj].update_state
+        self._rendered_objects[pj].update_state(True, pj.is_moving, False)
         return self._rendered_objects[pj].render()
 
     def render_player(self, pj: PlayerCharacter):
         self._reder_pj.update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],pj.items[BodyParts.hands])
+        self._reder_pj.update_state(True, pj.is_moving, False)
         return self._reder_pj.render()
         
     def render_menu(self, menu: Menu):
@@ -52,7 +56,7 @@ class render_engine():
         if menu.options:
             i = 0
             for opt in menu.options:
-                str_opt += style.CGREEN + str(i)+ "." + style.CEND + opt +" "
+                str_opt += style.CGREEN + str(i)+ "." + style.CEND + str(opt) +" "
                 i += 1        
 
         # Calculate elements size to center the menu

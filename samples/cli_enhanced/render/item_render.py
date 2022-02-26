@@ -1,14 +1,15 @@
 from .base_render import base_render
 
 
-class wall_render(base_render):
+class item_render(base_render):
     
     def __init__(self):
         super().__init__(7,3)
     
     def render(self):
         composed_wall = []
-        for i in range(self._frame_height):
-            composed_wall.append("█"*self._frame_width)
+        composed_wall.append("  /-\\  ")
+        composed_wall.append(" |·X·| ")
+        composed_wall.append("  \\-/  ")
         return composed_wall
 

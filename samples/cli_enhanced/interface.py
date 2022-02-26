@@ -45,12 +45,12 @@ class AreaBox(CommandLineBox):
 
         # Margin spaces to fill entire area with elements (and margins)
         self.width_margin = int((self.width - self.objects_per_row*self.scale_width)/2)
-
+        self.height_margin = int((self.height - self.objects_per_col*self.scale_height)/2)
         print("Height", self.height, "Width", self.width)
         print("objects per row:", self.objects_per_row)
         print("objects per col:", self.objects_per_col)
         print("Total objects:",   self.objects_in_area)
-        print("marging", self.width_margin)
+        print("Width marging", self.width_margin, "Height margin", self.height_margin)
         input()
 
     def retrieve_objects(self, frame: Frame):
@@ -59,10 +59,19 @@ class AreaBox(CommandLineBox):
         items = []
         for y in range(0, self.objects_per_col):
             for x in range(0, self.objects_per_row):
-                if frame.player.position == Position(x,y):
+                current_pos = Position(x,y)
+                if frame.player.position == current_pos:
                     items.append(self.render_engine.render_player(frame.player))
                 else:
-                    items.append(self.render_engine.render_ground(x*y))
+                    npc = frame.get_npc(current_pos)
+                    if npc:
+                        items.append(self.render_engine.render_character(npc))
+                    else:
+                        item = frame.area.item(current_pos)
+                        if item:
+                            items.append(self.render_engine.render_item(item))
+                        else:
+                            items.append(self.render_engine.render_ground(x*y))
 
         return items
 
@@ -71,9 +80,9 @@ class AreaBox(CommandLineBox):
         if len(objects) != self.objects_in_area:
             raise Exception("AreaBox::get_content_string: Received unexpected objects number %d/%d"%(len(objects),self.objects_in_area))
 
-        string = str()
+        string = "\n"*self.height_margin
         free_spaces = style.CEND + " " * self.width_margin
-        for y in range(0, self.objects_per_col):
+        for y in reversed(range(0, self.objects_per_col)):
             items = objects[y*self.objects_per_row:(y*self.objects_per_row+self.objects_per_row)]
 
             #draw this row of objects
@@ -85,8 +94,7 @@ class AreaBox(CommandLineBox):
                 str_row += free_spaces + "\n"
             string += str_row 
 
-        remain_size = int(self.height - string.count("\n"))
-        return string +"\n"*remain_size+""
+        return string +"\n"*self.height_margin+""
 
 class CommandLineInterface(GUI):
     """Enhanced CLI interface for MotorRol"""
@@ -197,6 +205,8 @@ class CommandLineInterface(GUI):
             player.active_action_menu(self.last_frame.area)
         elif action and ord(action) == 27:
             player.active_pause_menu()
+        elif action == None:
+            player.no_move(self.last_frame.area)
 
     def clear(self):
         if os.name in ('nt', 'dos'):
