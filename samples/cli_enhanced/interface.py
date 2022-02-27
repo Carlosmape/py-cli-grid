@@ -42,39 +42,27 @@ class AreaBox(CommandLineBox):
         self.objects_per_col = int(self.height/self.scale_height)
         self.objects_in_area = self.objects_per_col*self.objects_per_row
         self.render_engine = render_engine(self.objects_in_area)
+        self.from_frame_y = 0
+        self.from_frame_x = 0
+        self.to_frame_y = 0 
+        self.to_frame_x = 0
+        self.frame_width = 0
+        self.frame_height = 0
 
         # Margin spaces to fill entire area with elements (and margins)
         self.width_margin = int((self.width - self.objects_per_row*self.scale_width)/2)
         self.height_margin = int((self.height - self.objects_per_col*self.scale_height)/2)
-        print("Height", self.height, "Width", self.width)
-        print("objects per row:", self.objects_per_row)
-        print("objects per col:", self.objects_per_col)
-        print("Total objects:",   self.objects_in_area)
-        print("Width marging", self.width_margin, "Height margin", self.height_margin)
-        input()
+
 
     def retrieve_objects(self, frame: Frame):
         if not frame.area or not frame.player:
             return
         items = []
         
-        #Calculate frame of the area to render
-        if frame.player.position.Y-self.objects_per_col/2 < 0:
-            desfase = self.objects_per_col + (frame.player.position.Y-self.objects_per_col/2)
-        else:
-            desfase = 0
-        posh_from = max(0, int(frame.player.position.Y-self.objects_per_col/2))
-        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2+desfase))
+        self.update_frame_sizes(frame)
 
-        if frame.player.position.X-self.objects_per_row/2 < 0:
-            desfase = self.objects_per_row - frame.player.position.X-self.objects_per_row/2 
-        else:
-            desfase = 0       
-        posw_from = max(0, int(frame.player.position.X-self.objects_per_row/2))
-        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2+desfase))
-
-        for y in range(posh_from, posh_to):
-            for x in range(posw_from, posw_to):
+        for y in range(self.from_frame_y, self.to_frame_y):
+            for x in range(self.from_frame_x, self.to_frame_x):
                 current_pos = Position(x,y)
                 if frame.player.position == current_pos:
                     items.append(self.render_engine.render_player(frame.player))
@@ -87,49 +75,60 @@ class AreaBox(CommandLineBox):
                         if item:
                             items.append(self.render_engine.render_item(item))
                         else:
-                            items.append(self.render_engine.render_ground(x*y))
+                            try:
+                                items.append(self.render_engine.render_ground((x-self.from_frame_x)*(y-self.from_frame_y)))
+                            except:
+                                print((x-self.from_frame_x),(y-self.from_frame_y), self.objects_in_area)
+                                print(self.from_frame_y,self.to_frame_y,self.from_frame_x, self.to_frame_x)
+                                input()
 
         return items
 
+    def update_frame_sizes(self, frame: Frame):
+        #Calculate frame of the area to render
+        desfase_from = 0
+        if int(frame.player.position.Y-self.objects_per_col/2) < 0:
+            desfase_from = self.objects_per_col + (frame.player.position.Y-self.objects_per_col/2)
+        else:
+            desfase_from = 0
+        desfase_to = 0
+        if  int(frame.player.position.Y+self.objects_per_col/2) > frame.area.height+1:
+            desfase_to = int(frame.player.position.Y+self.objects_per_col/2) - frame.area.height+1
+        else:
+            desfase_to = 0
+        self.from_frame_y = max(0, int(frame.player.position.Y-self.objects_per_col/2-desfase_to))
+        self.to_frame_y =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2+desfase_from))
+
+        desfase_from = 0
+        if frame.player.position.X-self.objects_per_row/2 < 0:
+            desfase_from = self.objects_per_row - frame.player.position.X-self.objects_per_row/2 
+
+        desfase_to = 0
+        if  frame.player.position.X+self.objects_per_row/2 > frame.area.width:
+            desfase_to = frame.player.position.X+self.objects_per_row/2 - frame.area.width
+
+        self.from_frame_x = max(0, int(frame.player.position.X-self.objects_per_row/2-desfase_to))
+        self.to_frame_x =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2+desfase_from))
+
+        self.frame_width = self.to_frame_x - self.from_frame_x
+        self.frame_height = self.to_frame_y - self.from_frame_y
+
+        self.width_margin = int((self.width - self.frame_width*self.scale_width)/2)
+        self.height_margin = int((self.height - self.frame_height*self.scale_height)/2)
+
+        self.objects_in_area = self.frame_width * self.frame_height
 
     def get_content_string(self, objects, frame: Frame):
- 
-        #Calculate frame of the area to render
-        if frame.player.position.Y-self.objects_per_col/2 < 0:
-            desfase = self.objects_per_col + (frame.player.position.Y-self.objects_per_col/2)
-        else:
-            desfase = 0
-        posh_from = max(0, int(frame.player.position.Y-self.objects_per_col/2))
-        posh_to =   min(frame.area.height+1, int(frame.player.position.Y+self.objects_per_col/2+desfase))
-
-        if frame.player.position.X-self.objects_per_row/2 < 0:
-            desfase = self.objects_per_row - frame.player.position.X-self.objects_per_row/2 
-        else:
-            desfase = 0       
-        posw_from = max(0, int(frame.player.position.X-self.objects_per_row/2))
-        posw_to =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2+desfase))
-        frame_width = posw_to - posw_from
-        frame_height = posh_to - posh_from
-
-        print(posh_from, posh_to)
-        print(posw_from, posw_to)
-        print(self.objects_per_row, self.objects_per_col)
-        print(frame.area.width, frame.area.height)
-        print(frame_width, frame_height)
-        #input()
-        self.width_margin = int((self.width - frame_width*self.scale_width)/2)
-        self.height_margin = int((self.height - frame_height*self.scale_height)/2)
-
-        self.objects_in_area = frame_width*frame_height
-
+        if not frame.area or not frame.player:
+            return
         if len(objects) != self.objects_in_area:
             raise Exception("AreaBox::get_content_string: Received unexpected objects number %d/%d"%(len(objects),self.objects_in_area))
 
         string = "\n"*self.height_margin
         free_spaces = style.CEND + " " * self.width_margin
 
-        for y in reversed(range(0, frame_height)):
-            items = objects[y*frame_width:(y*frame_width+frame_width)]
+        for y in reversed(range(0, self.frame_height)):
+            items = objects[y*self.frame_width:(y*self.frame_width+self.frame_width)]
 
             #draw this row of objects
             str_row = ''

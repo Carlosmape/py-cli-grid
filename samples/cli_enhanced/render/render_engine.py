@@ -30,12 +30,12 @@ class render_engine():
         return self._ground_render[ground].render()
 
     def render_item(self, item:Item):
-        if item not in self._rendered_objects:
+        if type(item) not in self._rendered_objects:
             if isinstance(item, ImpassableItem):
-                self._rendered_objects[item] = wall_render()
+                self._rendered_objects[type(item)] = wall_render()
             else:
-                self._rendered_objects[item] = item_render()
-        return self._rendered_objects[item].render()
+                self._rendered_objects[type(item)] = item_render()
+        return self._rendered_objects[type(item)].render()
     
     def render_character(self, pj: NoPlayerCharacter):
         if pj not in self._rendered_objects:
