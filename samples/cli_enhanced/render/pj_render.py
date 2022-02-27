@@ -1,4 +1,6 @@
 import random
+
+from samples.cli_enhanced.render.colors import style
 from .base_render import base_render
 
 class character_render(base_render):
@@ -30,9 +32,9 @@ class character_render(base_render):
     composed_torso = ""
     composed_legs = ""
 
-    def __init__(self):
+    def __init__(self, background, foreground):
         # Initialize base class
-        super().__init__(7,3)
+        super().__init__(7,3, background, foreground)
         
         # Generate random parts
         self._head = random.randint(0, len(character_render.heads_iddle)-1)
@@ -116,7 +118,7 @@ class character_render(base_render):
                 sword = self.sword_iddle[step]
 
         if self._to_east:
-            return "   " + head + sword
+            return self._back_color+"   " + head + sword+style.CEND
         else:
             return sword + head + "   "
 
@@ -139,7 +141,7 @@ class character_render(base_render):
             if self._attacking or self._running:
                 l_hand = character_render.hands_action[step]
 
-        return " " + l_hand + l_arm + torso + r_arm + r_hand + " "
+        return self._back_color+" " + l_hand + l_arm + torso + r_arm + r_hand + " "+style.CEND
 
     def composeLegs(self, step):
         # We know that we have 7 chars to compose lower boddy
@@ -184,6 +186,6 @@ class character_render(base_render):
                     legs = character_render.nude_legs_run_w
 
         if self._to_east:
-            return "  " + legs + staff
+            return self._back_color+"  " + legs + staff+style.CEND
         else:
-            return staff + legs + "  "
+            return self._back_color+staff + legs + "  "+style.CEND

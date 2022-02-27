@@ -21,8 +21,8 @@ class env_render(base_render):
 
     MAX_STEPS = 6
 
-    def __init__(self):
-        super().__init__(7,3)
+    def __init__(self, background, foreground):
+        super().__init__(7,3, background, foreground)
         self.type = randint(0,len(env_render.grass_types)-1)
         self.height_pos = randint(0,self._frame_height-1)
         self._animation_step = env_render.MAX_STEPS * random()
@@ -58,5 +58,5 @@ class env_render(base_render):
     def fill_color(self, frame):
         """Fills frame with background and colors the grass elements"""
         for i in range(0,self._frame_height):
-            frame[i] = style.CBEIGEBG2+ style.CBEIGE+frame[i] + style.CEND
+            frame[i] = self._back_color+self._fore_color+frame[i] + style.CEND
         return frame
