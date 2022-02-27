@@ -41,7 +41,8 @@ class AreaBox(CommandLineBox):
         self.objects_per_row = int(self.width/self.scale_width)
         self.objects_per_col = int(self.height/self.scale_height)
         self.objects_in_area = (self.objects_per_col+1)*(self.objects_per_row+1)
-        self.render_engine = render_engine(self.objects_in_area)
+        self.max_objects_in_area = self.objects_in_area
+        self.render_engine = render_engine(self.max_objects_in_area)
         self.from_frame_y = 0
         self.from_frame_x = 0
         self.to_frame_y = 0 
@@ -75,12 +76,7 @@ class AreaBox(CommandLineBox):
                         if item:
                             items.append(self.render_engine.render_item(item))
                         else:
-                            try:
-                                items.append(self.render_engine.render_ground((x-self.from_frame_x)*(y-self.from_frame_y)))
-                            except:
-                                print((x-self.from_frame_x),(y-self.from_frame_y), self.objects_in_area)
-                                print(self.from_frame_y,self.to_frame_y,self.from_frame_x, self.to_frame_x)
-                                input()
+                            items.append(self.render_engine.render_ground((x*y)%self.max_objects_in_area))
 
         return items
 
