@@ -14,6 +14,7 @@ from .env_render import env_render
 from .wall_render import wall_render
 from .item_render import item_render
 from .container_render import container_render
+from .tittle_render import tittle_render
 from .colors import style
 
 class render_engine():
@@ -26,11 +27,14 @@ class render_engine():
         self._initialized = True
         self._rendered_objects = {}
         self._reder_pj = character_render(render_engine.background_col, style.CBLACK)
+        self._tittle_render = tittle_render(render_engine.background_col, style.CBLACK)
         self._ground_variety = ground
         self._ground_render = []
         for i in range(0,self._ground_variety+1):
             self._ground_render.append(env_render(render_engine.background_col, render_engine.grass_col))
             
+    def render_tittle(self):
+        return self._tittle_render.render()
     
     def render_ground(self,ground):
         return self._ground_render[ground].render()

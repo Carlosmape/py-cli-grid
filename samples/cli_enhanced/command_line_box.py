@@ -1,4 +1,7 @@
 
+from random import randint
+from engine.characters.Base import DIRECTION_EAST, DIRECTION_WEST, DIRECTIONS
+from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.defines.defines import Position
 from engine.frame import Frame
 from samples.cli_enhanced.render.colors import style
@@ -31,7 +34,7 @@ class AreaBox(CommandLineBox):
         # Items per row and col
         self.objects_per_row = int(self.width/self.scale_width)
         self.objects_per_col = int(self.height/self.scale_height)
-        self.objects_in_area = (self.objects_per_col+1)*(self.objects_per_row+1)
+        self.objects_in_area = (self.objects_per_col)*(self.objects_per_row)
         self.max_objects_in_area = self.objects_in_area
         self.render_engine = render_engine(self.max_objects_in_area)
         self.from_frame_y = 0
@@ -130,16 +133,44 @@ class AreaBox(CommandLineBox):
 
 class LoadingBox(AreaBox):
     def __init__(self, width, height, scale_width, scale_height):
-        super().__init__(width,height,scale_width,scale_height)
-        self.frame_width = width
-        self.frame_height = height
-        self.width_margin = int((self.width - (self.objects_per_row+1)*self.scale_width)/2)
-        self.height_margin = int((self.height - (self.objects_per_col+1)*self.scale_height)/2)
+        super().__init__(width,height,scale_width, scale_height)
+        self.width_margin = int((self.width - (self.objects_per_row)*self.scale_width)/2)
+        self.height_margin = int((self.height - (self.objects_per_col)*self.scale_height)/2)
+        self.frame_width = self.objects_per_row 
+        self.frame_height = self.objects_per_col
+        self.npcs = []
+        for i in range(4):
+            self.npcs.append(NoPlayerCharacter(Position(),1))
+
+    def update_dummys_npc(self):
+        for npc in self.npcs:
+            action = randint(0,3)
+            if action == 0:
+                npc.is_moving = not npc.is_moving
+            elif action == 1:
+                npc.last_direction = DIRECTIONS[DIRECTION_WEST]
+            elif action == 2:
+                npc.last_direction = DIRECTIONS[DIRECTION_EAST]
+            elif action == 3:
+                npc.is_moving = False
 
     def retrieve_objects(self):
+        self.update_dummys_npc()
         items = []
-        for y in range(0, self.objects_per_col+1):
-            for x in range(0, self.objects_per_row+1):
-                items.append(self.render_engine.render_ground(x*y))
+        for y in range(0, self.objects_per_col):
+            for x in range(0, self.objects_per_row):
+                if y == self.objects_per_col/2 and x == self.objects_per_row/2:
+                    items.append(self.render_engine.render_tittle())
+                elif y-1 == self.objects_per_col/2 and x-1 == self.objects_per_row/2:
+                    items.append(self.render_engine.render_character(self.npcs[0]))
+                elif y+1 == self.objects_per_col/2 and x-1 == self.objects_per_row/2:
+                    items.append(self.render_engine.render_character(self.npcs[1]))
+                elif y-1 == self.objects_per_col/2 and x+1 == self.objects_per_row/2:
+                    items.append(self.render_engine.render_character(self.npcs[2]))
+                elif y+1 == self.objects_per_col/2 and x+1 == self.objects_per_row/2:
+                    items.append(self.render_engine.render_character(self.npcs[3]))               
+                else:
+                    items.append(self.render_engine.render_ground(x*y))
+
         return items
 
