@@ -4,8 +4,9 @@ from .base_render import base_render
 
 class item_render(base_render):
     
-    def __init__(self, background, foreground):
+    def __init__(self, background, foreground, item_bg = style.CBLACKBG):
         super().__init__(7,3, background, foreground)
+        self._item_bg = item_bg
     
     def render(self):
         composed_wall = []

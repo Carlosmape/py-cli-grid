@@ -120,7 +120,7 @@ class character_render(base_render):
         if self._to_east:
             return self._back_color+"   " + head + sword+style.CEND
         else:
-            return sword + head + "   "
+            return self._back_color+sword + head + "   "+style.CEND
 
     def composeTorso(self, step):
         # We known that we have 7 chars to compose middle body

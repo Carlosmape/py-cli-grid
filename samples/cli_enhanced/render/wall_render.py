@@ -10,6 +10,12 @@ class wall_render(base_render):
     def render(self):
         composed_wall = []
         for i in range(self._frame_height):
-            composed_wall.append(self._back_color+self._fore_color+"█"*self._frame_width + style.CEND)
+            # Compose each item row
+            #if i % 2 == 0:
+            #    row = "▓"*i+"█"*(self._frame_width-i)
+            #else:
+            #    row = "█"*(self._frame_width-i)+"▓"*i
+            row = "█"*self._frame_width
+            composed_wall.append(self._back_color+self._fore_color+row + style.CEND)
         return composed_wall
 
