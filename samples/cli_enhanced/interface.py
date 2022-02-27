@@ -40,7 +40,7 @@ class AreaBox(CommandLineBox):
         # Items per row and col
         self.objects_per_row = int(self.width/self.scale_width)
         self.objects_per_col = int(self.height/self.scale_height)
-        self.objects_in_area = self.objects_per_col*self.objects_per_row
+        self.objects_in_area = (self.objects_per_col+1)*(self.objects_per_row+1)
         self.render_engine = render_engine(self.objects_in_area)
         self.from_frame_y = 0
         self.from_frame_x = 0
@@ -104,8 +104,8 @@ class AreaBox(CommandLineBox):
             desfase_from = self.objects_per_row - frame.player.position.X-self.objects_per_row/2 
 
         desfase_to = 0
-        if  frame.player.position.X+self.objects_per_row/2 > frame.area.width:
-            desfase_to = frame.player.position.X+self.objects_per_row/2 - frame.area.width
+        if  frame.player.position.X+self.objects_per_row/2 > frame.area.width+1:
+            desfase_to = frame.player.position.X+self.objects_per_row/2 - frame.area.width+1
 
         self.from_frame_x = max(0, int(frame.player.position.X-self.objects_per_row/2-desfase_to))
         self.to_frame_x =   min(frame.area.width+1, int(frame.player.position.X+self.objects_per_row/2+desfase_from))
@@ -181,11 +181,6 @@ class CommandLineInterface(GUI):
 
     def render_start_screen(self):
         # Clear console
-        print("height", self.height, "width", self.width)
-        print("objects per row:", self.objects_per_row)
-        print("objects per col:", self.objects_per_col)
-        print("Total objects:",   self.objects_in_area)
-        input()
         self.clear() 
         while not self.readUserAction():
             string = str()
@@ -246,12 +241,12 @@ class CommandLineInterface(GUI):
             player.move_south(self.last_frame.area)
         elif action == ('d' or 'D'):
             player.move_east(self.last_frame.area)
-        elif action == (' '):
+        elif action == ('f' or 'F'):
             player.active_action_menu(self.last_frame.area)
         elif action and ord(action) == 27:
             player.active_pause_menu()
-        #elif action == None:
-        #    player.no_move(self.last_frame.area)
+        elif action == None:
+            player.no_move(self.last_frame.area)
 
     def clear(self):
         if os.name in ('nt', 'dos'):
