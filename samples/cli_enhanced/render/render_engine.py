@@ -1,5 +1,5 @@
 from random import randint
-from engine.characters.Base import Character
+from engine.characters.Base import DIRECTION_EAST, DIRECTIONS, Character
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Actions import Action
@@ -48,13 +48,12 @@ class render_engine():
     def render_character(self, pj: NoPlayerCharacter):
         if pj not in self._rendered_objects:
             self._rendered_objects[pj] = character_render(render_engine.background_col, style.CBLACK)
-
-        self._rendered_objects[pj].update_state(True, pj.is_moving, False)
+        self._rendered_objects[pj].update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, False)
         return self._rendered_objects[pj].render()
 
     def render_player(self, pj: PlayerCharacter):
         self._reder_pj.update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],pj.items[BodyParts.hands])
-        self._reder_pj.update_state(True, pj.is_moving, False)
+        self._reder_pj.update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, False)
         return self._reder_pj.render()
         
     def render_menu(self, menu: Menu):
