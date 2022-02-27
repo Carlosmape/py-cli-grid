@@ -19,15 +19,14 @@ class CommandLineBox():
         self.width = width
         self.height = height
         self.content = []
+        # Margin spaces to fill entire area with elements (and margins)
+        self.width_margin = self.width
+        self.height_margin = self.height
+    
+    def fill_box(self, string):
+        self.height_margin = int(self.height - string.count("\n"))
+        return string +"\n"*self.height_margin+""
 
-    def append(self, str_content:str):
-        line_size = len(str_content)
-        if line_size > self.width:
-            raise Exception("CommandLineBox::append: Box width exceeded")
-        if len(self.content) < self.height:
-            self.content.append(str_content)
-        else:
-            raise Exception("CommandLineBox::append: Box height exceeded")
 
 class AreaBox(CommandLineBox):
     def __init__(self, width, height, scale_width, scale_height):
@@ -54,6 +53,8 @@ class AreaBox(CommandLineBox):
         self.width_margin = int((self.width - self.objects_per_row*self.scale_width)/2)
         self.height_margin = int((self.height - self.objects_per_col*self.scale_height)/2)
 
+    def fill_box(self, string):
+        return string +"\n"*self.height_margin+""
 
     def retrieve_objects(self, frame: Frame):
         if not frame.area or not frame.player:
@@ -135,7 +136,7 @@ class AreaBox(CommandLineBox):
                 str_row += free_spaces + "\n"
             string += str_row 
 
-        return string +"\n"*self.height_margin+""
+        return self.fill_box(string)
 
 class CommandLineInterface(GUI):
     """Enhanced CLI interface for MotorRol"""
@@ -203,13 +204,19 @@ class CommandLineInterface(GUI):
         composed_area = self.area_container.retrieve_objects(frame)
         if composed_area:
             str_gui += self.area_container.get_content_string(composed_area, frame)
-
+        # Get stats
+        #TODO: extract this in renfer_engine
+        composed_stats = frame.get_msg()
+        # Add messages
+        frame_str = ""
+        for msg in composed_stats:
+            frame_str += style.CGREEN + " - " + style.CEND
+            frame_str += style.CITALIC + msg + "\n"
+        str_gui += self.status_container.fill_box(frame_str)
         # Get Menu
         composed_menu = self.render_menu(frame.menu)
         if composed_menu:
-            str_gui += composed_menu[0] +"\n"
-            str_gui += composed_menu[1] +"\n"
-            str_gui += composed_menu[2] +"\n"
+            str_gui += self.menu_container.fill_box(composed_menu[0]+"\n"+composed_menu[1]+"\n"+composed_menu[2]+"\n")
 
         remain_size = int(self.height - str_gui.count("\n")-1)
         print(str_gui+"\n"*remain_size, end='\r')
