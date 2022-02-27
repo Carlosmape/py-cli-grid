@@ -7,6 +7,7 @@ from engine.defines.defines import BodyParts
 from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import ImpassableItem
 from engine.items.interactives.CollectibleItem import CollectibleItem
+from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable
 from engine.items.interactives.containeritem import container_item
 from engine.menu import Menu
 from .pj_render import character_render
@@ -52,6 +53,8 @@ class render_engine():
     def render_character(self, pj: NoPlayerCharacter):
         if pj not in self._rendered_objects:
             self._rendered_objects[pj] = character_render(render_engine.background_col, style.CBLACK)
+
+        self._rendered_objects[pj].update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],pj.items[BodyParts.hands]==HandsWearable.Staff())
         self._rendered_objects[pj].update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, False)
         return self._rendered_objects[pj].render()
 

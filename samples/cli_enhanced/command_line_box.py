@@ -2,8 +2,9 @@
 from random import randint
 from engine.characters.Base import DIRECTION_EAST, DIRECTION_WEST, DIRECTIONS
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
-from engine.defines.defines import Position
+from engine.defines.defines import BodyParts, Position
 from engine.frame import Frame
+from engine.items.interactives.WearableItem import HandsWearable, WearableItem
 from samples.cli_enhanced.render.colors import style
 from samples.cli_enhanced.render.render_engine import render_engine
 
@@ -140,7 +141,8 @@ class LoadingBox(AreaBox):
         self.frame_height = self.objects_per_col
         self.npcs = []
         for i in range(4):
-            self.npcs.append(NoPlayerCharacter(Position(),1))
+            self.npcs.append(NoPlayerCharacter(Position(self.objects_per_col/2,self.objects_per_row/2),1))
+            self.npcs[i].items[BodyParts.hands] = HandsWearable.Any()
 
     def update_dummys_npc(self):
         for npc in self.npcs:
@@ -161,13 +163,13 @@ class LoadingBox(AreaBox):
             for x in range(0, self.objects_per_row):
                 if y == self.objects_per_col/2 and x == self.objects_per_row/2:
                     items.append(self.render_engine.render_tittle())
-                elif y-1 == self.objects_per_col/2 and x-1 == self.objects_per_row/2:
+                elif y-2 == self.objects_per_col/2 and x-2 == self.objects_per_row/2:
                     items.append(self.render_engine.render_character(self.npcs[0]))
-                elif y+1 == self.objects_per_col/2 and x-1 == self.objects_per_row/2:
+                elif y+2 == self.objects_per_col/2 and x-2 == self.objects_per_row/2:
                     items.append(self.render_engine.render_character(self.npcs[1]))
-                elif y-1 == self.objects_per_col/2 and x+1 == self.objects_per_row/2:
+                elif y-2 == self.objects_per_col/2 and x+2 == self.objects_per_row/2:
                     items.append(self.render_engine.render_character(self.npcs[2]))
-                elif y+1 == self.objects_per_col/2 and x+1 == self.objects_per_row/2:
+                elif y+2 == self.objects_per_col/2 and x+2 == self.objects_per_row/2:
                     items.append(self.render_engine.render_character(self.npcs[3]))               
                 else:
                     items.append(self.render_engine.render_ground(x*y))

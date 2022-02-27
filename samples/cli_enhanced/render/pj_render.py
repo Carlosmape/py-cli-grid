@@ -118,9 +118,9 @@ class character_render(base_render):
                 sword = self.sword_iddle[step]
 
         if self._to_east:
-            return self._back_color+"   " + head + sword+style.CEND
+            return self._back_color+self._fore_color+"   " + head + sword+style.CEND
         else:
-            return self._back_color+sword + head + "   "+style.CEND
+            return self._back_color+self._fore_color+sword + head + "   "+style.CEND
 
     def composeTorso(self, step):
         # We known that we have 7 chars to compose middle body
@@ -141,7 +141,7 @@ class character_render(base_render):
             if self._attacking or self._running:
                 l_hand = character_render.hands_action[step]
 
-        return self._back_color+" " + l_hand + l_arm + torso + r_arm + r_hand + " "+style.CEND
+        return self._back_color+self._fore_color+" " + l_hand + l_arm + torso + r_arm + r_hand + " "+style.CEND
 
     def composeLegs(self, step):
         # We know that we have 7 chars to compose lower boddy
@@ -186,6 +186,6 @@ class character_render(base_render):
                     legs = character_render.nude_legs_run_w
 
         if self._to_east:
-            return self._back_color+"  " + legs + staff+style.CEND
+            return self._back_color+self._fore_color+"  " + legs + staff+style.CEND
         else:
-            return self._back_color+staff + legs + "  "+style.CEND
+            return self._back_color+self._fore_color+staff + legs + "  "+style.CEND
