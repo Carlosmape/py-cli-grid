@@ -1,4 +1,5 @@
 import os
+import threading
 from time import sleep
 from traceback import format_exc
 from engine.characters.PlayerCharacter import PlayerCharacter
@@ -21,7 +22,7 @@ class CommandLineInterface(GUI):
 
     def __init__(self):
         super().__init__()
-
+        
         # Get terminal size
         size = os.get_terminal_size()
         self.width = size.columns
@@ -44,20 +45,10 @@ class CommandLineInterface(GUI):
 
         # Initialize Render
         self.render_engine = render_engine(self.objects_in_area)
-
-        #Show start screen before game begins
+        
         self.render_start_screen()
 
-        # Clear console
-        self.clear() 
-
-        # Clean user actions
-        self.readUserAction();
-
     def render_start_screen(self):
-        # Clear console
-        self.clear() 
-
         while not self.readUserAction():
             composed_area = self.loading_container.retrieve_objects()
             str_gui = self.loading_container.get_content_string(composed_area)
@@ -65,6 +56,9 @@ class CommandLineInterface(GUI):
             sleep(1/self.max_frame_rate)
             
     def render(self, frame:Frame):
+        threading.Thread(target=self.render_thread, args=(frame,)).start()
+
+    def render_thread(self, frame: Frame):
         str_gui=''
 
         # Get Area
