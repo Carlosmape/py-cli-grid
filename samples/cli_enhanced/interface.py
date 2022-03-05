@@ -8,7 +8,10 @@ from engine.frame import Frame
 from engine.interface import GUI
 from KBHit import KBHit
 from engine.menu import Menu
-from samples.cli_enhanced.command_line_box import AreaBox, CommandLineBox, LoadingBox
+from samples.cli_enhanced.area_box import AreaBox
+from samples.cli_enhanced.command_line_box import CommandLineBox
+from samples.cli_enhanced.loading_box import LoadingBox
+from samples.cli_enhanced.menu_box import MenuBox
 from samples.cli_enhanced.render.colors import style
 from samples.cli_enhanced.render.render_engine import render_engine
 
@@ -36,7 +39,7 @@ class CommandLineInterface(GUI):
         self.loading_container = LoadingBox(self.width, self.height, self.scale_width, self.scale_height)
         self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
         self.status_container = CommandLineBox(self.width, self.height/4)
-        self.menu_container = CommandLineBox(self.width, self.height/4)
+        self.menu_container = MenuBox(self.width, self.height/4)
 
         # Items per row and col
         self.objects_per_row = int(self.width/self.scale_width)
@@ -73,19 +76,12 @@ class CommandLineInterface(GUI):
         str_gui += self.status_container.render(frame_str)
 
         # Get Menu
-        composed_menu = self.render_menu(frame.menu)
-        if composed_menu:
-            str_gui += self.menu_container.render(composed_menu[0]+"\n"+composed_menu[1]+"\n"+composed_menu[2]+"\n")
+        str_gui += self.menu_container.render(frame.menu)
 
         remain_size = int(self.height - str_gui.count("\n")-1)
         print(str_gui+"\n"*remain_size, end='\r')
 
     
-    def render_menu(self, menu:Menu):
-        if not menu:
-            return
-        return self.render_engine.render_menu(menu)
-
     def readUserAction(self, blocking: bool = False):
         if blocking:
             return input()

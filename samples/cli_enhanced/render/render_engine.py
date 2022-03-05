@@ -63,25 +63,4 @@ class render_engine():
         self._reder_pj.update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, False)
         return self._reder_pj.render()
         
-    def render_menu(self, menu: Menu):
-        composed_menu = []
-
-        str_opt=''
-        if menu.options:
-            i = 0
-            for opt in menu.options:
-                str_opt += style.CGREEN + str(i)+ "." + style.CEND + str(opt) +" "
-                i += 1        
-
-        # Calculate elements size to center the menu
-        size_menu = len(menu.title)
-        size_query = len(menu.query)
-        size_options = len(str_opt)
-        max_size_part = max(size_menu, size_options, size_query)
-
-        composed_menu.append(" "*int((max_size_part-size_menu)/2)+style.CBOLD+style.CITALIC+menu.title+style.CEND)
-        composed_menu.append(" "*int((max_size_part-size_options)/2)+str_opt)
-        composed_menu.append(" "*int((max_size_part-size_query)/2)+menu.query)
-        return composed_menu
-
 
