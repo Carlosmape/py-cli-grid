@@ -14,6 +14,7 @@ from samples.cli_enhanced.loading_box import LoadingBox
 from samples.cli_enhanced.menu_box import MenuBox
 from samples.cli_enhanced.render.colors import style
 from samples.cli_enhanced.render.render_engine import render_engine
+from samples.cli_enhanced.stats_box import PjStatsBox
 
 keyboard = KBHit()
 # System call
@@ -38,7 +39,7 @@ class CommandLineInterface(GUI):
         # Calculate frame sizes for each part
         self.loading_container = LoadingBox(self.width, self.height, self.scale_width, self.scale_height)
         self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
-        self.status_container = CommandLineBox(self.width, self.height/4)
+        self.status_container = PjStatsBox(self.width, self.height/4)
         self.menu_container = MenuBox(self.width, self.height/4)
 
         # Items per row and col
@@ -66,6 +67,8 @@ class CommandLineInterface(GUI):
         str_gui += self.area_container.render(frame)
 
         # Get stats
+        str_gui += self.status_container.render(frame.player)
+
         #TODO: extract this in renfer_engine
         composed_stats = frame.get_msg()
         # Add messages
@@ -73,7 +76,7 @@ class CommandLineInterface(GUI):
         for msg in composed_stats:
             frame_str += style.CGREEN + " - " + style.CEND
             frame_str += style.CITALIC + msg + "\n"
-        str_gui += self.status_container.render(frame_str)
+        str_gui += frame_str
 
         # Get Menu
         str_gui += self.menu_container.render(frame.menu)
