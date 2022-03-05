@@ -50,9 +50,7 @@ class CommandLineInterface(GUI):
 
     def render_start_screen(self):
         while not self.readUserAction():
-            composed_area = self.loading_container.retrieve_objects()
-            str_gui = self.loading_container.get_content_string(composed_area)
-            print(str_gui, end='\r')
+            print(self.loading_container.render())
             sleep(1/self.max_frame_rate)
             
     def render(self, frame:Frame):
@@ -62,9 +60,8 @@ class CommandLineInterface(GUI):
         str_gui=''
 
         # Get Area
-        composed_area = self.area_container.retrieve_objects(frame)
-        if composed_area:
-            str_gui += self.area_container.get_content_string(composed_area)
+        str_gui += self.area_container.render(frame)
+
         # Get stats
         #TODO: extract this in renfer_engine
         composed_stats = frame.get_msg()
@@ -73,11 +70,12 @@ class CommandLineInterface(GUI):
         for msg in composed_stats:
             frame_str += style.CGREEN + " - " + style.CEND
             frame_str += style.CITALIC + msg + "\n"
-        str_gui += self.status_container.fill_box(frame_str)
+        str_gui += self.status_container.render(frame_str)
+
         # Get Menu
         composed_menu = self.render_menu(frame.menu)
         if composed_menu:
-            str_gui += self.menu_container.fill_box(composed_menu[0]+"\n"+composed_menu[1]+"\n"+composed_menu[2]+"\n")
+            str_gui += self.menu_container.render(composed_menu[0]+"\n"+composed_menu[1]+"\n"+composed_menu[2]+"\n")
 
         remain_size = int(self.height - str_gui.count("\n")-1)
         print(str_gui+"\n"*remain_size, end='\r')
