@@ -83,7 +83,7 @@ class PjStatsBox(CommandLineBox):
                     str_quests += q.name + style.CITALIC + " +" + str(q.reward.getXp()) + " xp"+style.CEND
                     if q.reward.hasItem():
                         str_quests += q.reward.getItem().name + " "
-                    str_quests += style.CEND + "\n"
+                    str_quests += style.CEND + "\n "
                     str_quests += style.CBEIGE + q.description + style.CEND
             return str_quests
         else:
@@ -101,11 +101,12 @@ class PjStatsBox(CommandLineBox):
                 col_str = ""
                 lines = col.split("\n")
                 if len(lines) > line:
-                    if len(lines[line]) > col_width:
-                        col_str += lines[line][0:col_width]
+                    if len(lines[line])- self.count_printable(lines[line]) > col_width:
+                        col_str += lines[line][0:col_width+self.count_printable(lines[line][0:col_width])]
                     else:
                         col_str += lines[line]
-                line_str += col_str + " " * (col_width - len(col_str) + self.count_printable(col_str))
+                col_fill_size = (col_width - len(col_str) + self.count_printable(col_str))
+                line_str += col_str + " " * col_fill_size
             frame_str += line_str + "\n"
         return self._fill_box(frame_str)
 
