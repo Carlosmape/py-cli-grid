@@ -39,8 +39,8 @@ class CommandLineInterface(GUI):
         # Calculate frame sizes for each part
         self.loading_container = LoadingBox(self.width, self.height, self.scale_width, self.scale_height)
         self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
-        self.status_container = PjStatsBox(self.width, self.height/4)
-        self.menu_container = MenuBox(self.width, self.height/4)
+        self.status_container = PjStatsBox(self.width, self.height/6)
+        self.menu_container = MenuBox(self.width, self.height/6)
 
         # Items per row and col
         self.objects_per_row = int(self.width/self.scale_width)
