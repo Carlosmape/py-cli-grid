@@ -41,6 +41,7 @@ class CommandLineInterface(GUI):
         self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
         self.status_container = PjStatsBox(self.width, self.height/6)
         self.menu_container = MenuBox(self.width, self.height/6)
+        self.log_container = CommandLineBox(self.width, self.height/6)
 
         # Items per row and col
         self.objects_per_row = int(self.width/self.scale_width)
@@ -66,17 +67,17 @@ class CommandLineInterface(GUI):
         # Get Area
         str_gui += self.area_container.render(frame)
 
-        # Get stats
-        str_gui += self.status_container.render(frame.player)
-
+        # Get messages
         #TODO: extract this in renfer_engine
         composed_stats = frame.get_msg()
-        # Add messages
         frame_str = ""
         for msg in composed_stats:
             frame_str += style.CGREEN + " - " + style.CEND
             frame_str += style.CITALIC + msg + "\n"
-        str_gui += frame_str
+        str_gui += self.log_container.render(frame_str)
+
+        # Get stats
+        str_gui += self.status_container.render(frame.player)
 
         # Get Menu
         str_gui += self.menu_container.render(frame.menu)
