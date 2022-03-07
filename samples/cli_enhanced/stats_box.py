@@ -1,6 +1,8 @@
 import re
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts
+from engine.items.interactives.CollectibleItem import CollectibleItem
+from engine.items.interactives.containeritem import container_item
 from engine.menu import Menu
 from samples.cli_enhanced.command_line_box import CommandLineBox
 from samples.cli_enhanced.render.colors import style
@@ -23,35 +25,63 @@ class PjStatsBox(CommandLineBox):
         self.height_margin = int(self.height - string.count("\n"))
         return string +"\n"*self.height_margin+""
 
+    def _get_equipment_stats(self,pj: PlayerCharacter, body_part):
+        if pj.items[body_part]:
+            item: CollectibleItem = pj.items[body_part]
+            eq_string = str(item) 
+            if item.health > 0:
+                eq_string += " " +style.CITALIC + style.CRED + str(item.health) + style.CEND
+            if item.agility > 0:
+                eq_string += " " +style.CITALIC + style.CYELLOW + str(item.agility) + style.CEND
+            if item.streng > 0:
+                eq_string += " " +style.CITALIC + style.CGREEN + str(item.streng) + style.CEND
+            if item.speed > 0:
+                eq_string += " " +style.CITALIC + style.CBLUE2 + str(item.speed) + style.CEND
+            if isinstance(item, container_item):
+                eq_string += " "+style.CITALIC + str(item.load)+"/"+str(item.capacity)+" Kg" + style.CEND
+            return eq_string
+        else:
+            return BodyParts.str(body_part)
+
     def _render_equipment(self, pj: PlayerCharacter):
         # Player equipment
         pj_str = str()
         # Prepare each part text
-        strHead =       str(pj.items[BodyParts.head] or 'Head' )
-        strShoulder =   str(pj.items[BodyParts.shoulder] or 'Shoulders')
-        strChest =      str(pj.items[BodyParts.chest] or 'Chest')
-        strBack =       str(pj.items[BodyParts.back] or 'Back')
-        strArms =       str(pj.items[BodyParts.arms] or 'Arms')
-        strHands =      str(pj.items[BodyParts.hands] or 'Hand')
-        strCore =       str(pj.items[BodyParts.core] or 'Core')
-        strLegs =       str(pj.items[BodyParts.legs] or 'Legs')
-        strFeets =      str(pj.items[BodyParts.feets] or 'Feets')
+        strHead =       self._get_equipment_stats(pj,BodyParts.head)
+        strShoulder =   self._get_equipment_stats(pj,BodyParts.shoulder)
+        strChest =      self._get_equipment_stats(pj,BodyParts.chest)
+        strBack =       self._get_equipment_stats(pj,BodyParts.back)
+        strArms =       self._get_equipment_stats(pj,BodyParts.arms)
+        strHands =      self._get_equipment_stats(pj,BodyParts.hands)
+        strCore =       self._get_equipment_stats(pj,BodyParts.core)
+        strLegs =       self._get_equipment_stats(pj,BodyParts.legs)
+        strFeets =      self._get_equipment_stats(pj,BodyParts.feets)
         strEmpty = " "
         # Calculate the properly position for each part at the left side
-        max_space = max(len(strHead), len(strChest), len(strArms), len(strCore), len(strFeets))
-        strHead = " " * (max_space - len(strHead)) + strHead
-        strChest = " " * (max_space - len(strChest)) + strChest
-        strCore = " " * (max_space - len(strCore)) + strCore
-        strArms = " " * (max_space - len (strArms)) + strArms
+        sizeHead = len(strHead) - self._non_printable_len(strHead)
+        sizeShoulder = len(strShoulder) - self._non_printable_len(strShoulder)
+        sizeChest = len(strChest) - self._non_printable_len(strChest)
+        sizeBack = len(strBack) - self._non_printable_len(strBack)
+        sizeArms = len(strArms) - self._non_printable_len(strArms)
+        sizeHands = len(strHands) - self._non_printable_len(strHands)
+        sizeCore = len(strCore) - self._non_printable_len(strCore)
+        sizeLegs = len(strLegs) - self._non_printable_len(strLegs)
+        sizeFeets = len(strFeets) - self._non_printable_len(strFeets)
+
+        max_space = max(sizeHead, sizeShoulder, sizeChest, sizeBack, sizeArms, sizeHands, sizeCore, sizeLegs, sizeFeets)
+        strHead = " " * (max_space  - sizeHead) + strHead
+        strChest = " " * (max_space - sizeChest) + strChest
+        strCore = " " * (max_space  - sizeCore) + strCore
+        strArms = " " * (max_space  - sizeArms) + strArms
         strEmpty = " " * (max_space)
-        strFeets = " " * (max_space - len(strFeets)) + strFeets
+        strFeets = " " * (max_space - sizeFeets) + strFeets
         # Compose body model with equipment
-        pj_str +=      style.CITALIC+strHead +style.CEND+style.CVIOLET+"    O    "+style.CEND+strShoulder
-        pj_str += "\n"+style.CITALIC+strChest+style.CEND+style.CVIOLET+"  ó(w)ò  "+style.CEND+strBack
-        pj_str += "\n"+style.CITALIC+strArms +style.CEND+style.CVIOLET+"_/ | | \_"+style.CEND+strHands
-        pj_str += "\n"+style.CITALIC+strCore +style.CEND+style.CVIOLET+"  .|_|.  "+style.CEND
-        pj_str += "\n"+style.CITALIC+strEmpty+style.CEND+style.CVIOLET+"   v v   "+style.CEND+strLegs
-        pj_str += "\n"+style.CITALIC+strFeets+style.CEND+style.CVIOLET+"  _l l_  "+style.CEND+"\n"
+        pj_str +=      strHead +style.CVIOLET+"    O    "+style.CEND+strShoulder
+        pj_str += "\n"+strChest+style.CVIOLET+"  ó(w)ò  "+style.CEND+strBack
+        pj_str += "\n"+strArms +style.CVIOLET+"_/ | | \_"+style.CEND+strHands
+        pj_str += "\n"+strCore +style.CVIOLET+"  .|_|.  "+style.CEND
+        pj_str += "\n"+strEmpty+style.CVIOLET+"   v v   "+style.CEND+strLegs
+        pj_str += "\n"+strFeets+style.CVIOLET+"  _l l_  "+style.CEND+"\n"
         return pj_str
 
     def _render_stats(self, pj: PlayerCharacter):
