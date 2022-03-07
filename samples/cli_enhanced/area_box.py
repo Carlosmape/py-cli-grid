@@ -1,4 +1,4 @@
-from engine.defines.defines import Position
+from engine.defines.defines import Position, Position_types
 from engine.frame import Frame
 from samples.cli_enhanced.command_line_box import CommandLineBox
 from samples.cli_enhanced.render.colors import style
