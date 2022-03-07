@@ -24,6 +24,8 @@ os.system("")
 class CommandLineInterface(GUI):
     """Enhanced CLI interface for MotorRol"""
 
+    current_frame: Frame = None
+
     def __init__(self):
         super().__init__()
         
@@ -51,6 +53,9 @@ class CommandLineInterface(GUI):
         # Initialize Render
         self.render_engine = render_engine(self.objects_in_area)
         
+        # Initialize Graphic Thread
+        self.frame_lock = threading.Lock()
+        self.gui_thread = threading.Thread(target=self.render_thread)
         self.render_start_screen()
 
     def render_start_screen(self):
@@ -59,22 +64,30 @@ class CommandLineInterface(GUI):
             sleep(1/self.max_frame_rate)
             
     def render(self, frame:Frame):
-        threading.Thread(target=self.render_thread, args=(frame,)).start()
+        if self.frame_lock.acquire():
+            CommandLineInterface.current_frame=frame
+            self.frame_lock.release()
+        if not self.gui_thread.is_alive():
+            self.gui_thread = threading.Thread(target=self.render_thread)
+            self.gui_thread.start()
 
-    def render_thread(self, frame: Frame):
+    def render_thread(self):
+        frame = CommandLineInterface.current_frame
+
         str_gui=''
-
+        
         # Get Area
         str_gui += self.area_container.render(frame)
 
         # Get messages
         #TODO: extract this in renfer_engine
-        composed_stats = frame.get_msg()
-        frame_str = ""
-        for msg in composed_stats:
-            frame_str += style.CGREEN + " - " + style.CEND
-            frame_str += style.CITALIC + msg + "\n"
-        str_gui += self.log_container.render(frame_str)
+        if frame:
+            composed_stats = frame.get_msg()
+            frame_str = style.CBOLD + "Log:" + style.CEND +"\n"
+            for msg in composed_stats[0:int(self.log_container.height-1)]:
+                frame_str += style.CGREEN + " - " + style.CEND
+                frame_str += style.CITALIC + msg + "\n"
+            str_gui += self.log_container.render(frame_str)
 
         # Get stats
         str_gui += self.status_container.render(frame.player)
