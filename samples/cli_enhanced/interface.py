@@ -25,8 +25,11 @@ class CommandLineInterface(GUI):
     """Enhanced CLI interface for MotorRol"""
 
     current_frame: Frame = None
+    loaded: bool = False
 
     def __init__(self):
+
+        # Parent class initialization
         super().__init__()
         
         # Get terminal size
@@ -38,8 +41,12 @@ class CommandLineInterface(GUI):
         self.scale_width = 7
         self.scale_height = 3
 
-        # Calculate frame sizes for each part
+        # Create loading screen
         self.loading_container = LoadingBox(self.width, self.height, self.scale_width, self.scale_height)
+        loading_thread = threading.Thread(target=self.render_start_screen)
+        loading_thread.start()
+        
+        # Calculate frame sizes for each part
         self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
         self.status_container = PjStatsBox(self.width, self.height/6)
         self.menu_container = MenuBox(self.width, self.height/6)
@@ -56,10 +63,17 @@ class CommandLineInterface(GUI):
         # Initialize Graphic Thread
         self.frame_lock = threading.Lock()
         self.gui_thread = threading.Thread(target=self.render_thread)
-        self.render_start_screen()
+
+        # Change loaded flag
+        sleep(1)
+        CommandLineInterface.loaded = True
 
     def render_start_screen(self):
-        while not self.readUserAction():
+        blocked_read_input = True
+        while blocked_read_input and not self.readUserAction():
+            if CommandLineInterface.loaded:
+                self.loading_container.complete_load()
+                blocked_read_input = False
             print(self.loading_container.render())
             sleep(1/self.max_frame_rate)
             

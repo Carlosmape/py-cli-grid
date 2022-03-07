@@ -36,8 +36,8 @@ class render_engine():
         for i in range(0,self._ground_variety+1):
             self._ground_render.append(env_render(render_engine.background_col, render_engine.grass_col))
             
-    def render_tittle(self):
-        return self._tittle_render.render()
+    def render_tittle(self, loaded:bool):
+        return self._tittle_render.render(loaded)
     
     def render_ground(self,ground):
         return self._ground_render[ground].render()

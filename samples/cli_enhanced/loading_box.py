@@ -10,6 +10,7 @@ from samples.cli_enhanced.command_line_box import CommandLineBox
 class LoadingBox(AreaBox):
     def __init__(self, width, height, scale_width, scale_height):
         super().__init__(width,height,scale_width, scale_height)
+        self.loaded = False
         self.width_margin = int((self.width - (self.max_obj_in_width)*self.scale_width)/2)
         self.height_margin = int((self.height - (self.max_obj_in_height)*self.scale_height)/2)
         self.map_width = self.max_obj_in_width 
@@ -38,7 +39,7 @@ class LoadingBox(AreaBox):
         for y in range(0, self.max_obj_in_height):
             for x in range(0, self.max_obj_in_width):
                 if y == self.max_obj_in_height/2 and x == self.max_obj_in_width/2:
-                    items.append(self.render_engine.render_tittle())
+                    items.append(self.render_engine.render_tittle(self.loaded))
                 elif y-2 == self.max_obj_in_height/2 and x-2 == self.max_obj_in_width/2:
                     items.append(self.render_engine.render_character(self.npcs[0]))
                 elif y+2 == self.max_obj_in_height/2 and x-2 == self.max_obj_in_width/2:
@@ -52,6 +53,9 @@ class LoadingBox(AreaBox):
 
         return items
    
+    def complete_load(self):
+        self.loaded = True
+
     def render(self):
         obj = self._extract_objects()
         return self._compose_frame_string(obj)
