@@ -67,9 +67,8 @@ class CommandLineInterface(GUI):
         if self.frame_lock.acquire():
             CommandLineInterface.current_frame=frame
             self.frame_lock.release()
-        if not self.gui_thread.is_alive():
-            self.gui_thread = threading.Thread(target=self.render_thread)
-            self.gui_thread.start()
+        self.gui_thread = threading.Thread(target=self.render_thread)
+        self.gui_thread.start()
 
     def render_thread(self):
         frame = CommandLineInterface.current_frame
