@@ -7,9 +7,11 @@ from engine.defines.defines import BodyParts
 from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import ImpassableItem
 from engine.items.interactives.CollectibleItem import CollectibleItem
+from engine.items.interactives.Door import Door
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable
 from engine.items.interactives.containeritem import container_item
 from engine.menu import Menu
+from samples.cli_enhanced.render.door_render import door_render
 from .pj_render import character_render
 from .env_render import env_render
 from .wall_render import wall_render
@@ -44,6 +46,8 @@ class render_engine():
         if type(item) not in self._rendered_objects:
             if isinstance(item, ImpassableItem):
                 self._rendered_objects[type(item)] = wall_render(render_engine.background_col, render_engine.wall_col)
+            elif isinstance(item, Door):
+                self._rendered_objects[type(item)] = door_render(render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, container_item):
                 self._rendered_objects[type(item)] = container_render(render_engine.background_col, render_engine.wall_col)
             else:
