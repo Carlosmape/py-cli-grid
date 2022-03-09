@@ -15,7 +15,7 @@ from samples.cli_enhanced.menu_box import MenuBox
 from samples.cli_enhanced.render.colors import style
 from samples.cli_enhanced.render.render_engine import render_engine
 from samples.cli_enhanced.stats_box import PjStatsBox
-
+from samples.cli_enhanced.gui_thread import gui_thread
 keyboard = KBHit()
 # System call
 os.system("")
@@ -24,7 +24,6 @@ os.system("")
 class CommandLineInterface(GUI):
     """Enhanced CLI interface for MotorRol"""
 
-    current_frame: Frame = None
     loaded: bool = False
 
     def __init__(self):
@@ -37,36 +36,22 @@ class CommandLineInterface(GUI):
         self.width = size.columns
         self.height = size.lines
 
-        # Calculate scale to draw items
-        self.scale_width = 7
-        self.scale_height = 3
+        # Create GUI thread
+        self.gui_thread = gui_thread(self.height, self.width)
 
         # Create loading screen
-        self.loading_container = LoadingBox(self.width, self.height, self.scale_width, self.scale_height)
+        self.loading_container = LoadingBox(self.width, self.height, 7, 3)
         loading_thread = threading.Thread(target=self.render_start_screen)
         loading_thread.start()
         
-        # Calculate frame sizes for each part
-        self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
-        self.status_container = PjStatsBox(self.width, self.height/6)
-        self.menu_container = MenuBox(self.width, self.height/6)
-        self.log_container = CommandLineBox(self.width, self.height/6)
-
-        # Items per row and col
-        self.objects_per_row = int(self.width/self.scale_width)
-        self.objects_per_col = int(self.height/self.scale_height)
-        self.objects_in_area = self.objects_per_col*self.objects_per_row
-
-        # Initialize Render
-        self.render_engine = render_engine(self.objects_in_area)
         
-        # Initialize Graphic Thread
-        self.frame_lock = threading.Lock()
-        self.gui_thread = threading.Thread(target=self.render_thread)
-
         # Change loaded flag
         sleep(1)
         CommandLineInterface.loaded = True
+        sleep(1)
+
+        # Start GUI thread
+        self.gui_thread.start()
 
     def render_start_screen(self):
         blocked_read_input = True
@@ -78,40 +63,8 @@ class CommandLineInterface(GUI):
             sleep(1/self.max_frame_rate)
             
     def render(self, frame:Frame):
-        if self.frame_lock.acquire():
-            CommandLineInterface.current_frame=frame
-            self.frame_lock.release()
-        self.gui_thread = threading.Thread(target=self.render_thread)
-        self.gui_thread.start()
+        self.gui_thread.update_frame(frame)
 
-    def render_thread(self):
-        frame = CommandLineInterface.current_frame
-
-        str_gui=''
-        
-        # Get Area
-        str_gui += self.area_container.render(frame)
-
-        # Get messages
-        #TODO: extract this in renfer_engine
-        if frame:
-            composed_stats = frame.get_msg()
-            frame_str = style.CBOLD + "Log:" + style.CEND +"\n"
-            for msg in composed_stats[0:int(self.log_container.height-1)]:
-                frame_str += style.CGREEN + " - " + style.CEND
-                frame_str += style.CITALIC + msg + "\n"
-            str_gui += self.log_container.render(frame_str)
-
-        # Get stats
-        str_gui += self.status_container.render(frame.player)
-
-        # Get Menu
-        str_gui += self.menu_container.render(frame.menu)
-
-        remain_size = int(self.height - str_gui.count("\n")-1)
-        print(str_gui+"\n"*remain_size, end='\r')
-
-    
     def readUserAction(self, blocking: bool = False):
         if blocking:
             return input()
