@@ -43,6 +43,9 @@ class CommandLineInterface(GUI):
         self.loading_container = LoadingBox(self.width, self.height, 7, 3)
         loading_thread = threading.Thread(target=self.render_start_screen)
         loading_thread.start()
+
+        # Engine specific configurations
+        Position.tolerance = 0
         
         
         # Change loaded flag

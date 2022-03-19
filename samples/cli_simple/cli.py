@@ -88,6 +88,9 @@ class CommandLineInterface(GUI):
         self.height = size.lines - 1
         time.sleep(0.5)
 
+        # Engine specific configs
+        Position.tolerance = 0
+
         # Clean user actions
         self.readUserAction();
 
