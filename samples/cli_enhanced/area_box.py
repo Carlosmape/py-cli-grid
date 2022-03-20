@@ -35,6 +35,13 @@ class AreaBox(CommandLineBox):
         self.width_margin = int((self.width - self.max_obj_in_width*self.scale_width)/2)
         self.height_margin = int((self.height - self.max_obj_in_height*self.scale_height)/2)
 
+        # Calculate char-map distance relation
+        # Each object is a integer position in the map
+        # Each object has 7char-width
+        # Each char width is 1/7 in map
+        size_char_w = 1/self.scale_width
+        size_char_h = 1/self.scale_height
+
     def _fill_box(self, string):
         return string +"\n"*self.height_margin+""
 
@@ -62,9 +69,11 @@ class AreaBox(CommandLineBox):
         return items
 
     def _update_frame_size(self, frame: Frame):
-        #Calculate frame of the area to render
+        #Get player position to ensure it is inside the frame
         pj = frame.player.position
+        
 
+        #Calculate frame of the area to render
         # Calculate desfases (when the pj is in the map edges, 
         # remaining elements shall drawed in the oposite side)
         desfase_from = 0

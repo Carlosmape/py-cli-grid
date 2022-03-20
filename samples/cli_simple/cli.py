@@ -166,20 +166,21 @@ class CommandLineInterface(GUI):
         pj_str = str()
         if frame.player:
             pj = frame.player
+            sts = pj.stats()
             # Name and position
-            pj_str += style.CBOLD + ("\n[> %s (%s) <]") % (pj.name, pj.get_level()) + style.CEND
+            pj_str += style.CBOLD + ("\n[> %s (%s) <]") % (pj.name, sts.level()) + style.CEND
             # Player status
-            strXP = self.strWall * pj.stats.experience()
-            strXP += self.strEmptyBar * pj.stats.remain_experience()
-            pj_str += style.CVIOLET + "\n XP(%s/%s)\t" %(pj.stats.experience(), pj.stats.experience()+pj.stats.remain_experience())
+            strXP = self.strWall * sts.experience()
+            strXP += self.strEmptyBar * sts.remain_experience()
+            pj_str += style.CVIOLET + "\n XP(%s/%s)\t" %(sts.experience(), sts.experience()+sts.remain_experience())
             pj_str += strXP
-            strHP = self.strWall * pj.get_health()
-            strHP += self.strEmptyBar * (pj.get_max_health() - pj.get_health()) 
-            pj_str += style.CRED + "\n HP(%s/%s)\t" %(pj.get_health(), pj.get_max_health())
+            strHP = self.strWall * sts.health()
+            strHP += self.strEmptyBar * (sts.max_health() - sts.health()) 
+            pj_str += style.CRED + "\n HP(%s/%s)\t" %(sts.health(), sts.max_health())
             pj_str += strHP
-            pj_str += style.CYELLOW + "\n Agility:" + str(pj.get_agility())
-            pj_str += style.CGREEN + "\n Strength:" + str(pj.get_strength())
-            pj_str += style.CBLUE2 + "\n Speed:" + str(round(pj.get_speed(),2)) + style.CEND
+            pj_str += style.CYELLOW + "\n Agility:" + str(sts.agility())
+            pj_str += style.CGREEN + "\n Strength:" + str(sts.strength())
+            pj_str += style.CBLUE2 + "\n Speed:" + str(round(sts.movement_speed(),2)) + style.CEND
             # Player equipment
             pj_str += self.__player_equipment_str(pj)
             # Quests
