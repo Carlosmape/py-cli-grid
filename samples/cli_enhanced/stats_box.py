@@ -29,14 +29,15 @@ class PjStatsBox(CommandLineBox):
         if pj.items[body_part]:
             item: CollectibleItem = pj.items[body_part]
             eq_string = str(item) 
-            if item.health > 0:
-                eq_string += " " +style.CITALIC + style.CRED + str(item.health) + style.CEND
-            if item.agility > 0:
-                eq_string += " " +style.CITALIC + style.CYELLOW + str(item.agility) + style.CEND
-            if item.streng > 0:
-                eq_string += " " +style.CITALIC + style.CGREEN + str(item.streng) + style.CEND
-            if item.speed > 0:
-                eq_string += " " +style.CITALIC + style.CBLUE2 + str(item.speed) + style.CEND
+            sts = item.stats()
+            if sts.health() > 0:
+                eq_string += " " +style.CITALIC + style.CRED + str(sts.health()) + style.CEND
+            if sts.agility() > 0:
+                eq_string += " " +style.CITALIC + style.CYELLOW + str(sts.agility()) + style.CEND
+            if sts.streng() > 0:
+                eq_string += " " +style.CITALIC + style.CGREEN + str(sts.streng()) + style.CEND
+            if sts.movement_speed() > 0:
+                eq_string += " " +style.CITALIC + style.CBLUE2 + str(sts.movement_speed()) + style.CEND
             if isinstance(item, container_item):
                 eq_string += " "+style.CITALIC + str(item.load)+"/"+str(item.capacity)+" Kg" + style.CEND
             return eq_string
@@ -86,24 +87,25 @@ class PjStatsBox(CommandLineBox):
 
     def _render_stats(self, pj: PlayerCharacter):
         str_stats = str()
+        sts = pj.stats()
         # Player status
-        str_stats += style.CBOLD + " Level:" + str(pj.get_level()) + style.CEND + " \n"
+        str_stats += style.CBOLD + " Level:" + str(sts.level()) + style.CEND + " \n"
         # XP bar 
-        strXP = self.full_str * pj.stats.experience()
-        strXP += self.empty_str * pj.stats.remain_experience()
-        str_stats += style.CVIOLET + style.CBOLD+ " XP(%s/%s) " %(pj.stats.experience(), pj.stats.experience()+pj.stats.remain_experience()) + style.CEND + " "
+        strXP = self.full_str * sts.experience()
+        strXP += self.empty_str * sts.remain_experience()
+        str_stats += style.CVIOLET + style.CBOLD+ " XP(%s/%s) " %(sts.experience(), sts.experience()+sts.remain_experience()) + style.CEND + " "
         str_stats += style.CVIOLET + strXP +style.CEND + "\n"
         # HP bar
-        strHP = self.full_str * pj.get_health()
-        strHP += self.empty_str * (pj.get_max_health() - pj.get_health()) 
-        str_stats += style.CRED + style.CBOLD + " HP(%s/%s) " %(pj.get_health(), pj.get_max_health()) + " " + style.CEND + " "
-        if pj.get_health() <= pj.get_max_health()/4:
+        strHP = self.full_str * sts.health()
+        strHP += self.empty_str * (sts.max_health() - sts.health()) 
+        str_stats += style.CRED + style.CBOLD + " HP(%s/%s) " %(sts.health(), sts.max_health()) + " " + style.CEND + " "
+        if sts.health() <= sts.max_health()/4:
             str_stats += style.CBLINK
         str_stats += style.CRED + strHP + style.CEND + "\n"
         # Another stats
-        str_stats += style.CBOLD + style.CYELLOW + " Agility:" + str(pj.get_agility())+style.CEND + "\n"
-        str_stats += style.CGREEN + " Strength:" + str(pj.get_strength()) +style.CEND+ "\n"
-        str_stats += style.CBLUE2 + " Speed:" + str(round(pj.get_speed(),2)) + style.CEND + "\n"
+        str_stats += style.CBOLD + style.CYELLOW + " Agility:" + str(sts.agility())+style.CEND + "\n"
+        str_stats += style.CGREEN + " Strength:" + str(sts.strength()) +style.CEND+ "\n"
+        str_stats += style.CBLUE2 + " Speed:" + str(round(sts.movement_speed(),2)) + style.CEND + "\n"
         return str_stats
 
     def _render_quests(self, pj: PlayerCharacter):
