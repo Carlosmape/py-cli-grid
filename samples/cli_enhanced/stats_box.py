@@ -30,12 +30,12 @@ class PjStatsBox(CommandLineBox):
             item: CollectibleItem = pj.items[body_part]
             eq_string = str(item) 
             sts = item.stats()
-            if sts.health() > 0:
-                eq_string += " " +style.CITALIC + style.CRED + str(sts.health()) + style.CEND
+            if sts.max_health() > 0:
+                eq_string += " " +style.CITALIC + style.CRED + str(sts.max_health()) + style.CEND
             if sts.agility() > 0:
                 eq_string += " " +style.CITALIC + style.CYELLOW + str(sts.agility()) + style.CEND
-            if sts.streng() > 0:
-                eq_string += " " +style.CITALIC + style.CGREEN + str(sts.streng()) + style.CEND
+            if sts.strength() > 0:
+                eq_string += " " +style.CITALIC + style.CGREEN + str(sts.strength()) + style.CEND
             if sts.movement_speed() > 0:
                 eq_string += " " +style.CITALIC + style.CBLUE2 + str(sts.movement_speed()) + style.CEND
             if isinstance(item, container_item):
