@@ -1,5 +1,6 @@
 import multiprocessing
 from multiprocessing.queues import Queue
+from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.frame import Frame
 
 from samples.cli_enhanced.area_box import AreaBox
@@ -67,5 +68,17 @@ class gui_thread(multiprocessing.Process):
                 str_gui += self.menu_container.render(frame.menu)
     
                 remain_size = int(self.height - str_gui.count("\n")-2)
-                str_gui += "Queue full " + str(self.frame_queue.full()) + " size " + str(self.frame_queue.qsize()) +" pos "+ str(frame.player.position if frame.player else 0) +"\n"
-                print(str_gui+"\n"*remain_size, end='\r')
+                print(str_gui+("\n"*remain_size) + self.debug(frame.player), end='\r')
+
+    def debug(self, pj: PlayerCharacter):
+        str_dbg = style.CITALIC + style.CYELLOW
+        str_dbg += "Q full " + str(self.frame_queue.full()) + " size " + str(self.frame_queue.qsize())
+        if pj: 
+            str_dbg += " pos "+ str(pj.position) 
+            if (pj.is_moving):
+                str_dbg += " d %.3f" % (pj.last_distance) 
+                str_dbg += " t %.3f" % (pj.delta_time) 
+                str_dbg += " s %.3f" % (pj.last_distance / pj.delta_time if pj.last_distance and pj.delta_time else 0) 
+        return str_dbg + style.CEND
+
+
