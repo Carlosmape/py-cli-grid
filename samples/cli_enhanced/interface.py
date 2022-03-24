@@ -3,19 +3,12 @@ import threading
 from time import sleep
 from traceback import format_exc
 from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines.defines import Position, Position_types
+from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import GUI
 from KBHit import KBHit
-from engine.menu import Menu
-from samples.cli_enhanced.area_box import AreaBox
-from samples.cli_enhanced.command_line_box import CommandLineBox
-from samples.cli_enhanced.loading_box import LoadingBox
-from samples.cli_enhanced.menu_box import MenuBox
-from samples.cli_enhanced.render.colors import style
-from samples.cli_enhanced.render.render_engine import render_engine
-from samples.cli_enhanced.stats_box import PjStatsBox
 from samples.cli_enhanced.gui_thread import gui_thread
+from samples.cli_enhanced.loading_box import LoadingBox
 keyboard = KBHit()
 # System call
 os.system("")
@@ -31,6 +24,7 @@ class CommandLineInterface(GUI):
         # Parent class initialization
         super().__init__()
         
+        self.max_frame_rate = 120
         # Get terminal size
         size = os.get_terminal_size()
         self.width = size.columns
@@ -114,3 +108,6 @@ class CommandLineInterface(GUI):
             msg += "Aborting the game execution"
             input(msg)
             return True
+
+    def end(self):
+        self.gui_thread.terminate()

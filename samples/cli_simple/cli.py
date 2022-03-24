@@ -148,6 +148,9 @@ class CommandLineInterface(GUI):
             input(msg)
             return True
 
+    def end(self):
+        print("EXITING GAME")
+
     def __frame_str(self, frame: Frame):
         frame_str = str()
         # Render areaw
