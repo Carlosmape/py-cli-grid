@@ -24,7 +24,7 @@ class CommandLineInterface(GUI):
         # Parent class initialization
         super().__init__()
         
-        self.max_frame_rate = 120
+        self.max_frame_rate = 30
         # Get terminal size
         size = os.get_terminal_size()
         self.width = size.columns
