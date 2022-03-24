@@ -1,4 +1,5 @@
 import re
+from typing import List
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts
 from engine.items.interactives.CollectibleItem import CollectibleItem
@@ -123,13 +124,14 @@ class PjStatsBox(CommandLineBox):
         else:
             return ""
 
-    def render(self, pj: PlayerCharacter):
+    def render(self, pj: PlayerCharacter, msg: List[str]):
         if pj is None:
             return ""
         stats_col_str  = self._render_stats(pj)
         equipment_col_str = self._render_equipment(pj)
+        log_col_str = style.CBOLD + "Log:" + style.CEND+ style.CITALIC+ "\n".join(msg) + style.CEND
         
-        frame_str = self.render_cols([stats_col_str, equipment_col_str], False)
+        frame_str = self.render_cols([log_col_str, stats_col_str, equipment_col_str], False)
         frame_str += self._render_quests(pj)
         return self._fill_box(frame_str)
 

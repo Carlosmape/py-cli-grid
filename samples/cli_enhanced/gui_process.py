@@ -23,13 +23,13 @@ class gui_process(multiprocessing.Process):
         self.scale_height = 3
 
         # Calculate frame sizes for each part
-        self.area_container = AreaBox(self.width, self.height/2, self.scale_width, self.scale_height)
+        self.area_container = AreaBox(self.width, 2*self.height/3, self.scale_width, self.scale_height)
         self.status_container = PjStatsBox(self.width, self.height/6)
         self.menu_container = MenuBox(self.width, self.height/6)
-        self.log_container = CommandLineBox(self.width, self.height/6)
         self.isStarted = False
 
         self.frame_queue: Queue[Frame] = multiprocessing.Queue()
+        self.frame = None
 
     def update_frame(self, frame: Frame):
         self.frame_queue.put(frame)
@@ -43,32 +43,22 @@ class gui_process(multiprocessing.Process):
 
     def run(self):
         while(self.isStarted):
-            frame = self.frame_queue.get()
-            if frame is not None:
+            self.frame = self.frame_queue.get()
+            if self.frame is not None:
                 # Compose entire screen output (str)
                 str_gui=''
     
                 # Get Area
-                str_gui += self.area_container.render(frame)
-    
-                # Get messages
-                #TODO: extract this in renfer_engine
-                if frame:
-                    composed_stats = frame.get_msg()
-                    frame_str = style.CBOLD + "Log:" + style.CEND +"\n"
-                    for msg in composed_stats[0:int(self.log_container.height-1)]:
-                        frame_str += style.CGREEN + " - " + style.CEND
-                        frame_str += style.CITALIC + msg + "\n"
-                    str_gui += self.log_container.render(frame_str)
+                str_gui += self.area_container.render(self.frame)
     
                 # Get stats
-                str_gui += self.status_container.render(frame.player)
+                str_gui += self.status_container.render(self.frame.player, self.frame.get_msg())
     
                 # Get Menu
-                str_gui += self.menu_container.render(frame.menu)
+                str_gui += self.menu_container.render(self.frame.menu)
     
                 remain_size = int(self.height - str_gui.count("\n")-2)
-                print(str_gui+("\n"*remain_size) + self.debug(frame.player), end='\r')
+                print(str_gui+("\n"*remain_size) + self.debug(self.frame.player), end='\r')
 
     def debug(self, pj: PlayerCharacter):
         str_dbg = style.CITALIC + style.CYELLOW
