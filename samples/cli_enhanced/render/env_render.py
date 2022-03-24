@@ -22,7 +22,7 @@ class env_render(base_render):
     MAX_STEPS = len(TYPES[0])
 
     def __init__(self, background, foreground):
-        super().__init__(7,3, background, foreground, 1, env_render.MAX_STEPS, True)
+        super().__init__(7,3, background, foreground, 0.5, env_render.MAX_STEPS, True)
         self.type = randint(0,len(env_render.TYPES)-1)
         self.height_pos = randint(0,self._frame_height-1)
 
