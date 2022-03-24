@@ -7,7 +7,7 @@ from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import GUI
 from KBHit import KBHit
-from samples.cli_enhanced.gui_thread import gui_thread
+from samples.cli_enhanced.gui_process import gui_process
 from samples.cli_enhanced.loading_box import LoadingBox
 keyboard = KBHit()
 # System call
@@ -30,34 +30,36 @@ class CommandLineInterface(GUI):
         self.width = size.columns
         self.height = size.lines
 
-        # Create GUI thread
-        self.gui_thread = gui_thread(self.height, self.width)
-
         # Create loading screen
         self.loading_container = LoadingBox(self.width, self.height, 7, 3)
         loading_thread = threading.Thread(target=self.render_start_screen)
         loading_thread.start()
 
+        # Create GUI thread
+        self.gui_thread = gui_process(self.height, self.width)
+
         # Engine specific configurations
         Position.tolerance = 0
-        
         
         # Change loaded flag
         sleep(1)
         CommandLineInterface.loaded = True
         sleep(1)
+        loading_thread.join()
 
         # Start GUI thread
         self.gui_thread.start()
 
     def render_start_screen(self):
-        blocked_read_input = True
-        while blocked_read_input and not self.readUserAction():
-            if CommandLineInterface.loaded:
-                self.loading_container.complete_load()
-                blocked_read_input = False
+        user_action = None
+        while True if not CommandLineInterface.loaded else user_action is None:
             print(self.loading_container.render())
             sleep(1/self.max_frame_rate)
+
+            if CommandLineInterface.loaded:
+                self.loading_container.complete_load()
+                #Clear buffered user inputs
+                user_action = self.readUserAction()
             
     def render(self, frame:Frame):
         self.gui_thread.update_frame(frame)

@@ -10,7 +10,7 @@ from samples.cli_enhanced.render.colors import style
 from samples.cli_enhanced.stats_box import PjStatsBox
 
 
-class gui_thread(multiprocessing.Process):
+class gui_process(multiprocessing.Process):
 
 
     def __init__(self, height, width):
