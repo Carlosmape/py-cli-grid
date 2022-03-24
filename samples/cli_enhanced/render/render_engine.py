@@ -53,7 +53,7 @@ class render_engine():
             if isinstance(item, ImpassableItem):
                 self._rendered_objects[type(item)] = wall_render(render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Door):
-                self._rendered_objects[type(item)] = door_render(render_engine.background_col, render_engine.wall_col)
+                self._rendered_objects[type(item)] = door_render(style.CYELLOWBG, render_engine.wall_col)
             elif isinstance(item, container_item):
                 self._rendered_objects[type(item)] = container_render(render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, DecorationItem):
