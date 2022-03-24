@@ -16,7 +16,9 @@ class AreaBox(CommandLineBox):
 
         # Items per row and col
         self.max_obj_in_width = int(self.width/self.scale_width)
+        self.middle_in_width = int(self.max_obj_in_width/2)
         self.max_obj_in_height = int(self.height/self.scale_height)
+        self.middle_in_height = int(self.max_obj_in_height/2)
         self.max_objects_in_area =(self.max_obj_in_height)*(self.max_obj_in_width)
 
         #Models engine
@@ -70,36 +72,38 @@ class AreaBox(CommandLineBox):
 
     def _update_frame_size(self, frame: Frame):
         #Get player position to ensure it is inside the frame
-        pj = frame.player.position
-        
+        pjx = round(frame.player.position.X, Position.tolerance)
+        pjy = round(frame.player.position.Y, Position.tolerance)
 
         #Calculate frame of the area to render
         # Calculate desfases (when the pj is in the map edges, 
         # remaining elements shall drawed in the oposite side)
         desfase_from = 0
-        if pj.Y-self.max_obj_in_height/2 < 0:
-            desfase_from = self.max_obj_in_height + (pj.Y-self.max_obj_in_height/2)
+        if pjy - self.middle_in_height < 0:
+            desfase_from = self.max_obj_in_height + (pjy-self.middle_in_height)
 
         desfase_to = 0
-        if  pj.Y+self.max_obj_in_height/2 > frame.area.height+1:
-            desfase_to = pj.Y+self.max_obj_in_height/2 - frame.area.height+1
+        if  pjy + self.middle_in_height > frame.area.height:
+            desfase_to = pjy+self.middle_in_height - frame.area.height
 
-        self.map_from_y = max(0, int(pj.Y-self.max_obj_in_height/2-desfase_to))
-        self.map_to_y =   min(frame.area.height+1, int(pj.Y+self.max_obj_in_height/2+desfase_from))
+        self.map_from_y = max(0, int(pjy-self.middle_in_height-desfase_to))
+        self.map_to_y =   min(frame.area.height, int(pjy+self.middle_in_height+desfase_from))
 
         desfase_from = 0
-        if pj.X-self.max_obj_in_width/2 < 0:
-            desfase_from = self.max_obj_in_width - pj.X-self.max_obj_in_width/2 
+        if pjx - self.middle_in_width < 0:
+            desfase_from = self.max_obj_in_width - pjx - self.middle_in_width 
 
         desfase_to = 0
-        if pj.X+self.max_obj_in_width/2 > frame.area.width+1:
-            desfase_to = pj.X+self.max_obj_in_width/2 - frame.area.width+1
+        if pjx+self.middle_in_width > frame.area.width+1:
+            desfase_to = pjx+self.middle_in_width - frame.area.width+1
 
-        self.map_from_x = max(0, int(pj.X-self.max_obj_in_width/2-desfase_to))
-        self.map_to_x =   min(frame.area.width+1, int(pj.X+self.max_obj_in_width/2+desfase_from))
+        self.map_from_x = max(0, int(pjx-self.middle_in_width-desfase_to))
+        self.map_to_x =   min(frame.area.width+1, int(pjx+self.middle_in_width+desfase_from))
 
         self.map_width = self.map_to_x - self.map_from_x
+        self.middle_in_width = int(self.map_width/2)
         self.map_height = self.map_to_y - self.map_from_y
+        self.middle_in_height = int(self.map_height/2)
 
         self.width_margin = int((self.width - self.map_width*self.scale_width)/2)
         self.height_margin = int((self.height - self.map_height*self.scale_height)/2)
