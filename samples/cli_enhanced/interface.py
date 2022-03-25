@@ -96,15 +96,15 @@ class CommandLineInterface(GUI):
 
     def manage_exceptions(self, ex: BaseException):
 
-        # Call super method without return to avoid premature game exit
-        super().manage_exceptions(ex)
-
         # If KeyboardInterrupt do not exit the game
         if isinstance(ex, KeyboardInterrupt):
             return False
 
         # Show exception info
-        else:
+        else: 
+            # Call super method without return to avoid premature game exit
+            super().manage_exceptions(ex)
+
             msg = "An error ocurrer during the game\n"
             msg += str(format_exc()) + "\n"
             msg += "Aborting the game execution"
