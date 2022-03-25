@@ -131,7 +131,7 @@ class PjStatsBox(CommandLineBox):
         equipment_col_str = self._render_equipment(pj)
         log_col_str = style.CBOLD + "Log:" + style.CEND+ style.CITALIC+ "\n".join(msg) + style.CEND
         
-        frame_str = self.render_cols([log_col_str, stats_col_str, equipment_col_str], False)
-        frame_str += self._render_quests(pj)
+        frame_str = self.render_cols([self._render_quests(pj)], False)
+        frame_str += self.render_cols([log_col_str, stats_col_str, equipment_col_str], False)
         return self._fill_box(frame_str)
 

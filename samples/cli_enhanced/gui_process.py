@@ -47,18 +47,20 @@ class gui_process(multiprocessing.Process):
             if self.frame is not None:
                 # Compose entire screen output (str)
                 str_gui=''
-    
-                # Get Area
-                str_gui += self.area_container.render(self.frame)
-    
+
                 # Get stats
                 str_gui += self.status_container.render(self.frame.player, self.frame.get_msg())
-    
+
+                # Get Area
+                str_gui += self.area_container.render(self.frame)
+                  
                 # Get Menu
                 str_gui += self.menu_container.render(self.frame.menu)
     
                 remain_size = int(self.height - str_gui.count("\n")-2)
-                print(str_gui+("\n"*remain_size) + self.debug(self.frame.player), end='\r')
+                #Print and reset cursor to console top-left
+                cursor_top = ""#'\033[0;0H'
+                print(cursor_top + str_gui+("\n"*remain_size) + self.debug(self.frame.player), end="\r")
 
     def debug(self, pj: PlayerCharacter):
         str_dbg = style.CITALIC + style.CYELLOW
