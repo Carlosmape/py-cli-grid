@@ -60,6 +60,9 @@ class CommandLineInterface(GUI):
                 self.loading_container.complete_load()
                 #Clear buffered user inputs
                 user_action = self.readUserAction()
+
+        #Finally clean buffered user inputs again
+        self.readUserAction()
             
     def render(self, frame:Frame):
         self.gui_thread.update_frame(frame)
