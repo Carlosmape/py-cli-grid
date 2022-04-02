@@ -24,8 +24,8 @@ class gui_process(multiprocessing.Process):
 
         # Calculate frame sizes for each part
         self.area_container = AreaBox(self.width, 2*self.height/3, self.scale_width, self.scale_height)
-        self.status_container = PjStatsBox(self.width, self.height/6)
-        self.menu_container = MenuBox(self.width, self.height/6)
+        self.status_container = PjStatsBox(self.width, self.height/4)
+        self.menu_container = MenuBox(self.width, self.height/8)
         self.isStarted = False
 
         self.frame_queue: Queue[Frame] = multiprocessing.Queue()

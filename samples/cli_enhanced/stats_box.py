@@ -123,15 +123,17 @@ class PjStatsBox(CommandLineBox):
             return str_quests
         else:
             return ""
+    def _render_log(self, msg: List[str]):
+        return style.CBOLD + "Log:\n" + style.CEND+ style.CITALIC+ "\n".join(msg) + style.CEND
 
     def render(self, pj: PlayerCharacter, msg: List[str]):
         if pj is None:
             return ""
         stats_col_str  = self._render_stats(pj)
         equipment_col_str = self._render_equipment(pj)
-        log_col_str = style.CBOLD + "Log:" + style.CEND+ style.CITALIC+ "\n".join(msg) + style.CEND
-        
-        frame_str = self.render_cols([self._render_quests(pj)], False)
-        frame_str += self.render_cols([log_col_str, stats_col_str, equipment_col_str], False)
+        quest_col_str = self._render_quests(pj)
+        log_col_str = self._render_log(msg) 
+        frame_str = self.render_cols([stats_col_str, equipment_col_str], False)
+        frame_str += self.render_cols([quest_col_str, log_col_str], False)
         return self._fill_box(frame_str)
 

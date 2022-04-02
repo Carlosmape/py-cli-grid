@@ -16,13 +16,13 @@ class CommandLineBox():
         self.height_margin = int(self.height - string.count("\n"))
         return string +"\n"*self.height_margin+""
 
-    def render(self, string:str, filled = True):
-        if filled:
+    def render(self, string:str, vertically_filled = True):
+        if vertically_filled:
             return self._fill_box(string)
         else:
             return string
 
-    def render_cols(self, col_list_str:list, filled = True):
+    def render_cols(self, col_list_str:list, vertically_filled = True):
         n_cols = len(col_list_str)
         col_width = int(self.width/n_cols)
         col_max_height = max(l.count("\n") for l in col_list_str)
@@ -46,7 +46,7 @@ class CommandLineBox():
                 col_fill_size = (col_width - len(col_str) + self._non_printable_len(col_str))
                 line_str += col_str + " " * col_fill_size
             frame_str += line_str + "\n"
-        if filled:
+        if vertically_filled:
             return self._fill_box(frame_str)
         else:
             return frame_str
