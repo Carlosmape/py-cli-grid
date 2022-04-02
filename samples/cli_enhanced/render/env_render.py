@@ -6,6 +6,8 @@ from .colors import style
 class env_render(base_render):
     # Defined grass types. Take care about MAX_STEPS
     TYPES = [
+        ['   ','   ','   ','   ','   ','   '],
+        [' ´ ',' · ',' ´ ',' . ',' ´ ',' ¨ '],
         ['·´·','´·´','·´´','..´','´´.','´¨´'],
         [',.,',',,,','.,.','..,','.,.',',,.'],
         ['¨´¨','´¨´','¨´´','¨¨´','´¨´','´´´'],
