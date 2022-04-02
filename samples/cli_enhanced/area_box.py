@@ -80,30 +80,28 @@ class AreaBox(CommandLineBox):
         # remaining elements shall drawed in the oposite side)
         desfase_from = 0
         if pjy - self.middle_in_height < 0:
-            desfase_from = self.max_obj_in_height + (pjy-self.middle_in_height)
+            desfase_from = (pjy-self.middle_in_height)
 
         desfase_to = 0
         if  pjy + self.middle_in_height > frame.area.height:
             desfase_to = pjy+self.middle_in_height - frame.area.height
 
         self.map_from_y = max(0, int(pjy-self.middle_in_height-desfase_to))
-        self.map_to_y =   min(frame.area.height, int(pjy+self.middle_in_height+desfase_from))
+        self.map_to_y =   min(frame.area.height, int(pjy+self.middle_in_height-desfase_from))
 
         desfase_from = 0
         if pjx - self.middle_in_width < 0:
-            desfase_from = self.max_obj_in_width - pjx - self.middle_in_width 
+            desfase_from = pjx - self.middle_in_width 
 
         desfase_to = 0
-        if pjx+self.middle_in_width > frame.area.width+1:
-            desfase_to = pjx+self.middle_in_width - frame.area.width+1
+        if pjx+self.middle_in_width > frame.area.width:
+            desfase_to =pjx+self.middle_in_width - frame.area.width
 
         self.map_from_x = max(0, int(pjx-self.middle_in_width-desfase_to))
-        self.map_to_x =   min(frame.area.width+1, int(pjx+self.middle_in_width+desfase_from))
+        self.map_to_x =   min(frame.area.width, int(pjx+self.middle_in_width-desfase_from))
 
         self.map_width = self.map_to_x - self.map_from_x
-        self.middle_in_width = int(self.map_width/2)
         self.map_height = self.map_to_y - self.map_from_y
-        self.middle_in_height = int(self.map_height/2)
 
         self.width_margin = int((self.width - self.map_width*self.scale_width)/2)
         self.height_margin = int((self.height - self.map_height*self.scale_height)/2)
