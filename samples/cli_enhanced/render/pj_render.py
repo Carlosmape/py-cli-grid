@@ -30,8 +30,10 @@ class character_render(base_render):
     MAX_STEPS = min(len(arms), len(hands_iddle), len(hands_action))
 
     def __init__(self, background, foreground):
-        # Initialize base class
+        # Initialize base class for iddle animation
         super().__init__(7,3, background, foreground, 0.5, character_render.MAX_STEPS, True)
+        # Run animation
+        self._action_render = base_render(7,3, background, foreground, 0.2, character_render.MAX_STEPS, False)
         
         # Generate random parts
         self._head = random.randint(0, len(character_render.heads_iddle)-1)
@@ -75,8 +77,12 @@ class character_render(base_render):
     def render(self):
         composed_str = []
 
-        curr_step = self._get_curr_step()
+        if self._running or self._attacking:
+            curr_step = self._action_render._get_curr_step()
+        else:
+            curr_step = self._get_curr_step()
         self._update_step()
+        self._action_render._update_step()
                 
         #Compose the character
         composed_str.append(self.composeHead(curr_step))
