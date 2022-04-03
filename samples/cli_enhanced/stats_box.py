@@ -135,5 +135,5 @@ class PjStatsBox(CommandLineBox):
         log_col_str = self._render_log(msg) 
         frame_str = self.render_cols([stats_col_str, equipment_col_str], False)
         frame_str += self.render_cols([log_col_str, quest_col_str], False)
-        return self._fill_box(frame_str)
+        return super().render(frame_str)
 

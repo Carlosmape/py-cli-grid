@@ -68,10 +68,13 @@ class CommandLineInterface(GUI):
         self.gui_thread.update_frame(frame)
 
     def readUserAction(self, blocking: bool = False):
-        if blocking:
-            return input()
-        elif keyboard.kbhit():
-            return keyboard.getch()
+        try:
+            if blocking:
+                return input()
+            elif keyboard.kbhit():
+                return keyboard.getch()
+        except BaseException as ex:
+            self.manage_exceptions(ex)
 
     def doAction(self, action: bytes, player: PlayerCharacter):
         if not self.last_frame:
@@ -98,20 +101,17 @@ class CommandLineInterface(GUI):
             os.system('clear')
 
     def manage_exceptions(self, ex: BaseException):
+        msg = str(self.last_uptate) + ": "
+        msg += "An error ocurrer during the game\n"
+        msg += str(format_exc()) + "\n"
+        msg += "Aborting the game execution"
+        with open("error.log", "w") as f:
+            f.write(msg)
 
-        # If KeyboardInterrupt do not exit the game
         if isinstance(ex, KeyboardInterrupt):
             return False
-
-        # Show exception info
-        else: 
-            # Call super method without return to avoid premature game exit
+        else:
             super().manage_exceptions(ex)
-
-            msg = "An error ocurrer during the game\n"
-            msg += str(format_exc()) + "\n"
-            msg += "Aborting the game execution"
-            input(msg)
             return True
 
     def end(self):

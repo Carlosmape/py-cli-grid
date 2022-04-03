@@ -28,23 +28,30 @@ class CommandLineBox():
         col_max_height = max(l.count("\n") for l in col_list_str)
 
         frame_str = ""
-        for line in range(col_max_height):
+        line_remaining = list()
+        for line in range(col_max_height+1):
             line_str = ""
-            line_remaining = None
             for col in col_list_str:
+                line_remaining.append(str())
                 col_str = ""
                 lines = col.split("\n")
-                if line_remaining is not None:
-                    col_str += line_remaining
-                elif len(lines) > line:
-                    if len(lines[line])- self._non_printable_len(lines[line]) > col_width:
-                        line_size = col_width+self._non_printable_len(lines[line][0:col_width])
+                if len(lines) > line:
+                    if len(lines[line])- self._non_printable_len(lines[line]) > col_width-1:
+                        line_size = col_width-1+self._non_printable_len(lines[line][0:col_width])
                         col_str += lines[line][0:line_size]
-                        line_remaining = lines[line][line_size:-1]
+                        line_remaining[-1] = lines[line][line_size:len(lines[line])]
                     else:
                         col_str += lines[line]
                 col_fill_size = (col_width - len(col_str) + self._non_printable_len(col_str))
-                line_str += col_str + " " * col_fill_size
+                line_str += col_str + " " * (col_fill_size if col_fill_size > 0 else 0)
+
+            if any(line_remaining):
+                for lr in line_remaining:
+                    col_str = lr
+                    col_fill_size = (col_width - len(col_str) + self._non_printable_len(col_str))
+                    line_str += col_str + " " * (col_fill_size if col_fill_size > 0 else 0)
+            line_remaining.clear()
+
             frame_str += line_str + "\n"
         if vertically_filled:
             return self._fill_box(frame_str)
