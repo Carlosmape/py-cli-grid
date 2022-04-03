@@ -8,16 +8,12 @@ class tittle_render(base_render):
     MAX_STEPS = len(LOAD)
 
     def __init__(self, background, foreground):
-        super().__init__(7,3, background, foreground)
+        super().__init__(7,3, background, foreground, 0.2, tittle_render.MAX_STEPS, False)
 
     def render(self, loaded = False):
         composed_env = []
-        if (self._animation_step > tittle_render.MAX_STEPS-1):
-            self._animation_step = 0.0
-
-        # Calculate current step taking care about reverse animation
-        curr_step = int(self._animation_step)
-
+        curr_step = self._get_curr_step()
+        self._update_step()
         # Fill 3x5 frame with empty spaces
         for i in range(0, self._frame_height):
             composed_env.append(" "*self._frame_width)
@@ -28,12 +24,10 @@ class tittle_render(base_render):
                 composed_env[0] = " PRESS "
                 composed_env[1] = "  ANY  "
                 composed_env[2] = "  KEY  "
-            self._animation_step += 1/(4*tittle_render.MAX_STEPS)
         else:
             composed_env[0] = "LOADING"
             composed_env[1] = "  "+tittle_render.LOAD[curr_step]+"  "
             composed_env[2] = " GAME  "
-            self._animation_step += 1/(2)
 
         return self.fill_color(composed_env)
     

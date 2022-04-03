@@ -16,7 +16,7 @@ class MenuBox(CommandLineBox):
     
     def _fill_box(self, string):
         self.height_margin = int(self.height - string.count("\n"))
-        return string +"\n"*self.height_margin+""
+        return string +"\n"*self.height_margin
 
     def _render_menu(self, menu: Menu):
         composed_menu = str()
@@ -34,9 +34,9 @@ class MenuBox(CommandLineBox):
         size_options = len(str_opt)
         max_size_part = max(size_menu, size_options, size_query)
 
-        composed_menu += " "*int((max_size_part-size_menu)/2)+style.CBOLD+style.CITALIC+menu.title+style.CEND + "\n"
-        composed_menu += " "*int((max_size_part-size_options)/2)+str_opt + "\n"
-        composed_menu += " "*int((max_size_part-size_query)/2)+menu.query + "\n"
+        composed_menu += " "+style.CBOLD+style.CITALIC+menu.title+style.CEND + "\n"
+        composed_menu += " "+str_opt + "\n" if str_opt else str_opt
+        composed_menu += " "+menu.query.replace("\n", "\n ") 
         return composed_menu
 
     def render(self, menu: Menu):

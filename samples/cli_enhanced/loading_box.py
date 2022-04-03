@@ -18,7 +18,7 @@ class LoadingBox(AreaBox):
         self.tittle_box = CommandLineBox(width, height/5)
         self.npcs = []
         for i in range(4):
-            self.npcs.append(NoPlayerCharacter(Position(self.max_obj_in_height/2,self.max_obj_in_width/2),1))
+            self.npcs.append(NoPlayerCharacter(Position(self.middle_in_height,self.middle_in_width),1))
             self.npcs[i].items[BodyParts.hands] = HandsWearable.Any()
 
     def _update_npcs(self):
@@ -36,17 +36,19 @@ class LoadingBox(AreaBox):
     def _extract_objects(self):
         self._update_npcs()
         items = []
+        middle_height = int(self.max_obj_in_height/2)
+        middle_width = int(self.max_obj_in_width/2)
         for y in range(0, self.max_obj_in_height):
             for x in range(0, self.max_obj_in_width):
-                if y == self.max_obj_in_height/2 and x == self.max_obj_in_width/2:
+                if y == middle_height and x == middle_width:
                     items.append(self.render_engine.render_tittle(self.loaded))
-                elif y-2 == self.max_obj_in_height/2 and x-2 == self.max_obj_in_width/2:
+                elif y-2 == middle_height and x-2 == middle_width:
                     items.append(self.render_engine.render_character(self.npcs[0]))
-                elif y+2 == self.max_obj_in_height/2 and x-2 == self.max_obj_in_width/2:
+                elif y+2 == middle_height and x-2 == middle_width:
                     items.append(self.render_engine.render_character(self.npcs[1]))
-                elif y-2 == self.max_obj_in_height/2 and x+2 == self.max_obj_in_width/2:
+                elif y-2 == middle_height and x+2 == middle_width:
                     items.append(self.render_engine.render_character(self.npcs[2]))
-                elif y+2 == self.max_obj_in_height/2 and x+2 == self.max_obj_in_width/2:
+                elif y+2 == middle_height and x+2 == middle_width:
                     items.append(self.render_engine.render_character(self.npcs[3]))               
                 else:
                     items.append(self.render_engine.render_ground(x*y))

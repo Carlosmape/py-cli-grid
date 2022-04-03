@@ -26,15 +26,14 @@ class character_render(base_render):
     armor_legs2_run_e=  "//\\" 
     armor_legs2_run_w=  "/\\\\"
 
-    MAX_STEPS = 3
-
-    composed_head = ""
-    composed_torso = ""
-    composed_legs = ""
+    #Define max steps
+    MAX_STEPS = min(len(arms), len(hands_iddle), len(hands_action))
 
     def __init__(self, background, foreground):
-        # Initialize base class
-        super().__init__(7,3, background, foreground)
+        # Initialize base class for iddle animation
+        super().__init__(7,3, background, foreground, 0.5, character_render.MAX_STEPS, True)
+        # Run animation
+        self._action_render = base_render(7,3, background, foreground, 0.2, character_render.MAX_STEPS, False)
         
         # Generate random parts
         self._head = random.randint(0, len(character_render.heads_iddle)-1)
@@ -78,23 +77,13 @@ class character_render(base_render):
     def render(self):
         composed_str = []
 
-        #Check if MAX_STEPS reached (to reinitialize animation)
-        if self._animation_step > character_render.MAX_STEPS-1:
-            self._animation_step = 0.0
-            self._reverse = not self._reverse
-        
-        #Calculate current step taking care about reverse animations
-        if self._reverse:
-            curr_step = character_render.MAX_STEPS - 1 - int(self._animation_step)
+        if self._running or self._attacking:
+            curr_step = self._action_render._get_curr_step()
         else:
-            curr_step = int(self._animation_step)
-
-        #Increase animation step for the following animation frame
-        if not self._running and not self._attacking:
-            self._animation_step += 1/(6*character_render.MAX_STEPS)
-        else:
-            self._animation_step += 3/(4*character_render.MAX_STEPS)
-        
+            curr_step = self._get_curr_step()
+        self._update_step()
+        self._action_render._update_step()
+                
         #Compose the character
         composed_str.append(self.composeHead(curr_step))
         composed_str.append(self.composeTorso(curr_step))

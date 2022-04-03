@@ -1,4 +1,5 @@
 import re
+from typing import List
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts
 from engine.items.interactives.CollectibleItem import CollectibleItem
@@ -30,12 +31,12 @@ class PjStatsBox(CommandLineBox):
             item: CollectibleItem = pj.items[body_part]
             eq_string = str(item) 
             sts = item.stats()
-            if sts.health() > 0:
-                eq_string += " " +style.CITALIC + style.CRED + str(sts.health()) + style.CEND
+            if sts.max_health() > 0:
+                eq_string += " " +style.CITALIC + style.CRED + str(sts.max_health()) + style.CEND
             if sts.agility() > 0:
                 eq_string += " " +style.CITALIC + style.CYELLOW + str(sts.agility()) + style.CEND
-            if sts.streng() > 0:
-                eq_string += " " +style.CITALIC + style.CGREEN + str(sts.streng()) + style.CEND
+            if sts.strength() > 0:
+                eq_string += " " +style.CITALIC + style.CGREEN + str(sts.strength()) + style.CEND
             if sts.movement_speed() > 0:
                 eq_string += " " +style.CITALIC + style.CBLUE2 + str(sts.movement_speed()) + style.CEND
             if isinstance(item, container_item):
@@ -122,14 +123,17 @@ class PjStatsBox(CommandLineBox):
             return str_quests
         else:
             return ""
+    def _render_log(self, msg: List[str]):
+        return style.CBOLD + "Log:\n" + style.CEND+ style.CITALIC+ "\n".join(msg) + style.CEND
 
-    def render(self, pj: PlayerCharacter):
+    def render(self, pj: PlayerCharacter, msg: List[str]):
         if pj is None:
             return ""
         stats_col_str  = self._render_stats(pj)
         equipment_col_str = self._render_equipment(pj)
-        
+        quest_col_str = self._render_quests(pj)
+        log_col_str = self._render_log(msg) 
         frame_str = self.render_cols([stats_col_str, equipment_col_str], False)
-        frame_str += self._render_quests(pj)
-        return self._fill_box(frame_str)
+        frame_str += self.render_cols([log_col_str, quest_col_str], False)
+        return super().render(frame_str)
 
