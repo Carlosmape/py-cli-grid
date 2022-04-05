@@ -18,7 +18,7 @@ class LoadingBox(AreaBox):
         self.tittle_box = CommandLineBox(width, height/5)
         self.npcs = []
         for i in range(4):
-            self.npcs.append(NoPlayerCharacter(Position(self.middle_in_height,self.middle_in_width),1))
+            self.npcs.append(NoPlayerCharacter(None, 1, Position(self.middle_in_height,self.middle_in_width)))
             self.npcs[i].items[BodyParts.hands] = HandsWearable.Any()
 
     def _update_npcs(self):

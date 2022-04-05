@@ -42,9 +42,7 @@ class CommandLineInterface(GUI):
         Position.tolerance = 0
         
         # Change loaded flag
-        sleep(1)
         CommandLineInterface.loaded = True
-        sleep(1)
         loading_thread.join()
 
         # Start GUI thread
