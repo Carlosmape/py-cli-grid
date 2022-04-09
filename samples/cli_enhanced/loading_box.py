@@ -1,6 +1,7 @@
 from engine.characters.AnimalCharacter import AnimalCharacter
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.defines.defines import BodyParts, Position
+from engine.items.interactives.CollectibleItem import CollectibleItem
 from engine.items.interactives.WearableItem import HandsWearable
 from engine.world.area import area
 from samples.cli_enhanced.area_box import AreaBox
@@ -47,7 +48,9 @@ class LoadingBox(AreaBox):
                 if y == middle_height and x == middle_width:
                     it = self.render_engine.render_tittle(self.loaded)
                 elif Position(x,y) in self.area.items:
-                    it = self.render_engine.render_item(self.area.item(Position(x,y)))
+                    ar_it = self.area.item(Position(x,y))
+                    if not isinstance(ar_it, CollectibleItem):
+                        it = self.render_engine.render_item(ar_it)
                 else:
                     for npc in self.npcs:
                         if Position(x, y) == npc.position:

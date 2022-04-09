@@ -51,7 +51,7 @@ class CommandLineInterface(GUI):
     def render_start_screen(self):
         user_action = None
         while True if not CommandLineInterface.loaded else user_action is None:
-            print(self.loading_container.render())
+            print(self.loading_container.render(), end="\r")
             sleep(1/self.max_frame_rate)
 
             if CommandLineInterface.loaded:
