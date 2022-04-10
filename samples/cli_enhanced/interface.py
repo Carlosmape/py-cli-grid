@@ -87,6 +87,8 @@ class CommandLineInterface(GUI):
             player.move_east(self.last_frame.area)
         elif action == ('f' or 'F'):
             player.active_action_menu(self.last_frame.area)
+        elif action == ('j' or 'J'):
+            player.Attack(player.nearby_npcs)
         elif action and ord(action) == 27:
             player.active_pause_menu()
         elif action == None:

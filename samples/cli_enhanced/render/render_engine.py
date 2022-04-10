@@ -71,8 +71,9 @@ class render_engine():
             if pj not in self._object_models:
                 self._object_models[pj] = character_render(render_engine.background_col, style.CBLACK)
 
-            self._object_models[pj].update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],pj.items[BodyParts.hands]==HandsWearable.Staff())
-            self._object_models[pj].update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, False)
+            weapon = pj.items[BodyParts.hands]!=HandsWearable.Staff() if pj.items[BodyParts.hands] else None
+            self._object_models[pj].update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],weapon)
+            self._object_models[pj].update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking)
 
         elif isinstance(pj, AnimalCharacter):
             if pj not in self._object_models:
@@ -82,8 +83,9 @@ class render_engine():
         return self._object_models[pj].render()
 
     def render_player(self, pj: PlayerCharacter):
-        self._reder_pj.update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],pj.items[BodyParts.hands])
-        self._reder_pj.update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, False)
+        weapon = pj.items[BodyParts.hands]!=HandsWearable.Staff() if pj.items[BodyParts.hands] else None
+        self._reder_pj.update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs], weapon)
+        self._reder_pj.update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking)
         return self._reder_pj.render()
         
 
