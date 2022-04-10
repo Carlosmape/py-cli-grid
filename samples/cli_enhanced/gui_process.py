@@ -43,21 +43,24 @@ class gui_process(multiprocessing.Process):
 
     def run(self):
         while(self.isStarted):
-            self.frame = self.frame_queue.get()
-            if self.frame is not None:
+            try:
+                self.frame = self.frame_queue.get_nowait()
+            except:
+                pass
+            if self.frame:
                 # Compose entire screen output (str)
                 str_gui=''
 
-                # Get stats
+                # Player stats, journal and log
                 str_gui += self.status_container.render(self.frame.player, self.frame.get_msg())
 
-                # Get Area
+                # Area
                 str_gui += self.area_container.render(self.frame)
                   
-                # Get Menu
+                # Menu
                 str_gui += self.menu_container.render(self.frame.menu)
 
-                #Debug
+                # Debugging info
                 str_gui += self.debug(self.frame)
     
                 remain_size = int(self.height - str_gui.count("\n")-1)
