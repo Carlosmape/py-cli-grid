@@ -1,4 +1,5 @@
 import os
+import sys
 import threading
 from time import sleep
 from traceback import format_exc
@@ -7,6 +8,7 @@ from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import GUI
 from KBHit import KBHit
+from engine.world.area import area
 from samples.cli_enhanced.gui_process import gui_process
 from samples.cli_enhanced.loading_box import LoadingBox
 keyboard = KBHit()
@@ -23,12 +25,17 @@ class CommandLineInterface(GUI):
 
         # Parent class initialization
         super().__init__()
-        
-        self.max_frame_rate = 30
+
+        self.max_frame_rate = 25
         # Get terminal size
         size = os.get_terminal_size()
         self.width = size.columns
         self.height = size.lines
+
+        # Read arguments
+        if "debug" in sys.argv:
+            area.MIN_HEIGHT = area.MAX_HEIGHT = int(self.height/3)
+            area.MIN_WIDTH = area.MAX_WIDTH = int(self.width/7)
 
         # Create loading screen
         self.loading_container = LoadingBox(self.width, self.height, 7, 3)
@@ -40,7 +47,7 @@ class CommandLineInterface(GUI):
 
         # Engine specific configurations
         Position.tolerance = 0
-        
+
         # Change loaded flag
         CommandLineInterface.loaded = True
         loading_thread.join()
@@ -56,13 +63,13 @@ class CommandLineInterface(GUI):
 
             if CommandLineInterface.loaded:
                 self.loading_container.complete_load()
-                #Clear buffered user inputs
+                # Clear buffered user inputs
                 user_action = self.readUserAction()
 
-        #Finally clean buffered user inputs again
+        # Finally clean buffered user inputs again
         self.readUserAction()
-            
-    def render(self, frame:Frame):
+
+    def render(self, frame: Frame):
         self.gui_thread.update_frame(frame)
 
     def readUserAction(self, blocking: bool = False):
@@ -91,7 +98,7 @@ class CommandLineInterface(GUI):
             player.Attack(player.nearby_npcs)
         elif action and ord(action) == 27:
             player.active_pause_menu()
-        elif action == None:
+        elif action is None:
             player.no_move()
 
     def clear(self):

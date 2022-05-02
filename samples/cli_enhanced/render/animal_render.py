@@ -14,18 +14,25 @@ class animal_render(base_render):
         self._to_east = True
         self._running = False
         self._attacking = False
+        self._dead = False
 
-    def update_state(self,to_east,running,attacking):
+    def update_state(self, to_east, running, attacking, dead):
         # Update state of the character, should be call just before render new frame
         self._to_east = to_east
         self._running = running
         self._attacking = attacking
+        self._dead = dead
 
     def render(self):
-        composed_animal = []
 
+        if self._dead:
+            return self.compose_dead()
+
+        composed_animal = []
+        
         curr_step = self._get_curr_step()
-        self._update_step()
+        if not self._dead:
+            self._update_step()
 
         body = self.compose_animal(curr_step)
 
@@ -34,6 +41,10 @@ class animal_render(base_render):
         composed_animal.append(self._back_color+self._fore_color+"       "+style.CEND)
         return composed_animal
     
+    def compose_dead(self):
+        return ["x"*self._frame_width, "x"*self._frame_width, "x"*self._frame_width]
+
+
     def compose_animal(self, step:int):
         head = animal_render.head[step]
         tors = animal_render.torso[step]

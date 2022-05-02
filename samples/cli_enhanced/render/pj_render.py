@@ -46,6 +46,7 @@ class character_render(base_render):
         self._staff = False
         self._running = False
         self._attacking = False
+        self._dead = False
         self._torso_armor = False
         self._legs_armor = None
 
@@ -68,13 +69,18 @@ class character_render(base_render):
             self._staff = True
 
 
-    def update_state(self,to_east,running,attacking):
+    def update_state(self, to_east, running, attacking, dead):
         # Update state of the character, should be call just before render new frame
         self._to_east = to_east
         self._running = running
         self._attacking = attacking
+        self._dead = dead
 
     def render(self):
+
+        if self._dead:
+            return self.composeDead()
+
         composed_str = []
 
         if self._running or self._attacking:
@@ -90,6 +96,12 @@ class character_render(base_render):
         composed_str.append(self.composeLegs(curr_step))
 
         return composed_str
+
+    def composeDead(self):
+        composed_str = []
+        composed_str.append(" "*self._frame_width)
+        composed_str.append(" "*self._frame_width)
+        composed_str.append(" --"+self.nude_torsos[self._torso]+self.heads_iddle[self._head])
 
     def composeHead(self, step):
         # We known that we have 7 chars to compose upper body

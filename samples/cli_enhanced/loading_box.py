@@ -47,10 +47,9 @@ class LoadingBox(AreaBox):
                 # Or corresponding element
                 if y == middle_height and x == middle_width:
                     it = self.render_engine.render_tittle(self.loaded)
-                elif Position(x,y) in self.area.items:
-                    ar_it = self.area.item(Position(x,y))
-                    if not isinstance(ar_it, CollectibleItem):
-                        it = self.render_engine.render_item(ar_it)
+                elif Position(x, y) in self.area.items:
+                    ar_it = self.area.item(Position(x, y))
+                    it = self.render_engine.render_item(ar_it)
                 else:
                     for npc in self.npcs:
                         if Position(x, y) == npc.position:
