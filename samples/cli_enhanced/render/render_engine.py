@@ -7,6 +7,7 @@ from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import ImpassableItem
 from engine.items.interactives.CollectibleItem import CollectibleItem, DecorationItem
 from engine.items.interactives.Door import Door
+from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.Potion import Potion
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
@@ -41,7 +42,7 @@ class render_engine():
             render_engine.background_col, style.CBLACK)
         self._ground_variety = ground
         self._ground_render = []
-        for i in range(self._ground_variety+1):
+        for i in range(self._ground_variety + 1):
             self._ground_render.append(env_render(
                 render_engine.background_col, render_engine.grass_col))
 
@@ -59,10 +60,8 @@ class render_engine():
             elif isinstance(item, Door):
                 self._object_models[type(item)] = door_render(
                     style.CYELLOWBG, render_engine.wall_col)
-            elif isinstance(item, container_item):
-                self._object_models[type(item)] = container_render(
-                    render_engine.background_col, render_engine.wall_col)
-            elif isinstance(item, DecorationItem):
+            elif isinstance(item, DecorationItem) or\
+                isinstance(item, EdibleItem):
                 self._object_models[type(item)] = decoration_render(
                     render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Potion):
@@ -70,7 +69,10 @@ class render_engine():
                     render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, WearableItem):
                 self._object_models[type(item)] = equipment_render(
-                    render_engine.background_col, render_engine.wall_col, item)
+                    render_engine.background_col, render_engine.wall_col, item) 
+            elif isinstance(item, container_item):
+                self._object_models[type(item)] = container_render(
+                    render_engine.background_col, render_engine.wall_col)
             else:
                 self._object_models[type(item)] = generic_render(
                     render_engine.background_col, style.CBLACK)

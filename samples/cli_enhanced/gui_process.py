@@ -1,13 +1,14 @@
 import multiprocessing
 from multiprocessing.queues import Queue
+from threading import Thread
 from engine.frame import Frame
 from engine.world.area_types import area_types
 
-from samples.cli_enhanced.area_box import AreaBox
-from samples.cli_enhanced.menu_box import MenuBox
 from samples.cli_enhanced.render.colors import style
-from samples.cli_enhanced.stats_box import PjStatsBox
-
+from samples.cli_enhanced.cli_grid.area_box import AreaBox
+from samples.cli_enhanced.cli_grid.menu_box import MenuBox
+from samples.cli_enhanced.cli_grid.stats_box import PjStatsBox
+from samples.cli_enhanced.sound_manager import sound_manager
 
 class gui_process(multiprocessing.Process):
 
@@ -26,6 +27,9 @@ class gui_process(multiprocessing.Process):
         self.status_container = PjStatsBox(self.width, self.height/4)
         self.menu_container = MenuBox(self.width, self.height/12)
         self.isStarted = False
+
+        # Initialize sound system
+        self.sound_manager = sound_manager()
 
         self.frame_queue: Queue[Frame] = multiprocessing.Queue()
         self.frame = None
@@ -47,6 +51,9 @@ class gui_process(multiprocessing.Process):
             except:
                 pass
             if self.frame:
+                # Run sound thread
+                self.sound_manager.update(self.frame)
+
                 # Compose entire screen output (str)
                 str_gui = ''
 

@@ -10,7 +10,7 @@ from engine.interface import GUI
 from KBHit import KBHit
 from engine.world.area import area
 from samples.cli_enhanced.gui_process import gui_process
-from samples.cli_enhanced.loading_box import LoadingBox
+from samples.cli_enhanced.cli_grid.loading_box import LoadingBox
 keyboard = KBHit()
 # System call
 os.system("")

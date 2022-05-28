@@ -1,19 +1,24 @@
-from engine.items.interactives.WearableItem import ChestWearable, FeetsWearable, HandsWearable, WearableItem
+from engine.items.interactives.WearableItem import BackWearable, ChestWearable, FeetsWearable, HandsWearable, LegsWearable, ShoulderWearable, WearableItem
 from samples.cli_enhanced.render.colors import style
 from .base_render import base_render
 
 
 class equipment_render(base_render):
     # Define equipment models
-    FeetsObject = [
+    HeadObject = [
         "       ",
+        style.CBOLD + "  _n_  ",
         "       ",
-        "   db  "
     ]
-    HeadObect = [
+    ShoudlerObject = [
         "       ",
+        "       ",
+        "  ^-^  "
+    ] 
+    BackObject = [
         "   _   ",
-        "  (ö)  ",
+        "  (º)  ",
+        "   ¨   ",
     ]
     WeaponObject = [
         "       ",
@@ -25,6 +30,17 @@ class equipment_render(base_render):
         "       ",
         "  î#î  ",
     ]
+    LegsObject = [
+        "       ",
+        "       ",
+        "  /|\\  "
+    ]
+    FeetsObject = [
+        "       ",
+        "       ",
+        "   db  "
+    ]
+
 
     def __init__(self, background, foreground, item: WearableItem, item_bg=style.CBLACKBG):
         super().__init__(7, 3, background, foreground)
@@ -35,8 +51,14 @@ class equipment_render(base_render):
             self.obj = equipment_render.WeaponObject
         elif isinstance(item, ChestWearable):
             self.obj = equipment_render.ChestObject
+        elif isinstance(item, ShoulderWearable):
+            self.obj = equipment_render.ShoudlerObject
+        elif isinstance(item, LegsWearable):
+            self.obj = equipment_render.LegsObject
+        elif isinstance(item, BackWearable):
+            self.obj = equipment_render.BackObject
         else:
-            self.obj = equipment_render.HeadObect
+            self.obj = equipment_render.HeadObject
 
     def render(self):
         return [

@@ -25,7 +25,7 @@ class potion_render(base_render):
 
         # compose the bottle
         common_style = self._back_color+self._fore_color
-        composed_wall.append(common_style + "       "+style.CEND)
-        composed_wall.append(common_style+style.CBOLD + "   T   " + style.CEND)
-        composed_wall.append(common_style + "  ("+c+")  "+style.CEND)
+        composed_wall.append(common_style + "   ╦   " + style.CEND)
+        composed_wall.append(common_style + " `("+c+")´ " + style.CEND)
+        composed_wall.append(common_style + "   ¨   " + style.CEND)
         return composed_wall

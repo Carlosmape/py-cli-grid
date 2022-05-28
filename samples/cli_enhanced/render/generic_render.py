@@ -13,7 +13,7 @@ class generic_render(base_render):
         composed_wall.append(
             self._back_color+self._fore_color+"   _   "+style.CEND)
         composed_wall.append(
-            self._back_color+self._fore_color+"  |x|  " + style.CEND)
+            self._back_color+self._fore_color+"  |?|  " + style.CEND)
         composed_wall.append(
             self._back_color+self._fore_color+"   ¨   "+style.CEND)
         return composed_wall
