@@ -1,6 +1,5 @@
 from audioplayer import AudioPlayer
 from engine.frame import Frame
-from engine.world.area_types import area_types
 
 
 class game_sound(AudioPlayer):
@@ -17,7 +16,6 @@ class game_sound(AudioPlayer):
         else:
             self.is_started = self.is_playing = True
             super().play(self.loop)
-
     
     def stop(self):
         if self.is_playing:
@@ -25,19 +23,23 @@ class game_sound(AudioPlayer):
 
 class sound_manager():
     def __init__(self) -> None:
-        self.env_sound = game_sound("sounds/environment.mp3")
-        self.walk_sound = game_sound("sounds/walk.mp3")
+        self.env = game_sound("sounds/environment.mp3")
+        self.walk = [
+            game_sound("sounds/walk.mp3"),
+            game_sound("sounds/walk_alt.mp3")
+        ]
 
     def update(self, frame: Frame):
-        # Environmental sound
+        # Environmental sounds
         if frame.area:
-            self.env_sound.play()
+            self.env.play()
         else:
-            self.env_sound.stop()
+            self.env.stop()
 
         # Character sounds
         if frame.player and \
             frame.player.is_moving:
-            self.walk_sound.play()
+            self.walk[frame.player.last_direction % len(self.walk)].play()
         else:
-            self.walk_sound.stop()
+            for walk in self.walk:
+                walk.stop()
