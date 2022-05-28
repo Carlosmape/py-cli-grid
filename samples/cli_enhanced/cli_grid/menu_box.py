@@ -15,10 +15,6 @@ class MenuBox(CommandLineBox):
         self.width_margin = self.width
         self.height_margin = self.height
 
-    def _fill_box(self, string):
-        self.height_margin = int(self.height - string.count("\n"))
-        return string + "\n" * self.height_margin
-
     def _render_menu(self, menu: Menu):
         composed_menu = str()
 

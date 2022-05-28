@@ -1,6 +1,5 @@
-from engine.defines.defines import Position, Position_types
+from engine.defines.defines import Position
 from engine.frame import Frame
-from engine.world.area_types import area_types
 from samples.cli_enhanced.cli_grid.command_line_box import CommandLineBox
 from samples.cli_enhanced.render.colors import style
 from samples.cli_enhanced.render.render_engine import render_engine
@@ -50,7 +49,7 @@ class AreaBox(CommandLineBox):
         size_char_h = 1/self.scale_height
 
     def _fill_box(self, string):
-        return string + "\n"*self.height_margin+""
+        return string + "\n" * self.height_margin
 
     def _extract_objects(self, frame: Frame):
         items = []

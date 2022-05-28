@@ -20,10 +20,6 @@ class PjStatsBox(CommandLineBox):
         self.width_margin = self.width
         self.height_margin = self.height
 
-    def _fill_box(self, string):
-        self.height_margin = int(self.height - string.count("\n"))
-        return string + "\n"*self.height_margin+""
-
     def _get_equipment_stats(self, pj: PlayerCharacter, body_part):
         if pj.items[body_part]:
             item: WearableItem = pj.items[body_part]

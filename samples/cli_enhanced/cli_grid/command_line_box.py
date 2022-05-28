@@ -15,7 +15,7 @@ class CommandLineBox():
 
     def _fill_box(self, string):
         self.height_margin = int(self.height - string.count("\n"))
-        return string + "\n"*self.height_margin+""
+        return string + "\n" * self.height_margin
 
     def render(self, string: str, vertically_filled=True):
         if vertically_filled:
