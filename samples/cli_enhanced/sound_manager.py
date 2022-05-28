@@ -1,3 +1,4 @@
+import threading
 from audioplayer import AudioPlayer
 from engine.frame import Frame
 
@@ -28,18 +29,20 @@ class sound_manager():
             game_sound("sounds/walk.mp3"),
             game_sound("sounds/walk_alt.mp3")
         ]
+        self.__lock = threading.Lock()
 
     def update(self, frame: Frame):
-        # Environmental sounds
-        if frame.area:
-            self.env.play()
-        else:
-            self.env.stop()
-
-        # Character sounds
-        if frame.player and \
-            frame.player.is_moving:
-            self.walk[frame.player.last_direction % len(self.walk)].play()
-        else:
-            for walk in self.walk:
-                walk.stop()
+        with self.__lock:
+            # Environmental sounds
+            if frame.area:
+                self.env.play()
+            else:
+                self.env.stop()
+    
+            # Character sounds
+            if frame.player and \
+                frame.player.is_moving:
+                self.walk[frame.player.last_direction % len(self.walk)].play()
+            else:
+                for walk in self.walk:
+                    walk.stop()

@@ -52,7 +52,7 @@ class gui_process(multiprocessing.Process):
                 pass
             if self.frame:
                 # Run sound thread
-                self.sound_manager.update(self.frame)
+                Thread(target=self.sound_manager.update, args=[self.frame]).run()
 
                 # Compose entire screen output (str)
                 str_gui = ''
