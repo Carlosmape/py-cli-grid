@@ -22,9 +22,11 @@ os.system("")
 ##########
 # CLI Interface
 ##########
+
+
 class CommandLineInterface(GUI):
     # Ascii icons
-    strPlayer =  '#'
+    strPlayer = '#'
     strItem = '\''
     strWearable = 'º'
     strContainer = '¤'
@@ -39,13 +41,13 @@ class CommandLineInterface(GUI):
     strBotLimit = '▀'
     strNone = ' '
     # stuff
-    strTittle =  "\n __  __       _             ____       _ "
+    strTittle = "\n __  __       _             ____       _ "
     strTittle += "\n|  \/  | ___ | |_ ___  _ __|  _ \ ___ | |"
     strTittle += "\n| |\/| |/ _ \| __/ _ \| '__| |_) / _ \| |"
     strTittle += "\n| |  | | (_) | || (_) | |  |  _ < (_) | |"
     strTittle += "\n|_|  |_|\___/ \__\___/|_|  |_| \_\___/|_|"
 
-    strManSword =  "\n\             "
+    strManSword = "\n\             "
     strManSword += "\n \      O     "
     strManSword += "\n  \   ó(w)ò } "
     strManSword += "\n  (D_/ | | \|}"
@@ -53,7 +55,7 @@ class CommandLineInterface(GUI):
     strManSword += "\n       v v    "
     strManSword += "\n      _l l_   "
 
-    strWomanSword =  "\n        (T)"
+    strWomanSword = "\n        (T)"
     strWomanSword += "\n  _  0   | "
     strWomanSword += "\n / \(Y)==o "
     strWomanSword += "\n{ º } |  | "
@@ -64,7 +66,7 @@ class CommandLineInterface(GUI):
     # Constructor
     def __init__(self):
 
-        #Super initialization
+        # Super initialization
         self.clear()
         print(CommandLineInterface.strTittle)
         print("\n\t   Initializing interface")
@@ -92,7 +94,7 @@ class CommandLineInterface(GUI):
         Position.tolerance = 0
 
         # Clean user actions
-        self.readUserAction();
+        self.readUserAction()
 
     def readUserAction(self, blocking: bool = False):
         if blocking:
@@ -171,19 +173,24 @@ class CommandLineInterface(GUI):
             pj = frame.player
             sts = pj.stats()
             # Name and position
-            pj_str += style.CBOLD + ("\n[> %s (%s) <]") % (pj.name, sts.level()) + style.CEND
+            pj_str += style.CBOLD + \
+                ("\n[> %s (%s) <]") % (pj.name, sts.level()) + style.CEND
             # Player status
             strXP = self.strWall * sts.experience()
             strXP += self.strEmptyBar * sts.remain_experience()
-            pj_str += style.CVIOLET + "\n XP(%s/%s)\t" %(sts.experience(), sts.experience()+sts.remain_experience())
+            pj_str += style.CVIOLET + \
+                "\n XP(%s/%s)\t" % (sts.experience(),
+                                    sts.experience()+sts.remain_experience())
             pj_str += strXP
             strHP = self.strWall * sts.health()
-            strHP += self.strEmptyBar * (sts.max_health() - sts.health()) 
-            pj_str += style.CRED + "\n HP(%s/%s)\t" %(sts.health(), sts.max_health())
+            strHP += self.strEmptyBar * (sts.max_health() - sts.health())
+            pj_str += style.CRED + \
+                "\n HP(%s/%s)\t" % (sts.health(), sts.max_health())
             pj_str += strHP
             pj_str += style.CYELLOW + "\n Agility:" + str(sts.agility())
             pj_str += style.CGREEN + "\n Strength:" + str(sts.strength())
-            pj_str += style.CBLUE2 + "\n Speed:" + str(round(sts.movement_speed(),2)) + style.CEND
+            pj_str += style.CBLUE2 + "\n Speed:" + \
+                str(round(sts.movement_speed(), 2)) + style.CEND
             # Player equipment
             pj_str += self.__player_equipment_str(pj)
             # Quests
@@ -191,7 +198,7 @@ class CommandLineInterface(GUI):
                 pj_str += "\n" + style.CBOLD + "[> Quest <]" + style.CEND
                 for q in pj.quests:
                     if not q.objective.done:
-                        pj_str += "\n " + q.name 
+                        pj_str += "\n " + q.name
                         pj_str += " "
                         pj_str += q.description
         return pj_str
@@ -202,7 +209,8 @@ class CommandLineInterface(GUI):
         pj_str = "\n" + style.CBOLD + "[> Equipment <]\n" + style.CEND
         # Prepare each part text
         strHead = " Head(" + str(pj.items[BodyParts.head] or '-') + ") "
-        strShoulder = " Shoulders(" + str(pj.items[BodyParts.shoulder] or '-') + ") "
+        strShoulder = " Shoulders(" + \
+            str(pj.items[BodyParts.shoulder] or '-') + ") "
         strChest = " Chest(" + str(pj.items[BodyParts.chest] or '-') + ") "
         strBack = " Back(" + str(pj.items[BodyParts.back] or '-') + ") "
         strArms = " Arms(" + str(pj.items[BodyParts.arms] or '-') + ") "
@@ -212,20 +220,27 @@ class CommandLineInterface(GUI):
         strFeets = " Feets(" + str(pj.items[BodyParts.feets] or '-') + ") "
         strEmpty = " "
         # Calculate the properly position for each part at the left side
-        max_space = max(len(strHead), len(strChest), len(strArms), len(strCore), len(strFeets))
+        max_space = max(len(strHead), len(strChest), len(
+            strArms), len(strCore), len(strFeets))
         strHead = " " * (max_space - len(strHead)) + strHead
         strChest = " " * (max_space - len(strChest)) + strChest
         strCore = " " * (max_space - len(strCore)) + strCore
-        strArms = " " * (max_space - len (strArms)) + strArms
+        strArms = " " * (max_space - len(strArms)) + strArms
         strEmpty = " " * (max_space)
         strFeets = " " * (max_space - len(strFeets)) + strFeets
         # Compose body model with equipment
-        pj_str += "\n"+style.CITALIC+strHead +style.CEND+style.CVIOLET+"    O    "+style.CEND+strShoulder
-        pj_str += "\n"+style.CITALIC+strChest+style.CEND+style.CVIOLET+"  ó(w)ò  "+style.CEND+strBack
-        pj_str += "\n"+style.CITALIC+strArms +style.CEND+style.CVIOLET+"_/ | | \_"+style.CEND+strHands
-        pj_str += "\n"+style.CITALIC+strCore +style.CEND+style.CVIOLET+"  .|_|.  "+style.CEND
-        pj_str += "\n"+style.CITALIC+strEmpty+style.CEND+style.CVIOLET+"   v v   "+style.CEND+strLegs
-        pj_str += "\n"+style.CITALIC+strFeets+style.CEND+style.CVIOLET+"  _l l_  "+style.CEND+"\n"
+        pj_str += "\n"+style.CITALIC+strHead + style.CEND + \
+            style.CVIOLET+"    O    "+style.CEND+strShoulder
+        pj_str += "\n"+style.CITALIC+strChest+style.CEND + \
+            style.CVIOLET+"  ó(w)ò  "+style.CEND+strBack
+        pj_str += "\n"+style.CITALIC+strArms + style.CEND + \
+            style.CVIOLET+"_/ | | \_"+style.CEND+strHands
+        pj_str += "\n"+style.CITALIC+strCore + \
+            style.CEND+style.CVIOLET+"  .|_|.  "+style.CEND
+        pj_str += "\n"+style.CITALIC+strEmpty+style.CEND + \
+            style.CVIOLET+"   v v   "+style.CEND+strLegs
+        pj_str += "\n"+style.CITALIC+strFeets+style.CEND + \
+            style.CVIOLET+"  _l l_  "+style.CEND+"\n"
         return pj_str
 
     def __area_str(self, frame: Frame):
@@ -233,14 +248,16 @@ class CommandLineInterface(GUI):
         frame_str = str()
         if frame.area:
             # Print area type
-            frame_str += style.CBOLD + "[> Area: " + area_types.NAMES[frame.area.type] + " <]" + style.CEND
+            frame_str += style.CBOLD + \
+                "[> Area: " + area_types.NAMES[frame.area.type] + " <]" + style.CEND
             # Its needed to draw inverted due to console works from top to down
             frame_str += style.CBLACK
-            frame_str += "\n" + (self.strTopLimit* (3+frame.area.width)) + "\n"
+            frame_str += "\n" + (self.strTopLimit *
+                                 (3+frame.area.width)) + "\n"
             for y in range(frame.area.height, -1, -1):
                 frame_str += style.CBEIGEBG + style.CBLACK + self.strWall
                 for x in range(0, frame.area.width+1, 1):
-                    current_position = Position(x,y)
+                    current_position = Position(x, y)
                     if frame.player.position == current_position:
                         frame_str += self.strPlayer
                     elif frame.get_npc(current_position):
@@ -260,7 +277,8 @@ class CommandLineInterface(GUI):
                     else:
                         frame_str += self.strNone
                 frame_str += self.strWall + style.CEND + "\n"
-            frame_str += style.CBLACKBG + style.CBLACK + self.strBotLimit * (3+frame.area.width) + style.CEND
+            frame_str += style.CBLACKBG + style.CBLACK + \
+                self.strBotLimit * (3+frame.area.width) + style.CEND
 
         return frame_str
 
@@ -268,11 +286,14 @@ class CommandLineInterface(GUI):
         """ This method renders actions menu (pause menu, interactions with environment and NPCs) """
         frame_str = str()
         if frame.menu:
-            frame_str +=  "\n" + style.CBOLD + "[> " + frame.menu.title + " <]" + style.CEND
+            frame_str += "\n" + style.CBOLD + \
+                "[> " + frame.menu.title + " <]" + style.CEND
             if frame.menu.options:
                 frame_str += "\n"
                 for option in frame.menu.options:
-                    frame_str += style.CBOLD + style.CGREEN+" %s." % (frame.menu.options.index(option)) + style.CEND 
+                    frame_str += style.CBOLD + style.CGREEN + \
+                        " %s." % (frame.menu.options.index(
+                            option)) + style.CEND
                     frame_str += style.CITALIC + "%s" % (option) + style.CEND
             frame_str += "\n" + frame.menu.query + style.CEND
 

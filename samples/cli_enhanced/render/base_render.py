@@ -4,10 +4,11 @@ from time import time
 
 class base_render():
 
-    def __init__(self, frame_width, frame_height, back_color:str, fore_color:str, step_duration = 1.0, max_steps= 0, allow_reverse_animation = False):
+    def __init__(self, frame_width, frame_height, back_color: str, fore_color: str, step_duration=1.0, max_steps=0, allow_reverse_animation=False):
         # Base animation step
         # Initializes to random to avoid all animations synchronization
-        self._animation_step = random.randint(0, max_steps-1 if max_steps>0 else 0)
+        self._animation_step = random.randint(
+            0, max_steps-1 if max_steps > 0 else 0)
         self._max_steps = max_steps
         # Animation speed in seconds
         self._step_duration = step_duration
@@ -19,11 +20,11 @@ class base_render():
         self._fore_color = fore_color
         self._allow_reverse = allow_reverse_animation
         self._reverse = False
-    
+
     def render(self):
         raise NotImplemented
 
-    def _fill_frame(self, part:str):
+    def _fill_frame(self, part: str):
         part_size = len(part)
         return " "*int((self._frame_width - part_size)/2) + part + " "*int(self._frame_width/2)
 
@@ -48,5 +49,3 @@ class base_render():
             return self._max_steps - 1 - self._animation_step
         else:
             return self._animation_step
-
-

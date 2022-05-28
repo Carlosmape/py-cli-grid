@@ -3,38 +3,41 @@ import random
 from samples.cli_enhanced.render.colors import style
 from .base_render import base_render
 
-class character_render(base_render):
-    heads_iddle =   ["ó","ü","ô", "ö", "a", "e"]
-    heads_iddle2 =  ["ò","û","ö", "o", "ä", "ë"]
-    arms =          ["¡","î","i"]
-    hands_iddle =   [",",".","·"]
-    sword_iddle =   [" | "," ! "," | "] # This works as staff (top) aswell
-    staff_iddle =   ["|","|","!"]
-    sword_attack =  ["  /"," ! ","\\  "] # This works as staff (top) aswell
-    staff_attack_e=  ["´","|","\\"]
-    staff_attack_w=  ["/","|","`"]
-    hands_action =  ["+","*","-"]
-    nude_torsos =   ["T", "Y", "V"]
-    armor_torsos=   ["#","@","X","H", "O", "0"]
-    nude_legs =         [" ║ ", " ║ ", " ║ ", " ║ "]
-    armor_legs1  =      ["!n!", "!║!", "!Y!", "!T!"]
-    armor_legs2  =      ["/n\\","/║\\","/Y\\","/T\\"]
-    nude_legs_run_e= " / "
-    nude_legs_run_w= " \\ "
-    armor_legs1_run_e=  "!/!"
-    armor_legs1_run_w=  "!\\!"
-    armor_legs2_run_e=  "//\\" 
-    armor_legs2_run_w=  "/\\\\"
 
-    #Define max steps
+class character_render(base_render):
+    heads_iddle = ["ó", "ü", "ô", "ö", "a", "e"]
+    heads_iddle2 = ["ò", "û", "ö", "o", "ä", "ë"]
+    arms = ["¡", "î", "i"]
+    hands_iddle = [",", ".", "·"]
+    sword_iddle = [" | ", " ! ", " | "]  # This works as staff (top) aswell
+    staff_iddle = ["|", "|", "!"]
+    sword_attack = ["  /", " ! ", "\\  "]  # This works as staff (top) aswell
+    staff_attack_e = ["´", "|", "\\"]
+    staff_attack_w = ["/", "|", "`"]
+    hands_action = ["+", "*", "-"]
+    nude_torsos = ["T", "Y", "V"]
+    armor_torsos = ["#", "@", "X", "H", "O", "0"]
+    nude_legs = [" ║ ", " ║ ", " ║ ", " ║ "]
+    armor_legs1 = ["!n!", "!║!", "!Y!", "!T!"]
+    armor_legs2 = ["/n\\", "/║\\", "/Y\\", "/T\\"]
+    nude_legs_run_e = " / "
+    nude_legs_run_w = " \\ "
+    armor_legs1_run_e = "!/!"
+    armor_legs1_run_w = "!\\!"
+    armor_legs2_run_e = "//\\"
+    armor_legs2_run_w = "/\\\\"
+
+    # Define max steps
     MAX_STEPS = min(len(arms), len(hands_iddle), len(hands_action))
 
     def __init__(self, background, foreground):
         # Initialize base class for iddle animation
-        super().__init__(7,3, background, foreground, 0.5, character_render.MAX_STEPS, True)
+        super().__init__(7, 3, background, foreground,
+                         0.5, character_render.MAX_STEPS, True)
         # Run animation
-        self._action_render = base_render(7,3, background, foreground, 0.2, character_render.MAX_STEPS, False)
-        
+        self._action_render = base_render(
+            7, 3, background, foreground, 0.2, character_render.MAX_STEPS, False)
+
         # Generate random parts
         self._head = random.randint(0, len(character_render.heads_iddle)-1)
         self._torso = random.randint(0, len(character_render.nude_torsos)-1)
@@ -50,7 +53,7 @@ class character_render(base_render):
         self._torso_armor = False
         self._legs_armor = None
 
-    def update_equipment(self, torso_armor = False, legs_armor_type: bool = None, weapon_type: bool = None ):
+    def update_equipment(self, torso_armor=False, legs_armor_type: bool = None, weapon_type: bool = None):
         """
         torso_armor True/False (no types allowed)
         legs_armor_type None/True/False (True:trousers, False:Skirt)
@@ -67,7 +70,6 @@ class character_render(base_render):
         elif weapon_type == False:
             self._sword = True
             self._staff = True
-
 
     def update_state(self, to_east, running, attacking, dead):
         # Update state of the character, should be call just before render new frame
@@ -89,8 +91,8 @@ class character_render(base_render):
             curr_step = self._get_curr_step()
         self._update_step()
         self._action_render._update_step()
-                
-        #Compose the character
+
+        # Compose the character
         composed_str.append(self.composeHead(curr_step))
         composed_str.append(self.composeTorso(curr_step))
         composed_str.append(self.composeLegs(curr_step))
@@ -101,12 +103,13 @@ class character_render(base_render):
         composed_str = []
         composed_str.append(" "*self._frame_width)
         composed_str.append(" "*self._frame_width)
-        composed_str.append(" --"+self.nude_torsos[self._torso]+self.heads_iddle[self._head])
+        composed_str.append(
+            " --"+self.nude_torsos[self._torso]+self.heads_iddle[self._head])
 
     def composeHead(self, step):
         # We known that we have 7 chars to compose upper body
         # sword(3),head(1) + 2 extra padding withespaces depending on character direction
-        sword = "   " #3 chars by default
+        sword = "   "  # 3 chars by default
 
         head = self.heads_iddle[self._head]
         if step % 2 == 0:
@@ -131,7 +134,7 @@ class character_render(base_render):
         r_arm = character_render.arms[step]
         l_hand = character_render.hands_iddle[step]
         r_hand = character_render.hands_iddle[step]
-        
+
         if self._torso_armor:
             torso = character_render.armor_torsos[self._torso]
 

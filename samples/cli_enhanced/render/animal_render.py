@@ -5,11 +5,12 @@ from .base_render import base_render
 class animal_render(base_render):
 
     head = ["º", "º", "º"]
-    torso = ["n","m", "n"]
+    torso = ["n", "m", "n"]
     tail = ["´", "'", "`"]
-    MAX_STEPS =  min(len(head), len(torso), len(tail))
-    def __init__(self, background, foreground, item_bg = style.CBLACKBG):
-        super().__init__(7,3, background, foreground, 0.5, animal_render.MAX_STEPS, True)
+    MAX_STEPS = min(len(head), len(torso), len(tail))
+
+    def __init__(self, background, foreground, item_bg=style.CBLACKBG):
+        super().__init__(7, 3, background, foreground, 0.5, animal_render.MAX_STEPS, True)
         self._item_bg = item_bg
         self._to_east = True
         self._running = False
@@ -29,23 +30,25 @@ class animal_render(base_render):
             return self.compose_dead()
 
         composed_animal = []
-        
+
         curr_step = self._get_curr_step()
         if not self._dead:
             self._update_step()
 
         body = self.compose_animal(curr_step)
 
-        composed_animal.append(self._back_color+self._fore_color+"       "+style.CEND)
-        composed_animal.append(self._back_color+self._fore_color+"  "+body+"  "+style.CEND)
-        composed_animal.append(self._back_color+self._fore_color+"       "+style.CEND)
+        composed_animal.append(
+            self._back_color+self._fore_color+"       "+style.CEND)
+        composed_animal.append(
+            self._back_color+self._fore_color+"  "+body+"  "+style.CEND)
+        composed_animal.append(
+            self._back_color+self._fore_color+"       "+style.CEND)
         return composed_animal
-    
+
     def compose_dead(self):
         return ["x"*self._frame_width, "x"*self._frame_width, "x"*self._frame_width]
 
-
-    def compose_animal(self, step:int):
+    def compose_animal(self, step: int):
         head = animal_render.head[step]
         tors = animal_render.torso[step]
         tail = animal_render.tail[step]
@@ -54,4 +57,3 @@ class animal_render(base_render):
             return tail + tors + head
         else:
             return head + tors + tail
-

@@ -1,16 +1,17 @@
 from .base_render import base_render
 from .colors import style
 
+
 class tittle_render(base_render):
     # Defined tittle animations
-    LOAD = ['[-]','[\]','[|]','[/]','[-]','[\]','[|]','[/]']
+    LOAD = ['[-]', '[\]', '[|]', '[/]', '[-]', '[\]', '[|]', '[/]']
 
     MAX_STEPS = len(LOAD)
 
     def __init__(self, background, foreground):
-        super().__init__(7,3, background, foreground, 0.2, tittle_render.MAX_STEPS, False)
+        super().__init__(7, 3, background, foreground, 0.2, tittle_render.MAX_STEPS, False)
 
-    def render(self, loaded = False):
+    def render(self, loaded=False):
         composed_env = []
         curr_step = self._get_curr_step()
         self._update_step()
@@ -30,9 +31,10 @@ class tittle_render(base_render):
             composed_env[2] = " GAME  "
 
         return self.fill_color(composed_env)
-    
+
     def fill_color(self, frame):
         """Fills frame with background and colors the grass elements"""
-        for i in range(0,self._frame_height):
-            frame[i] = self._back_color+style.CBOLD+self._fore_color+frame[i] + style.CEND
+        for i in range(0, self._frame_height):
+            frame[i] = self._back_color+style.CBOLD + \
+                self._fore_color+frame[i] + style.CEND
         return frame

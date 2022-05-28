@@ -23,8 +23,9 @@ from .container_render import container_render
 from .tittle_render import tittle_render
 from .colors import style
 
+
 class render_engine():
-    
+
     background_col = style.CBEIGEBG2
     grass_col = style.CBEIGE
     wall_col = style.CBLACK
@@ -34,58 +35,75 @@ class render_engine():
     def __init__(self, ground):
         self._initialized = True
         self._object_models = {}
-        self._reder_pj = character_render(render_engine.background_col, style.CBLACK)
-        self._tittle_render = tittle_render(render_engine.background_col, style.CBLACK)
+        self._reder_pj = character_render(
+            render_engine.background_col, style.CBLACK)
+        self._tittle_render = tittle_render(
+            render_engine.background_col, style.CBLACK)
         self._ground_variety = ground
         self._ground_render = []
         for i in range(self._ground_variety+1):
-            self._ground_render.append(env_render(render_engine.background_col, render_engine.grass_col))
-            
-    def render_tittle(self, loaded:bool):
+            self._ground_render.append(env_render(
+                render_engine.background_col, render_engine.grass_col))
+
+    def render_tittle(self, loaded: bool):
         return self._tittle_render.render(loaded)
-    
-    def render_ground(self,ground):
+
+    def render_ground(self, ground):
         return self._ground_render[ground].render()
 
-    def render_item(self, item:Item):
+    def render_item(self, item: Item):
         if type(item) not in self._object_models:
             if isinstance(item, ImpassableItem):
-                self._object_models[type(item)] = wall_render(render_engine.background_col, render_engine.wall_col)
+                self._object_models[type(item)] = wall_render(
+                    render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Door):
-                self._object_models[type(item)] = door_render(style.CYELLOWBG, render_engine.wall_col)
+                self._object_models[type(item)] = door_render(
+                    style.CYELLOWBG, render_engine.wall_col)
             elif isinstance(item, container_item):
-                self._object_models[type(item)] = container_render(render_engine.background_col, render_engine.wall_col)
+                self._object_models[type(item)] = container_render(
+                    render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, DecorationItem):
-                self._object_models[type(item)] = decoration_render(render_engine.background_col, render_engine.wall_col)
+                self._object_models[type(item)] = decoration_render(
+                    render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Potion):
-                self._object_models[type(item)] = potion_render(render_engine.background_col, render_engine.wall_col, item)
+                self._object_models[type(item)] = potion_render(
+                    render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, WearableItem):
-                self._object_models[type(item)] = equipment_render(render_engine.background_col, render_engine.wall_col, item)
+                self._object_models[type(item)] = equipment_render(
+                    render_engine.background_col, render_engine.wall_col, item)
             else:
-                self._object_models[type(item)] = generic_render(render_engine.background_col, style.CBLACK)
+                self._object_models[type(item)] = generic_render(
+                    render_engine.background_col, style.CBLACK)
         return self._object_models[type(item)].render()
-    
+
     def render_character(self, pj: Character):
         if isinstance(pj, NoPlayerCharacter):
             if pj not in self._object_models:
-                self._object_models[pj] = character_render(render_engine.background_col, style.CBLACK)
+                self._object_models[pj] = character_render(
+                    render_engine.background_col, style.CBLACK)
 
-            weapon = pj.items[BodyParts.hands]!=HandsWearable.Staff() if pj.items[BodyParts.hands] else None
-            self._object_models[pj].update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs],weapon)
-            self._object_models[pj].update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
+            weapon = pj.items[BodyParts.hands] != HandsWearable.Staff(
+            ) if pj.items[BodyParts.hands] else None
+            self._object_models[pj].update_equipment(
+                pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
+            self._object_models[pj].update_state(
+                pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
 
         elif isinstance(pj, AnimalCharacter):
             if pj not in self._object_models:
-                self._object_models[pj] = animal_render(render_engine.background_col, style.CBLACK)
+                self._object_models[pj] = animal_render(
+                    render_engine.background_col, style.CBLACK)
 
-            self._object_models[pj].update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
+            self._object_models[pj].update_state(
+                pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
 
         return self._object_models[pj].render()
 
     def render_player(self, pj: PlayerCharacter):
-        weapon = pj.items[BodyParts.hands]!=HandsWearable.Staff() if pj.items[BodyParts.hands] else None
-        self._reder_pj.update_equipment(pj.items[BodyParts.chest],pj.items[BodyParts.legs], weapon)
-        self._reder_pj.update_state(pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
+        weapon = pj.items[BodyParts.hands] != HandsWearable.Staff(
+        ) if pj.items[BodyParts.hands] else None
+        self._reder_pj.update_equipment(
+            pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
+        self._reder_pj.update_state(
+            pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
         return self._reder_pj.render()
-        
-
