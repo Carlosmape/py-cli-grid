@@ -29,9 +29,8 @@ class char_sounds:
     def update(self, pj: PlayerCharacter):
         # Walking
         if pj.is_moving:
-            self.walk[pj.last_direction % len(self.walk)-1].play()
+            self.walk[pj.last_direction % len(self.walk)].play()
         else:
-            self.breath[0].play()
             for s in self.walk:
                 s.stop()
         # Hitting
@@ -42,6 +41,9 @@ class char_sounds:
             else:
                 n = randint(0, len(self.sword_hit) - 1)
                 self.sword_hit[n].play() 
-            for s in self.breath:
-                s.stop()
+        # Low-health
+        if pj.stats().health() <= pj.stats().max_health()/4:
+            self.breath[0].play()
+        else:
+            self.breath[0].stop()
 
