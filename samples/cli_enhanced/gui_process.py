@@ -31,6 +31,7 @@ class gui_process(multiprocessing.Process):
         # Initialize sound system
         self.sound_manager = sound_manager()
 
+        # Incoming frame from main process
         self.frame_queue: Queue[Frame] = multiprocessing.Queue()
         self.frame = None
 
