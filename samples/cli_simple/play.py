@@ -4,12 +4,19 @@ import sys
 
 sys.path.append('../../')
 from engine.engine import Engine
+from engine.lore.Repository import CharacterRepo, CityRepo, FactionRepo
 from cli import CommandLineInterface
+from samples.assets.lore import characters, factions, cities
 
 #########
 # Run Engine
 # Interface should be changed
 #########
 interface = CommandLineInterface()
-engine = Engine(interface)
+engine = Engine(
+    interface, 
+    FactionRepo(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS), 
+    CityRepo(cities.NAMES), 
+    CharacterRepo(characters.NAMES)
+)
 engine.run()
