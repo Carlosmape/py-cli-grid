@@ -1,3 +1,5 @@
+from typing import List
+from engine.characters.AICharacter import AICharacter
 from engine.characters.AnimalCharacter import AnimalCharacter
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.defines.defines import BodyParts, Position
@@ -10,23 +12,27 @@ from samples.cli_enhanced.gui.graphics.cli_grid.command_line_box import CommandL
 class LoadingBox(AreaBox):
     def __init__(self, width, height, scale_width, scale_height):
         super().__init__(width, height, scale_width, scale_height)
-        self.loaded = False
+
         self.width_margin = int(
-            (self.width - (self.max_obj_in_width)*self.scale_width)/2)
+             (self.width - (self.max_obj_in_width)*self.scale_width)/2)
         self.height_margin = int(
-            (self.height - (self.max_obj_in_height)*self.scale_height)/2)
+             (self.height - (self.max_obj_in_height)*self.scale_height)/2)
         self.map_width = self.max_obj_in_width
         self.map_height = self.max_obj_in_height
+
+        self.loaded = False
         self.tittle_box = CommandLineBox(width, height/5)
+
         self.area = area(1)
-        self.npcs = []
-        for i in range(int(self.max_objects_in_area/10)):
+
+        self.npcs: List[AICharacter] = []
+        for i in range(int(self.max_objects_in_area/20)):
             if i % 3 == 0:
-                self.npcs.append(AnimalCharacter(
-                    None, 1, self.area.generate_empty_position(False)))
+                self.npcs.append(
+                    AnimalCharacter("Animal", 1, self.area.generate_empty_position(False)))
             else:
-                self.npcs.append(NoPlayerCharacter(
-                    None, 1, self.area.generate_empty_position(False)))
+                self.npcs.append(
+                    NoPlayerCharacter("Unknown", 1, self.area.generate_empty_position(False)))
                 self.npcs[i].items[BodyParts.hands] = HandsWearable.Any()
             self.npcs[i].area = self.area
 

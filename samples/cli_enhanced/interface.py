@@ -10,21 +10,14 @@ from engine.interface import GUI
 from samples.cli_enhanced.gui.input.KBHit import KBHit
 from engine.world.area import area
 from samples.cli_enhanced.gui.gui_process import gui_process
+from samples.cli_enhanced.gui.loading_process import loading_process
 from samples.cli_enhanced.gui.sound_process import sound_process
-from samples.cli_enhanced.gui.graphics.cli_grid.loading_box import LoadingBox
-keyboard = KBHit()
-# System call
-os.system("")
 
 
 class CommandLineInterface(GUI):
-    """Enhanced CLI interface for MotorRol"""
-
-    loaded: bool = False
+    """Enhanced CLI interface sample for MotorRol"""
 
     def __init__(self):
-
-        # Parent class initialization
         super().__init__()
 
         self.max_frame_rate = 25
@@ -38,37 +31,34 @@ class CommandLineInterface(GUI):
             area.MIN_HEIGHT = area.MAX_HEIGHT = int(self.height/3)
             area.MIN_WIDTH = area.MAX_WIDTH = int(self.width/7)
 
-        # Create loading screen
-        self.loading_container = LoadingBox(self.width, self.height, 7, 3)
-        loading_thread = threading.Thread(target=self.render_start_screen)
-        loading_thread.start()
-
-        # Create Game subprocess
-        self.graphic_process = gui_process(self.height, self.width)
-        self.sound_process = sound_process()
-        self.graphic_process.start()
-        self.sound_process.start()
-
+        # Initialize keyboard
+        self.keyboard = KBHit() 
         # Engine specific configurations
         Position.tolerance = 0
+        
 
-        # Change loaded flag
-        CommandLineInterface.loaded = True
-        loading_thread.join()
+        # Create Game subprocess
+        # Game's settings must be beforpe start subprocess 
+        # Loading subprocess
+        self.loading_process = loading_process(self.width, self.height)
+        self.loading_process.start()
+        # Main subprocess
+        self.graphic_process = gui_process(self.height, self.width)
+        self.sound_process = sound_process()
 
-    def render_start_screen(self):
-        user_action = None
-        while True if not CommandLineInterface.loaded else user_action is None:
-            print(self.loading_container.render(), end="\r")
-            sleep(1/self.max_frame_rate)
+        sleep(1)
+        self.loading_process.complete(None)
+        sleep(1)
+        # Clean user actions just before press key
+        self.keyboard.getch()
+        while self.loading_process.is_alive():
+            self.loading_process.complete(
+                self.keyboard.getch()
+            )
+        self.clear()
 
-            if CommandLineInterface.loaded:
-                self.loading_container.complete_load()
-                # Clear buffered user inputs
-                user_action = self.readUserAction()
-
-        # Finally clean buffered user inputs again
-        self.readUserAction()
+        self.sound_process.start()
+        self.graphic_process.start()
 
     def render(self, frame: Frame):
         self.graphic_process.update(frame)
@@ -78,8 +68,8 @@ class CommandLineInterface(GUI):
         try:
             if blocking:
                 return input()
-            elif keyboard.kbhit():
-                return keyboard.getch()
+            elif self.keyboard.kbhit():
+                return self.keyboard.getch()
         except BaseException as ex:
             self.manage_exceptions(ex)
 
@@ -124,5 +114,6 @@ class CommandLineInterface(GUI):
             return True
 
     def end(self):
+        self.loading_process.terminate()
         self.graphic_process.terminate()
         self.sound_process.terminate()

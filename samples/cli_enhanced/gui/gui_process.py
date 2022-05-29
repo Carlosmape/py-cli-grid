@@ -1,11 +1,12 @@
 from engine.frame import Frame
 from engine.world.area_types import area_types
-from samples.cli_enhanced.gui.base_game_process import base_game_process
 
-from samples.cli_enhanced.gui.graphics.render.colors import style
-from samples.cli_enhanced.gui.graphics.cli_grid.area_box import AreaBox
-from samples.cli_enhanced.gui.graphics.cli_grid.menu_box import MenuBox
-from samples.cli_enhanced.gui.graphics.cli_grid.stats_box import PjStatsBox
+from .base_game_process import base_game_process
+from .graphics.render.colors import style
+from .graphics.cli_grid.command_line_box import CommandLineBox
+from .graphics.cli_grid.area_box import AreaBox
+from .graphics.cli_grid.menu_box import MenuBox
+from .graphics.cli_grid.stats_box import PjStatsBox
 
 class gui_process(base_game_process):
 
@@ -18,6 +19,9 @@ class gui_process(base_game_process):
         self.scale_width = 7
         self.scale_height = 3
 
+        # Need to print rendered parts in whole screen
+        self.screen = CommandLineBox(self.width, self.scale_height)
+
         # Calculate frame sizes for each part
         self.area_container = AreaBox(
             self.width, 2*self.height/3, self.scale_width, self.scale_height)
@@ -27,24 +31,13 @@ class gui_process(base_game_process):
     def run_specific(self, frame: Frame):
         # Compose entire screen output (str)
         str_gui = ''
-
-        # Player stats, journal and log
         str_gui += self.status_container.render(
             frame.player, frame.get_msg())
-
-        # Area
         str_gui += self.area_container.render(frame)
-
-        # Menu
         str_gui += self.menu_container.render(frame.menu)
-
-        # Debugging info
         str_gui += self.debug(frame)
 
-        remain_size = int(self.height - str_gui.count("\n")-1)
-        # Print and reset cursor to console top-left
-        cursor_top = ""  # '\033[0;0H'
-        print(cursor_top + str_gui+("\n"*remain_size), end="\r")
+        print(self.screen.render(str_gui))
 
     def debug(self, frame: Frame):
         str_dbg = str()

@@ -15,9 +15,9 @@ from samples.assets.lore import characters, factions, cities
 #########
 interface = CommandLineInterface()
 engine = Engine(
-    interface, 
-    FactionRepo(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS), 
-    CityRepo(cities.NAMES), 
+    interface,
+    FactionRepo(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS),
+    CityRepo(cities.NAMES),
     CharacterRepo(characters.NAMES)
 )
 engine.run()
