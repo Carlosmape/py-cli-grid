@@ -1,13 +1,11 @@
 from random import randint
-from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines.defines import BodyParts
 from engine.world.area import area
 from engine.world.area_types import area_types
 from samples.cli_enhanced.sounds.game_sound import game_sound
 
 
 class env_sounds:
-    PATH_ENV = "sounds/env/"
+    PATH_ENV = "../assets/sounds/env/"
 
     def __init__(self) -> None:
         self.nature = [

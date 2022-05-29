@@ -6,7 +6,7 @@ from samples.cli_enhanced.sounds.game_sound import game_sound
 
 
 class char_sounds:
-    PATH_CHAR = "sounds/char/"
+    PATH_CHAR = "../assets/sounds/char/"
     PATH_FIGHT = PATH_CHAR + "fight/"
 
     def __init__(self) -> None:
