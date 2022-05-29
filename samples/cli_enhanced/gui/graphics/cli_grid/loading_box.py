@@ -1,11 +1,10 @@
 from engine.characters.AnimalCharacter import AnimalCharacter
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.defines.defines import BodyParts, Position
-from engine.items.interactives.CollectibleItem import CollectibleItem
 from engine.items.interactives.WearableItem import HandsWearable
 from engine.world.area import area
-from samples.cli_enhanced.cli_grid.area_box import AreaBox
-from samples.cli_enhanced.cli_grid.command_line_box import CommandLineBox
+from samples.cli_enhanced.gui.graphics.cli_grid.area_box import AreaBox
+from samples.cli_enhanced.gui.graphics.cli_grid.command_line_box import CommandLineBox
 
 
 class LoadingBox(AreaBox):

@@ -1,5 +1,4 @@
-from random import randint, random
-from time import time
+from random import randint
 from .base_render import base_render
 from .colors import style
 

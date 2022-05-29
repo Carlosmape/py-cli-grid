@@ -1,7 +1,7 @@
 from random import randint
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts
-from samples.cli_enhanced.sounds.game_sound import game_sound
+from .game_sound import game_sound
 
 
 

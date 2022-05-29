@@ -1,7 +1,7 @@
 
 from engine.menu import Menu
-from samples.cli_enhanced.cli_grid.command_line_box import CommandLineBox
-from samples.cli_enhanced.render.colors import style
+from samples.cli_enhanced.gui.graphics.cli_grid.command_line_box import CommandLineBox
+from samples.cli_enhanced.gui.graphics.render.colors import style
 
 
 class MenuBox(CommandLineBox):

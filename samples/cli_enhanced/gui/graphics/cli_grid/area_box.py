@@ -1,8 +1,8 @@
 from engine.defines.defines import Position
 from engine.frame import Frame
-from samples.cli_enhanced.cli_grid.command_line_box import CommandLineBox
-from samples.cli_enhanced.render.colors import style
-from samples.cli_enhanced.render.render_engine import render_engine
+from samples.cli_enhanced.gui.graphics.cli_grid.command_line_box import CommandLineBox
+from samples.cli_enhanced.gui.graphics.render.colors import style
+from samples.cli_enhanced.gui.graphics.render.render_engine import render_engine
 
 
 class AreaBox(CommandLineBox):

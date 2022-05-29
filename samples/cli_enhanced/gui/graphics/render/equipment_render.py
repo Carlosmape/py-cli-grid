@@ -1,5 +1,5 @@
 from engine.items.interactives.WearableItem import BackWearable, ChestWearable, FeetsWearable, HandsWearable, LegsWearable, ShoulderWearable, WearableItem
-from samples.cli_enhanced.render.colors import style
+from .colors import style
 from .base_render import base_render
 
 

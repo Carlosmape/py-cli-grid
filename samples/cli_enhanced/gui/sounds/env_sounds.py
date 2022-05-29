@@ -1,7 +1,7 @@
 from random import randint
 from engine.world.area import area
 from engine.world.area_types import area_types
-from samples.cli_enhanced.sounds.game_sound import game_sound
+from .game_sound import game_sound
 
 
 class env_sounds:

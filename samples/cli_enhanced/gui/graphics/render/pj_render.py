@@ -1,6 +1,6 @@
 import random
 
-from samples.cli_enhanced.render.colors import style
+from .colors import style
 from .base_render import base_render
 
 

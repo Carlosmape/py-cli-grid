@@ -7,10 +7,11 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import GUI
-from KBHit import KBHit
+from samples.cli_enhanced.gui.input.KBHit import KBHit
 from engine.world.area import area
-from samples.cli_enhanced.gui_process import gui_process
-from samples.cli_enhanced.cli_grid.loading_box import LoadingBox
+from samples.cli_enhanced.gui.gui_process import gui_process
+from samples.cli_enhanced.gui.sound_process import sound_process
+from samples.cli_enhanced.gui.graphics.cli_grid.loading_box import LoadingBox
 keyboard = KBHit()
 # System call
 os.system("")
@@ -42,8 +43,11 @@ class CommandLineInterface(GUI):
         loading_thread = threading.Thread(target=self.render_start_screen)
         loading_thread.start()
 
-        # Create GUI thread
-        self.gui_thread = gui_process(self.height, self.width)
+        # Create Game subprocess
+        self.graphic_process = gui_process(self.height, self.width)
+        self.sound_process = sound_process()
+        self.graphic_process.start()
+        self.sound_process.start()
 
         # Engine specific configurations
         Position.tolerance = 0
@@ -51,9 +55,6 @@ class CommandLineInterface(GUI):
         # Change loaded flag
         CommandLineInterface.loaded = True
         loading_thread.join()
-
-        # Start GUI thread
-        self.gui_thread.start()
 
     def render_start_screen(self):
         user_action = None
@@ -70,7 +71,8 @@ class CommandLineInterface(GUI):
         self.readUserAction()
 
     def render(self, frame: Frame):
-        self.gui_thread.update_frame(frame)
+        self.graphic_process.update(frame)
+        self.sound_process.update(frame)
 
     def readUserAction(self, blocking: bool = False):
         try:
@@ -122,4 +124,5 @@ class CommandLineInterface(GUI):
             return True
 
     def end(self):
-        self.gui_thread.terminate()
+        self.graphic_process.terminate()
+        self.sound_process.terminate()

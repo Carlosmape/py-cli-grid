@@ -11,12 +11,12 @@ from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.Potion import Potion
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
-from samples.cli_enhanced.render.animal_render import animal_render
-from samples.cli_enhanced.render.decoration_render import decoration_render
-from samples.cli_enhanced.render.door_render import door_render
-from samples.cli_enhanced.render.equipment_render import equipment_render
-from samples.cli_enhanced.render.generic_render import generic_render
-from samples.cli_enhanced.render.potion_render import potion_render
+from .animal_render import animal_render
+from .decoration_render import decoration_render
+from .door_render import door_render
+from .equipment_render import equipment_render
+from .generic_render import generic_render
+from .potion_render import potion_render
 from .pj_render import character_render
 from .env_render import env_render
 from .wall_render import wall_render

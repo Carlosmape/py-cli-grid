@@ -4,8 +4,8 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts
 from engine.items.interactives.WearableItem import WearableItem
 from engine.items.interactives.containeritem import container_item
-from samples.cli_enhanced.cli_grid.command_line_box import CommandLineBox
-from samples.cli_enhanced.render.colors import style
+from samples.cli_enhanced.gui.graphics.cli_grid.command_line_box import CommandLineBox
+from samples.cli_enhanced.gui.graphics.render.colors import style
 
 
 class PjStatsBox(CommandLineBox):
