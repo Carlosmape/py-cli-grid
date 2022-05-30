@@ -107,7 +107,8 @@ class character_render(base_render):
         composed_str.append(" "*self._frame_width)
         composed_str.append(" "*self._frame_width)
         composed_str.append(
-            " --" + self.nude_torsos[self._torso] + self.heads_iddle[0][self._head]
+            " --" + self.nude_torsos[self._torso] +
+            self.heads_iddle[0][self._head]
         )
 
     def composeHead(self, step):

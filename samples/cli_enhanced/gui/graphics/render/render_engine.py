@@ -65,14 +65,14 @@ class render_engine():
                 self._object_models[type(item)] = edible_render(
                     render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, DecorationItem):
-                    self._object_models[type(item)] = decoration_render(
-                        render_engine.background_col, render_engine.wall_col, item)
+                self._object_models[type(item)] = decoration_render(
+                    render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, Potion):
                 self._object_models[type(item)] = potion_render(
                     render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, WearableItem):
                 self._object_models[type(item)] = equipment_render(
-                    render_engine.background_col, render_engine.wall_col, item) 
+                    render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, container_item):
                 self._object_models[type(item)] = container_render(
                     render_engine.background_col, render_engine.wall_col)

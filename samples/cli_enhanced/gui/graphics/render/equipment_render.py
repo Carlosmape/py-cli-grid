@@ -14,7 +14,7 @@ class equipment_render(base_render):
         "       ",
         "       ",
         "  ^-^  "
-    ] 
+    ]
     BackObject = [
         "   _   ",
         "  (º)  ",
@@ -40,7 +40,6 @@ class equipment_render(base_render):
         "       ",
         "   db  "
     ]
-
 
     def __init__(self, background, foreground, item: WearableItem, item_bg=style.CBLACKBG):
         super().__init__(7, 3, background, foreground)
