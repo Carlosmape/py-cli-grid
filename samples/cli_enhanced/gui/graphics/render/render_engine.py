@@ -11,6 +11,7 @@ from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.Potion import Potion
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
+from samples.cli_enhanced.gui.graphics.render.edible_render import edible_render
 from .animal_render import animal_render
 from .decoration_render import decoration_render
 from .door_render import door_render
@@ -60,10 +61,12 @@ class render_engine():
             elif isinstance(item, Door):
                 self._object_models[type(item)] = door_render(
                     style.CYELLOWBG, render_engine.wall_col)
-            elif isinstance(item, DecorationItem) or\
-                isinstance(item, EdibleItem):
-                self._object_models[type(item)] = decoration_render(
+            elif isinstance(item, EdibleItem):
+                self._object_models[type(item)] = edible_render(
                     render_engine.background_col, render_engine.wall_col)
+            elif isinstance(item, DecorationItem):
+                    self._object_models[type(item)] = decoration_render(
+                        render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Potion):
                 self._object_models[type(item)] = potion_render(
                     render_engine.background_col, render_engine.wall_col, item)

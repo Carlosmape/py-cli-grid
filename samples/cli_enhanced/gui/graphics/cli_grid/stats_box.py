@@ -93,9 +93,8 @@ class PjStatsBox(CommandLineBox):
         sts = pj.stats()
         # Player info
         str_stats += style.CBOLD + " " + pj.name.capitalize() + style.CEND
-        str_stats += " Level:" + str(sts.level()) + style.CEND + " \n"
-        # Faction
-        str_stats += " Faction: " + (pj.faction.name if pj.faction else "None") + "\n"
+        str_stats += " Level:" + str(sts.level())
+        str_stats += " Faction:" + (pj.faction.name if pj.faction else "None") + style.CEND + "\n"
         # XP bar
         strXP = self.full_str * sts.experience()
         strXP += self.empty_str * sts.remain_experience()

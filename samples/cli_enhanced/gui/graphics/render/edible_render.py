@@ -3,20 +3,19 @@ from .base_render import base_render
 from .colors import style
 
 
-class decoration_render(base_render):
-    """Represents collectible-non edible engine objects (sticks, rocks)"""
-
+class edible_render(base_render):
+    """Represents collectible-edible engine's objects (fruits, wild berries...)"""
     # Defined grass types. Take care about MAX_STEPS
     TYPES = [
-        [',n,', '.n,', '.n.', ',ñ.', ',n,', '.n.'],
-        [',o,', '.o,', '.o.', ',o.', ',o,', '.o.'],
+        [',ý,', '.ŷ,', '.ỳ.', ',v.', ';v.', '.ÿ.'],
+        [',w,', '.ẅ,', '.ẃ.', ',ŵ.', ',ẁ,', '.v.'],
     ]
 
     MAX_STEPS = len(TYPES[0])
 
     def __init__(self, background, foreground):
-        super().__init__(7, 3, background, foreground, 1, decoration_render.MAX_STEPS, True)
-        self.type = randint(0, len(decoration_render.TYPES)-1)
+        super().__init__(7, 3, background, foreground, 1, edible_render.MAX_STEPS, True)
+        self.type = randint(0, len(edible_render.TYPES)-1)
         self.height_pos = randint(0, self._frame_height-1)
 
     def render(self):
@@ -37,7 +36,7 @@ class decoration_render(base_render):
     def get_grass_type(self, step: int):
         """Returns corresponding grass type filled to _frame_width"""
         # Compose the environment element
-        return "  " + decoration_render.TYPES[self.type][step] + "  "
+        return "  " + edible_render.TYPES[self.type][step] + "  "
 
     def fill_color(self, frame):
         """Fills frame with background and colors the grass elements"""
