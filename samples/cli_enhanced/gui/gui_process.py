@@ -1,14 +1,14 @@
+from multiprocessing.queues import Queue
 from engine.frame import Frame
 from engine.world.area_types import area_types
 
-from .base_game_process import base_game_process
 from .graphics.render.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
 from .graphics.cli_grid.area_box import AreaBox
 from .graphics.cli_grid.menu_box import MenuBox
 from .graphics.cli_grid.stats_box import PjStatsBox
 
-class gui_process(base_game_process):
+class gui_process():
 
     def __init__(self, height, width):
         super().__init__()
@@ -28,22 +28,22 @@ class gui_process(base_game_process):
         self.status_container = PjStatsBox(self.width, self.height/4)
         self.menu_container = MenuBox(self.width, self.height/12)
 
-    def run_specific(self, frame: Frame):
+    def render(self, frame: Frame, q_size):
         # Compose entire screen output (str)
         str_gui = ''
         str_gui += self.status_container.render(
             frame.player, frame.get_msg())
         str_gui += self.area_container.render(frame)
         str_gui += self.menu_container.render(frame.menu)
-        str_gui += self.debug(frame)
+        str_gui += self.debug(frame, q_size)
 
         print(self.screen.render(str_gui))
 
-    def debug(self, frame: Frame):
+    def debug(self, frame: Frame, q_size):
         str_dbg = str()
         if frame:
             str_dbg = style.CITALIC + style.CYELLOW
-            str_dbg += "FrameQueue: " + str(self.frame_queue.qsize()) + " "
+            str_dbg += "Queue: " + str(q_size) + " "
             if frame.player:
                 pj = frame.player
                 str_dbg += "PJ: " + str(pj.position)

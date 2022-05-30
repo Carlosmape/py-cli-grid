@@ -1,12 +1,12 @@
 import os
 import sys
-import threading
 from time import sleep
 from traceback import format_exc
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import GUI
+from samples.cli_enhanced.gui.game_process import game_process
 from samples.cli_enhanced.gui.input.KBHit import KBHit
 from engine.world.area import area
 from samples.cli_enhanced.gui.gui_process import gui_process
@@ -43,8 +43,7 @@ class CommandLineInterface(GUI):
         self.loading_process = loading_process(self.width, self.height)
         self.loading_process.start()
         # Main subprocess
-        self.graphic_process = gui_process(self.height, self.width)
-        self.sound_process = sound_process()
+        self.game_process = game_process(self.height, self.width)
 
         sleep(1)
         self.loading_process.complete(None)
@@ -57,12 +56,10 @@ class CommandLineInterface(GUI):
             )
         self.clear()
 
-        self.sound_process.start()
-        self.graphic_process.start()
+        self.game_process.start()
 
     def render(self, frame: Frame):
-        self.graphic_process.update(frame)
-        self.sound_process.update(frame)
+        self.game_process.update(frame)
 
     def readUserAction(self, blocking: bool = False):
         try:
@@ -115,5 +112,4 @@ class CommandLineInterface(GUI):
 
     def end(self):
         self.loading_process.terminate()
-        self.graphic_process.terminate()
-        self.sound_process.terminate()
+        self.game_process.terminate()

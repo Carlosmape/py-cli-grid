@@ -6,8 +6,8 @@ from engine.frame import Frame
 
 class base_game_process(multiprocessing.Process):
 
-    def __init__(self, name = "engine_sub_process"):
-        super().__init__(name = name, daemon = True)
+    def __init__(self, name="engine_sub_process"):
+        super().__init__(name=name)
         self.frame_queue: Queue[Frame] = multiprocessing.Queue()
         self.is_started = False
 
@@ -27,13 +27,8 @@ class base_game_process(multiprocessing.Process):
         Process will wait for engine's Frames
         and will call run_specific(frame)"""
         while self.is_started:
-            frame = None
-            try:
-                frame = self.frame_queue.get_nowait()
-            except:
-                pass
-            if frame:
-                self.run_specific(frame)
+            frame = self.frame_queue.get()
+            self.run_specific(frame)
 
     def run_specific(self, frame: Frame):
         """This method must be overrided in derived class
