@@ -4,6 +4,8 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import BodyParts
 from engine.items.interactives.WearableItem import WearableItem
 from engine.items.interactives.containeritem import container_item
+from engine.stats.AlteredState import AlteredState
+from engine.stats.character_stats import character_stats
 from samples.cli_enhanced.gui.graphics.cli_grid.command_line_box import CommandLineBox
 from samples.cli_enhanced.gui.graphics.render.colors import style
 
@@ -86,12 +88,14 @@ class PjStatsBox(CommandLineBox):
         pj_str += "\n"+strFeets+style.CVIOLET+"  _l l_  "+style.CEND+"\n"
         return pj_str
 
-    def _render_stats(self, pj: PlayerCharacter):
+    def _render_pj_info(self, pj: PlayerCharacter):
         str_stats = str()
         sts = pj.stats()
-        # Player status
-        str_stats += style.CBOLD + " Level:" + \
-            str(sts.level()) + style.CEND + " \n"
+        # Player info
+        str_stats += style.CBOLD + " " + pj.name.capitalize() + style.CEND
+        str_stats += " Level:" + str(sts.level()) + style.CEND + " \n"
+        # Faction
+        str_stats += " Faction: " + (pj.faction.name if pj.faction else "None") + "\n"
         # XP bar
         strXP = self.full_str * sts.experience()
         strXP += self.empty_str * sts.remain_experience()
@@ -106,16 +110,38 @@ class PjStatsBox(CommandLineBox):
             " HP(%s/%s) " % (sts.health(), sts.max_health()) + \
             " " + style.CEND + " "
         if sts.health() <= sts.max_health()/4:
-            str_stats += style.CBLINK
+            str_stats += style.CBLINK + style.CBOLD
         str_stats += style.CRED + strHP + style.CEND + "\n"
-        # Another stats
+        return str_stats
+
+    def _render_stats(self, sts: character_stats):
+        # Another stats as cols
+        str_stats = str()
+        # Agility
         str_stats += style.CBOLD + style.CYELLOW + \
             " Agility:" + str(sts.agility())+style.CEND + "\n"
-        str_stats += style.CGREEN + " Strength:" + \
+        # Strength
+        str_stats += style.CBOLD + style.CGREEN + " Strength:" + \
             str(sts.strength()) + style.CEND + "\n"
-        str_stats += style.CBLUE2 + " Speed:" + \
+        # Movement speed
+        str_stats += style.CBOLD + style.CBLUE2 + " Speed:" + \
             str(round(sts.movement_speed(), 2)) + style.CEND + "\n"
+        # Altered status
+        str_stats += style.CBOLD + " Status: "
+        if sts.altered_states():
+            str_stats += self._get_altered_states(sts)
+        str_stats += style.CEND + "\n"
         return str_stats
+
+    def _get_altered_states(self, sts: character_stats):
+        states = str()
+        for alt_sts in list(sts.altered_states()):
+            if states:
+                states += ", "
+            states += type(alt_sts).__name__ 
+            if alt_sts.is_temporary():
+                states += "(" + str(alt_sts.remain_time()) + "s)"
+        return states
 
     def _render_quests(self, pj: PlayerCharacter):
         if pj.quests and len(pj.quests) > 0:
@@ -123,7 +149,8 @@ class PjStatsBox(CommandLineBox):
             for q in pj.quests:
                 if not q.objective.done:
                     str_quests += "\n" + style.CGREEN + "+ " + style.CEND
-                    str_quests += q.name + style.CITALIC + " +" + \
+                    str_quests += q.name + \
+                        style.CVIOLET + style.CBOLD + style.CITALIC + " +" + \
                         str(q.reward.getXp()) + " xp"+style.CEND
                     if q.reward.hasItem():
                         str_quests += q.reward.getItem().name + " "
@@ -140,10 +167,12 @@ class PjStatsBox(CommandLineBox):
         if pj is None:
             return ""
 
-        stats_col_str = self._render_stats(pj)
+        info_col_str = self._render_pj_info(pj)
+        stats_col_str = self._render_stats(pj.stats())
         equipment_col_str = self._render_equipment(pj)
         quest_col_str = self._render_quests(pj)
         log_col_str = self._render_log(msg)
-        frame_str = self.render_cols([stats_col_str, equipment_col_str], False)
+
+        frame_str = self.render_cols([info_col_str + stats_col_str, equipment_col_str], False)
         frame_str += self.render_cols([log_col_str, quest_col_str], False)
         return super().render(frame_str)
