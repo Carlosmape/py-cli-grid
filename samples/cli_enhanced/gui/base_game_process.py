@@ -7,7 +7,7 @@ from engine.frame import Frame
 class base_game_process(multiprocessing.Process):
 
     def __init__(self, name = "engine_sub_process"):
-        super().__init__(name = name)
+        super().__init__(name = name, daemon = True)
         self.frame_queue: Queue[Frame] = multiprocessing.Queue()
         self.is_started = False
 
