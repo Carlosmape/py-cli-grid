@@ -66,7 +66,7 @@ class render_engine():
                     render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, DecorationItem):
                     self._object_models[type(item)] = decoration_render(
-                        render_engine.background_col, render_engine.wall_col)
+                        render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, Potion):
                 self._object_models[type(item)] = potion_render(
                     render_engine.background_col, render_engine.wall_col, item)

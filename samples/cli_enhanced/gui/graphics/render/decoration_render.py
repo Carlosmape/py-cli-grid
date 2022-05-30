@@ -1,4 +1,6 @@
 from random import randint
+
+from engine.items.interactives.CollectibleItem import DecorationItem, DecorationItemFeather, DecorationItemLeaves, DecorationItemRock, DecorationItemStick
 from .base_render import base_render
 from .colors import style
 
@@ -7,17 +9,38 @@ class decoration_render(base_render):
     """Represents collectible-non edible engine objects (sticks, rocks)"""
 
     # Defined grass types. Take care about MAX_STEPS
+    # (all elements shall be the same length)
     TYPES = [
+        # GENERIC
         [',n,', '.n,', '.n.', ',ñ.', ',n,', '.n.'],
+        # ROCKS
         [',o,', '.o,', '.o.', ',o.', ',o,', '.o.'],
+        # STICKS
+        [',ƒ,', '.ƒ,', '.ƒ.', ',ƒ.', ',ƒ,', '.ƒ.'],
+        # LEAVES
+        [',*,', '.*,', '.*.', ',*.', ',*,', '.*.'],
+        # FEATHER
+        [',ð,', '.ð,', '.ð.', ',ð.', ',ð,', '.ð.'],
+        # MOSS
+        [',m,', '.m,', '.m.', ',m.', ',m,', '.m.'],
     ]
 
     MAX_STEPS = len(TYPES[0])
 
-    def __init__(self, background, foreground):
+    def __init__(self, background, foreground, item: DecorationItem):
         super().__init__(7, 3, background, foreground, 1, decoration_render.MAX_STEPS, True)
-        self.type = randint(0, len(decoration_render.TYPES)-1)
         self.height_pos = randint(0, self._frame_height-1)
+
+        # Select rendering type depending on collectible item type
+        self.type = 0
+        if isinstance(item, DecorationItemRock):
+            self.type = 0
+        elif isinstance(item, DecorationItemStick):
+            self.type = 2
+        elif isinstance(item, DecorationItemLeaves):
+            self.type = 3
+        elif isinstance(item, DecorationItemFeather):
+            self.type = 4
 
     def render(self):
         composed_obj = []
