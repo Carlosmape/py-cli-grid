@@ -1,5 +1,7 @@
 from random import randint
 from engine.characters.PlayerCharacter import PlayerCharacter
+from engine.defines.Actions import Action, EatAny, Observe
+from engine.defines.ItemActions import ObserveItem
 from engine.defines.defines import BodyParts
 from .game_sound import game_sound
 
@@ -25,8 +27,19 @@ class char_sounds:
             game_sound(char_sounds.PATH_FIGHT + "sword_impact.mp3", False),
             game_sound(char_sounds.PATH_FIGHT + "sword_armor_impact.wav", False),
         ]
+        self.eat = [
+            game_sound(char_sounds.PATH_CHAR + "eat.wav", False),
+            game_sound(char_sounds.PATH_CHAR + "eat_alt.wav", False),
+        ]
+        self.gasp = [
+            game_sound(char_sounds.PATH_CHAR + "gasp.wav", False),
+        ]
 
     def update(self, pj: PlayerCharacter):
+        # Check for last actions
+        if pj.last_action:
+            self.update_action(pj.last_action)
+
         # Walking
         if pj.is_moving:
             self.walk[pj.last_direction % len(self.walk)].play()
@@ -47,3 +60,13 @@ class char_sounds:
         else:
             self.breath[0].stop()
 
+    def update_action(self, act: Action):
+        if isinstance(act, EatAny):
+            n = randint(0, len(self.eat) - 1)
+            self.eat[n].play()
+        elif isinstance(act, Observe) or \
+            isinstance(act, ObserveItem):
+            n = randint(0, len(self.gasp) - 1)
+            self.gasp[n].play()
+
+  
