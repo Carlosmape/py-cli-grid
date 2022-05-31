@@ -86,7 +86,7 @@ class CommandLineInterface(GUI):
         elif action and ord(action) == 27:
             player.active_pause_menu()
         elif action is None:
-            player.no_move()
+            player.DoNothing()
 
     def clear(self):
         if os.name in ('nt', 'dos'):
