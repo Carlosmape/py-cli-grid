@@ -6,12 +6,10 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.defines import Position
 from engine.frame import Frame
 from engine.interface import GUI
-from samples.cli_enhanced.gui.game_process import game_process
-from samples.cli_enhanced.gui.input.KBHit import KBHit
+from samples.cli_enhanced.ui.game_process import game_process
+from samples.cli_enhanced.ui.input.KBHit import KBHit
 from engine.world.area import area
-from samples.cli_enhanced.gui.gui_process import gui_process
-from samples.cli_enhanced.gui.loading_process import loading_process
-from samples.cli_enhanced.gui.sound_process import sound_process
+from samples.cli_enhanced.ui.loading_process import loading_process
 
 
 class CommandLineInterface(GUI):

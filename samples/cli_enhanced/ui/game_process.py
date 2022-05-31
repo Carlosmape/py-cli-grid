@@ -1,8 +1,8 @@
-from multiprocessing.context import Process
+from time import time
 from engine.frame import Frame
-from samples.cli_enhanced.gui.base_game_process import base_game_process
-from samples.cli_enhanced.gui.gui_process import gui_process
-from samples.cli_enhanced.gui.sound_process import sound_process
+from samples.cli_enhanced.ui.base_game_process import base_game_process
+from samples.cli_enhanced.ui.gui_process import gui_process
+from samples.cli_enhanced.ui.sound_process import sound_process
 
 
 class game_process(base_game_process):
@@ -10,6 +10,9 @@ class game_process(base_game_process):
         super().__init__("GameProcess")
         self.gui_process = gui_process(height, width)
         self.sound_process = sound_process()
+
+    def run(self):
+        return super().run()
 
     def run_specific(self, frame: Frame):
         #sp = []
@@ -19,5 +22,6 @@ class game_process(base_game_process):
         #    p.start()
         #for p in sp:
         #    p.join()
-        self.gui_process.render(frame, self.frame_queue.qsize())
+        self.begin_process_frame = time()
+        self.gui_process.render(frame, self.frame_queue.qsize(), 0 if self.fps_avg is 0 else 1 / self.fps_avg)
         self.sound_process.render(frame)

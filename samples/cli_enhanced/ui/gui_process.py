@@ -1,4 +1,3 @@
-from multiprocessing.queues import Queue
 from engine.frame import Frame
 from engine.world.area_types import area_types
 
@@ -28,33 +27,37 @@ class gui_process():
         self.status_container = PjStatsBox(self.width, self.height/4)
         self.menu_container = MenuBox(self.width, self.height/12)
 
-    def render(self, frame: Frame, q_size):
+    def render(self, frame: Frame, q_size, fps):
         # Compose entire screen output (str)
         str_gui = ''
         str_gui += self.status_container.render(
             frame.player, frame.get_msg())
         str_gui += self.area_container.render(frame)
         str_gui += self.menu_container.render(frame.menu)
-        str_gui += self.debug(frame, q_size)
+        str_gui += self.debug(frame, q_size, fps)
 
         print(self.screen.render(str_gui))
 
-    def debug(self, frame: Frame, q_size):
+    def debug(self, frame: Frame, q_size, fps):
         str_dbg = str()
         if frame:
             str_dbg = style.CITALIC + style.CYELLOW
-            str_dbg += "Queue: " + str(q_size) + " "
-            if frame.player:
-                pj = frame.player
-                str_dbg += "PJ: " + str(pj.position)
-                if (pj.is_moving):
-                    str_dbg += " d %.3f" % (pj.last_distance)
-                    str_dbg += " t %.3f" % (pj.delta_time)
-                    str_dbg += " s %.3f" % (pj.last_distance /
-                                            pj.delta_time if pj.last_distance and pj.delta_time else 0)
+            str_dbg += "Queue: %d | FPS: %.2f" % (q_size, fps)
+
             if frame.area:
                 a = frame.area
-                str_dbg += " Area: " + \
+                str_dbg += " | Area: " + \
                     area_types.NAMES[a.type] + " " + \
                     str(a.width) + "x" + str(a.height)
+
+            if frame.player:
+                pj = frame.player
+                str_dbg += " | PJ: " + str(pj.position)
+                str_dbg += " act: " + str(pj.last_action)
+                if (pj.is_moving):
+                    str_dbg += " d: %.3f" % (pj.last_distance)
+                    str_dbg += " t: %.3f" % (pj.delta_time)
+                    str_dbg += " s: %.3f" % (pj.last_distance /
+                                            pj.delta_time if pj.last_distance and pj.delta_time else 0)
+            
         return str_dbg + style.CEND + "\n"

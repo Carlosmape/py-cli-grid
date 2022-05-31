@@ -1,6 +1,6 @@
 from engine.frame import Frame
-from samples.cli_enhanced.gui.sounds.char_sounds import char_sounds
-from samples.cli_enhanced.gui.sounds.env_sounds import env_sounds
+from .sounds.char_sounds import char_sounds
+from .sounds.env_sounds import env_sounds
 
 class sound_process():
     def __init__(self) -> None:

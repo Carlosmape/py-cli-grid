@@ -11,7 +11,7 @@ from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.Potion import Potion
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
-from samples.cli_enhanced.gui.graphics.render.edible_render import edible_render
+from .edible_render import edible_render
 from .animal_render import animal_render
 from .decoration_render import decoration_render
 from .door_render import door_render
