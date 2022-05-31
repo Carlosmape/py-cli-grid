@@ -15,13 +15,6 @@ class game_process(base_game_process):
         return super().run()
 
     def run_specific(self, frame: Frame):
-        #sp = []
-        #sp.append(Process(target=self.gui_process.render, args=[frame, self.frame_queue.qsize()], daemon=True))
-        #sp.append(Process(target=self.sound_process.render, args=[frame], daemon=True))
-        #for p in sp:
-        #    p.start()
-        #for p in sp:
-        #    p.join()
         self.begin_process_frame = time()
         self.gui_process.render(frame, self.frame_queue.qsize(), 0 if self.fps_avg is 0 else 1 / self.fps_avg)
         self.sound_process.render(frame)

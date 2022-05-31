@@ -17,7 +17,7 @@ class sound_process():
     def render(self, frame: Frame): 
         self.game_sounds.update(frame)
         if frame.area:
-            self.env_sounds.update(frame.area)
+            self.env_sounds.update(frame.area, frame.worldtime)
         if frame.player:
             self.char_sounds.update(frame.player)
 
