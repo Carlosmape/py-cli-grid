@@ -1,5 +1,7 @@
+from engine.characters.AICharacter import AICharacter
 from engine.characters.AnimalCharacter import AnimalCharacter
 from engine.characters.Base import DIRECTION_EAST, DIRECTIONS, Character
+from engine.characters.InteractiveCharacter import InteractiveCharacter
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Actions import AttackAny, Walk
@@ -82,7 +84,9 @@ class render_engine():
                     render_engine.background_col, style.CBLACK)
         return self._object_models[type(item)].render()
 
-    def render_character(self, pj: Character):
+    def render_character(self, pj: InteractiveCharacter): 
+
+        # Check if it is already rendered
         if isinstance(pj, NoPlayerCharacter):
             if pj not in self._object_models:
                 self._object_models[pj] = character_render(
@@ -92,17 +96,19 @@ class render_engine():
             ) if pj.items[BodyParts.hands] else None
             self._object_models[pj].update_equipment(
                 pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
-            self._object_models[pj].update_state(
-                pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
 
         elif isinstance(pj, AnimalCharacter):
             if pj not in self._object_models:
                 self._object_models[pj] = animal_render(
                     render_engine.background_col, style.CBLACK)
 
-            self._object_models[pj].update_state(
-                pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
-
+        
+        # Finally update their state and render 
+        walking =   isinstance(pj.last_action, Walk)
+        attacking = isinstance(pj.last_action, AttackAny)
+        to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
+        self._object_models[pj].update_state(
+                to_east, walking, attacking, pj.is_dead)
         return self._object_models[pj].render()
 
     def render_player(self, pj: PlayerCharacter):
