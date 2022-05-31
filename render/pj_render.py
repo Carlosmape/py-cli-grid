@@ -38,8 +38,11 @@ class character_render(base_render):
         super().__init__(7, 3, background, foreground,
                          0.5, character_render.MAX_STEPS, True)
         # Run animation
-        self._action_render = base_render(
+        self._walk_render = base_render(
             7, 3, background, foreground, 0.2, character_render.MAX_STEPS, False)
+
+        self._attack_render = base_render(
+            7, 3, background, foreground, 1, character_render.MAX_STEPS, False)
 
         # Generate random parts
         self._head = random.randint(0, len(character_render.heads_iddle)-1)
@@ -88,12 +91,15 @@ class character_render(base_render):
 
         composed_str = []
 
-        if self._running or self._attacking:
-            curr_step = self._action_render._get_curr_step()
+        if self._running:
+            curr_step = self._walk_render._get_curr_step()
+        elif self._attacking:
+            curr_step = self._attack_render._get_curr_step()
         else:
             curr_step = self._get_curr_step()
         self._update_step()
-        self._action_render._update_step()
+        self._walk_render._update_step()
+        self._attack_render._update_step()
 
         # Compose the character
         composed_str.append(self.composeHead(curr_step))

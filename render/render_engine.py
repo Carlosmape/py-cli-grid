@@ -2,6 +2,7 @@ from engine.characters.AnimalCharacter import AnimalCharacter
 from engine.characters.Base import DIRECTION_EAST, DIRECTIONS, Character
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
+from engine.defines.Actions import AttackAny, Walk
 from engine.defines.defines import BodyParts
 from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import ImpassableItem
@@ -105,10 +106,14 @@ class render_engine():
         return self._object_models[pj].render()
 
     def render_player(self, pj: PlayerCharacter):
+        # Extract needed flags
         weapon = pj.items[BodyParts.hands] != HandsWearable.Staff(
         ) if pj.items[BodyParts.hands] else None
+        walking =   isinstance(pj.last_action, Walk)
+        attacking = isinstance(pj.last_action, AttackAny)
+        to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
+
         self._reder_pj.update_equipment(
             pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
-        self._reder_pj.update_state(
-            pj.last_direction == DIRECTIONS[DIRECTION_EAST], pj.is_moving, pj.is_attacking, pj.is_dead)
+        self._reder_pj.update_state(to_east, walking, attacking, pj.is_dead)
         return self._reder_pj.render()
