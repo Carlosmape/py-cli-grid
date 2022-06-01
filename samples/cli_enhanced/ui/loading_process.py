@@ -1,12 +1,12 @@
 import multiprocessing
-import os
 from time import sleep
 from multiprocessing.queues import Queue
 from .graphics.cli_grid.loading_box import LoadingBox
 from .base_game_process import base_game_process
 
+
 class loading_process(base_game_process):
-    
+
     def __init__(self, width: int, height: int):
         super().__init__()
 
@@ -30,8 +30,8 @@ class loading_process(base_game_process):
     def run(self):
         userinput = None
         while self.is_started if not self.screen.loaded else userinput is None:
-            flag = False 
-            
+            flag = False
+
             try:
                 flag = self.flag_queue.get_nowait()
                 userinput = None
