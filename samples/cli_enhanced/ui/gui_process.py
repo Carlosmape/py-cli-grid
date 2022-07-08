@@ -49,7 +49,9 @@ class gui_process():
                 a = frame.area
                 str_dbg += " | Area: " + \
                     area_types.NAMES[a.type] + " " + \
-                    str(a.width) + "x" + str(a.height)
+                    str(a.width) + "x" + str(a.height) + " " + \
+                    "%2.2f ºC" % frame.area.weather.temperature
+
 
             if frame.player:
                 pj = frame.player
