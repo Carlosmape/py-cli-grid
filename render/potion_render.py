@@ -1,11 +1,11 @@
-from engine.items.interactives.Potion import AgilityPotion, HealthPotion, Potion, StrenghtPotion
+from engine.items.interactives.DrinkableItem import AgilityPotion, HealthPotion, DrinkableItem, StrenghtPotion
 from .colors import style
 from .base_render import base_render
 
 
 class potion_render(base_render):
 
-    def __init__(self, background, foreground, item: Potion, item_bg=style.CBLACKBG):
+    def __init__(self, background, foreground, item: DrinkableItem, item_bg=style.CBLACKBG):
         super().__init__(7, 3, background, foreground)
         self._item_bg = item_bg
 

@@ -11,7 +11,7 @@ from engine.items.impassables.ImpassableItem import ImpassableItem
 from engine.items.interactives.CollectibleItem import CollectibleItem, DecorationItem
 from engine.items.interactives.Door import Door
 from engine.items.interactives.EdibleItem import EdibleItem
-from engine.items.interactives.Potion import Potion
+from engine.items.interactives.DrinkableItem import DrinkableItem
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
 from .edible_render import edible_render
@@ -63,15 +63,15 @@ class render_engine():
                     render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Door):
                 self._object_models[type(item)] = door_render(
-                    style.CYELLOWBG, render_engine.wall_col)
+                    style.CYELLOWBG, render_engine.wall_col) 
+            elif isinstance(item, DrinkableItem):
+                self._object_models[type(item)] = potion_render(
+                    render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, EdibleItem):
                 self._object_models[type(item)] = edible_render(
                     render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, DecorationItem):
                 self._object_models[type(item)] = decoration_render(
-                    render_engine.background_col, render_engine.wall_col, item)
-            elif isinstance(item, Potion):
-                self._object_models[type(item)] = potion_render(
                     render_engine.background_col, render_engine.wall_col, item)
             elif isinstance(item, WearableItem):
                 self._object_models[type(item)] = equipment_render(
