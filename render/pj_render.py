@@ -110,10 +110,11 @@ class character_render(base_render):
 
     def composeDead(self):
         composed_str = []
-        composed_str.append(" "*self._frame_width)
-        composed_str.append(" "*self._frame_width)
-        composed_str.append(" "*(self._frame_width - 2) + self.nude_torsos[self._torso] + self.heads_iddle[0][self._head]
-        )
+        composed_str.append(self._back_color+self._fore_color+" "*self._frame_width + style.CEND)
+        composed_str.append(self._back_color+self._fore_color+" "*self._frame_width + style.CEND)
+        composed_str.append(self._back_color+self._fore_color+ self._fill_frame(
+                                "==" + self.nude_torsos[self._torso] + self.heads_iddle[0][self._head]
+        ) + style.CEND)
         return composed_str
 
     def composeHead(self, step):
