@@ -1,5 +1,5 @@
 from time import time
-from engine.defines.Actions import AttackAny, Walk
+from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
@@ -71,10 +71,10 @@ class gui_process():
                         str_dbg += " s:%.1f" % (pj.last_distance /
                                             pj.delta_time if pj.last_distance and pj.delta_time else 0)
                     elif isinstance(pj.last_action, AttackCharacter):
-                        str_dbg += " to " + pj.last_action.target.name + (" %.2f"% pj.last_action.target.stats().health())
+                        str_dbg += " to " + pj.last_action.target.name + (" %.2f" % pj.last_action.target.stats().health())
                     elif isinstance(pj.last_action, AttackItem):
                         str_dbg += " to " + pj.last_action.item.name
-            
+
             str_dbg += "\nWorldTime:%d/%d %2d:%2d:%2d" % (frame.worldtime.day, frame.worldtime.year, frame.worldtime.hour, frame.worldtime.minute, frame.worldtime.second)
             str_dbg += " Night" if frame.worldtime.is_night() else " Day"
             str_dbg += f" NightStarts:{frame.worldtime.night_starts}"

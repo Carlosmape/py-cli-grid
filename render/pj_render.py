@@ -112,10 +112,9 @@ class character_render(base_render):
         composed_str = []
         composed_str.append(" "*self._frame_width)
         composed_str.append(" "*self._frame_width)
-        composed_str.append(
-            " --" + self.nude_torsos[self._torso] +
-            self.heads_iddle[0][self._head]
+        composed_str.append(" "*(self._frame_width - 2) + self.nude_torsos[self._torso] + self.heads_iddle[0][self._head]
         )
+        return composed_str
 
     def composeHead(self, step):
         # We known that we have 7 chars to compose upper body
