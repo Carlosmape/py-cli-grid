@@ -1,3 +1,4 @@
+from engine.defines.Actions import Walk
 from engine.frame import Frame
 from engine.world.area_types import area_types
 
@@ -42,30 +43,30 @@ class gui_process():
         str_dbg = str()
         if frame:
             str_dbg = style.CITALIC + style.CYELLOW
-            str_dbg += f"Queue: %2d | FPS: %2.2f" % (q_size, fps)
+            str_dbg += f"Queue:%2d | FPS:%2.2f" % (q_size, fps)
 
 
             if frame.area:
                 a = frame.area
-                str_dbg += " | Area: " + \
+                str_dbg += " | Area:" + \
                     area_types.NAMES[a.type] + " " + \
                     str(a.width) + "x" + str(a.height) + " " + \
-                    "%2.2f ºC" % frame.area.weather.temperature
+                    "%2.2fºC" % frame.area.weather.temperature
 
 
             if frame.player:
                 pj = frame.player
-                str_dbg += " | PJ: " + str(pj.position)
-                str_dbg += " act: " + str(pj.last_action)
-                if (pj.is_moving):
-                    str_dbg += " d: %3.2f" % (pj.last_distance)
-                    str_dbg += " t: %3.2f" % (pj.delta_time)
-                    str_dbg += " s: %3.2f" % (pj.last_distance /
+                str_dbg += " | PJ:" + str(pj.position)
+                str_dbg += " act:" + str(pj.last_action)
+                if (pj.last_action and isinstance(pj.last_action, Walk)):
+                    str_dbg += " d:%3.2f" % (pj.last_distance)
+                    str_dbg += " t:%3.2f" % (pj.delta_time)
+                    str_dbg += " s:%3.2f" % (pj.last_distance /
                                             pj.delta_time if pj.last_distance and pj.delta_time else 0)
             
-            str_dbg += "\nWorldTime: %d/%d %2d:%2d:%2.2f" % (frame.worldtime.day, frame.worldtime.year, frame.worldtime.hour, frame.worldtime.minute, frame.worldtime.second)
+            str_dbg += "\nWorldTime:%d/%d %2d:%2d:%2.2f" % (frame.worldtime.day, frame.worldtime.year, frame.worldtime.hour, frame.worldtime.minute, frame.worldtime.second)
             str_dbg += " Night" if frame.worldtime.is_night() else " Day"
-            str_dbg += f" NightStarts: {frame.worldtime.night_starts}"
-            str_dbg += f" NightEnds: {frame.worldtime.night_ends}"
+            str_dbg += f" NightStarts:{frame.worldtime.night_starts}"
+            str_dbg += f" NightEnds:{frame.worldtime.night_ends}"
 
         return str_dbg + style.CEND + "\n"
