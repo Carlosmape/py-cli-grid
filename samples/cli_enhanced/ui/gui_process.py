@@ -33,14 +33,12 @@ class gui_process():
         self.last_frame = time()
         self.max_frame_delay = 0
 
-    def render(self, frame: Frame, q_size, fps):
+    def render(self, f: Frame, q_size, fps):
         # Compose entire screen output (str)
-        str_gui = ''
-        str_gui += self.status_container.render(
-            frame.player, frame.get_msg())
-        str_gui += self.area_container.render(frame)
-        str_gui += self.menu_container.render(frame.menu)
-        str_gui += self.debug(frame, q_size, fps)
+        str_gui: str
+        str_gui = self.status_container.render(f.player, f.get_msg())
+        str_gui += self.area_container.render(f)
+        str_gui += self.menu_container.render(f.menu, self.debug(f, q_size, fps))
 
         print(self.screen.render(str_gui))
 
