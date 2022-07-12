@@ -15,6 +15,7 @@ class animal_render(base_render):
         self._to_east = True
         self._running = False
         self._attacking = False
+        self._beingattacked = False
         self._dead = False
 
     def update_state(self, to_east, running, attacking, beingattacked,  dead):
@@ -42,6 +43,11 @@ class animal_render(base_render):
         composed_animal.append(self._colorize("       "))
         composed_animal.append(self._colorize("  "+body+"  "))
         composed_animal.append(self._colorize("       "))
+
+        if self._beingattacked:
+            for i in range(0, self._frame_height):
+                composed_animal[i] = style.CBLINK + composed_animal[i]
+
         return composed_animal
 
     def compose_dead(self):

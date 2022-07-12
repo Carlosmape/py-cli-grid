@@ -55,6 +55,7 @@ class character_render(base_render):
         self._staff = False
         self._running = False
         self._attacking = False
+        self._beingattacked = False
         self._dead = False
         self._torso_armor = False
         self._legs_armor = None
@@ -106,6 +107,10 @@ class character_render(base_render):
         composed_str.append(self.composeHead(curr_step))
         composed_str.append(self.composeTorso(curr_step))
         composed_str.append(self.composeLegs(curr_step))
+        
+        if self._beingattacked:
+            for i in range(0, self._frame_height):
+                composed_str[i] = style.CBLINK + composed_str[i]
 
         return composed_str
 

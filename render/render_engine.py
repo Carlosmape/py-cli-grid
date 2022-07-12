@@ -1,19 +1,17 @@
-from engine.characters.AICharacter import AICharacter
 from engine.characters.AnimalCharacter import AnimalCharacter
-from engine.characters.Base import DIRECTION_EAST, DIRECTIONS, Character
+from engine.characters.Base import DIRECTION_EAST, DIRECTIONS
 from engine.characters.InteractiveCharacter import InteractiveCharacter
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Actions import AttackAny, Walk
-from engine.defines.CharacterActions import BeingAttacked
 from engine.defines.defines import BodyParts
 from engine.items.Item import Item
-from engine.items.impassables.ImpassableItem import ImpassableItem, Rock, Wall
-from engine.items.interactives.CollectibleItem import CollectibleItem, DecorationItem
+from engine.items.impassables.ImpassableItem import Rock, Wall
+from engine.items.interactives.CollectibleItem import DecorationItem
 from engine.items.interactives.Door import Door
 from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.DrinkableItem import DrinkableItem
-from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
+from engine.items.interactives.WearableItem import HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
 from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
 from .edible_render import edible_render
@@ -111,7 +109,7 @@ class render_engine():
         # Finally update their state and render 
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
-        beingattacked = isinstance(pj.last_action, BeingAttacked)
+        beingattacked = pj.is_being_attacked
         to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
         self._object_models[pj].update_state(
                 to_east, walking, attacking, beingattacked, pj.is_dead)
@@ -123,7 +121,7 @@ class render_engine():
         ) if pj.items[BodyParts.hands] else None
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
-        beingattacked = isinstance(pj.last_action, BeingAttacked)
+        beingattacked = pj.is_being_attacked
         to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
 
         self._reder_pj.update_equipment(pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
