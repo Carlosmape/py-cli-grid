@@ -4,6 +4,7 @@ from engine.characters.InteractiveCharacter import InteractiveCharacter
 from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Actions import AttackAny, Walk
+from engine.defines.CharacterActions import BeingAttacked
 from engine.defines.defines import BodyParts
 from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import Rock, Wall
@@ -109,7 +110,7 @@ class render_engine():
         # Finally update their state and render 
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
-        beingattacked = pj.is_being_attacked
+        beingattacked = isinstance(pj.last_action, BeingAttacked)
         to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
         self._object_models[pj].update_state(
                 to_east, walking, attacking, beingattacked, pj.is_dead)
@@ -121,7 +122,7 @@ class render_engine():
         ) if pj.items[BodyParts.hands] else None
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
-        beingattacked = pj.is_being_attacked
+        beingattacked = isinstance(pj.last_action, BeingAttacked)
         to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
 
         self._reder_pj.update_equipment(pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)

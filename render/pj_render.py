@@ -108,10 +108,10 @@ class character_render(base_render):
         composed_str.append(self.composeTorso(curr_step))
         composed_str.append(self.composeLegs(curr_step))
         
-        if self._beingattacked and curr_step % 3 == 0:
+        if self._beingattacked:
             for i in range(0, self._frame_height):
                 composed_str[i] = style.CBOLD + composed_str[i]
-        if self._attacking and curr_step % 2 == 0:
+        if self._attacking:
             for i in range(0, self._frame_height):
                 composed_str[i] = style.CITALIC + composed_str[i]
 

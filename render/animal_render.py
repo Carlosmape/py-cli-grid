@@ -44,10 +44,10 @@ class animal_render(base_render):
         composed_animal.append(self._colorize("  "+body+"  "))
         composed_animal.append(self._colorize("       "))
 
-        if self._beingattacked and curr_step % 3 == 0:
+        if self._beingattacked:
             for i in range(0, self._frame_height):
                 composed_animal[i] = style.CBOLD + composed_animal[i]
-        if self._attacking and curr_step % 2 == 0:
+        if self._attacking:
             for i in range(0, self._frame_height):
                 composed_animal[i] = style.CITALIC + composed_animal[i]
         return composed_animal
