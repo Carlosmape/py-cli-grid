@@ -37,16 +37,23 @@ class animal_render(base_render):
 
         body = self.compose_animal(curr_step)
 
-        composed_animal.append(
-            self._back_color+self._fore_color+"       "+style.CEND)
-        composed_animal.append(
-            self._back_color+self._fore_color+"  "+body+"  "+style.CEND)
-        composed_animal.append(
-            self._back_color+self._fore_color+"       "+style.CEND)
+        color = self._back_color+self._fore_color
+        composed_animal.append(color+"       "+style.CEND)
+        composed_animal.append(color+"  "+body+"  "+style.CEND)
+        composed_animal.append(color+"       "+style.CEND)
         return composed_animal
 
     def compose_dead(self):
-        return ["x"*self._frame_width, "x"*self._frame_width, "x"*self._frame_width]
+        composed_animal = []
+        curr_step = self._get_curr_step()
+        body = self.compose_animal(curr_step)
+        color = self._back_color+self._fore_color+style.CITALIC
+        composed_animal.append(color+"       "+style.CEND)
+        composed_animal.append(color+"  "+body+"  "+style.CEND)
+        composed_animal.append(color+"       "+style.CEND)
+        return composed_animal
+
+
 
     def compose_animal(self, step: int):
         head = animal_render.head[step]
