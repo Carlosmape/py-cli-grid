@@ -7,13 +7,14 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Actions import AttackAny, Walk
 from engine.defines.defines import BodyParts
 from engine.items.Item import Item
-from engine.items.impassables.ImpassableItem import ImpassableItem
+from engine.items.impassables.ImpassableItem import ImpassableItem, Rock, Wall
 from engine.items.interactives.CollectibleItem import CollectibleItem, DecorationItem
 from engine.items.interactives.Door import Door
 from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.DrinkableItem import DrinkableItem
 from engine.items.interactives.WearableItem import FeetsWearable, HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
+from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
 from .edible_render import edible_render
 from .animal_render import animal_render
 from .decoration_render import decoration_render
@@ -58,8 +59,11 @@ class render_engine():
 
     def render_item(self, item: Item):
         if type(item) not in self._object_models:
-            if isinstance(item, ImpassableItem):
+            if isinstance(item, Wall):
                 self._object_models[type(item)] = wall_render(
+                    render_engine.background_col, render_engine.wall_col)
+            elif isinstance(item, Rock):
+                self._object_models[type(item)] = rock_render(
                     render_engine.background_col, render_engine.wall_col)
             elif isinstance(item, Door):
                 self._object_models[type(item)] = door_render(
