@@ -7,7 +7,7 @@ class equipment_render(base_render):
     # Define equipment models
     HeadObject = [
         "       ",
-        style.CBOLD + "  _n_  ",
+        "  _n_  ",
         "       ",
     ]
     ShoudlerObject = [
@@ -61,7 +61,7 @@ class equipment_render(base_render):
 
     def render(self):
         return [
-            self._back_color+self._fore_color+self.obj[0]+style.CEND,
-            self._back_color+self._fore_color+self.obj[1]+style.CEND,
-            self._back_color+self._fore_color+self.obj[2]+style.CEND,
+            self._colorize(self.obj[0]),
+            self._colorize(self.obj[1]),
+            self._colorize(self.obj[2]),
         ]

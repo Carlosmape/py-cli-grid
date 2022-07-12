@@ -17,18 +17,21 @@ class animal_render(base_render):
         self._attacking = False
         self._dead = False
 
-    def update_state(self, to_east, running, attacking, dead):
+    def update_state(self, to_east, running, attacking, beingattacked,  dead):
         # Update state of the character, should be call just before render new frame
         self._to_east = to_east
         self._running = running
         self._attacking = attacking
+        self._beingattacked = beingattacked
         self._dead = dead
 
     def render(self):
-
         if self._dead:
             return self.compose_dead()
+        else:
+            return self.compose_alive()
 
+    def compose_alive(self):
         composed_animal = []
 
         curr_step = self._get_curr_step()
@@ -36,24 +39,19 @@ class animal_render(base_render):
             self._update_step()
 
         body = self.compose_animal(curr_step)
-
-        color = self._back_color+self._fore_color
-        composed_animal.append(color+"       "+style.CEND)
-        composed_animal.append(color+"  "+body+"  "+style.CEND)
-        composed_animal.append(color+"       "+style.CEND)
+        composed_animal.append(self._colorize("       "))
+        composed_animal.append(self._colorize("  "+body+"  "))
+        composed_animal.append(self._colorize("       "))
         return composed_animal
 
     def compose_dead(self):
         composed_animal = []
         curr_step = self._get_curr_step()
         body = self.compose_animal(curr_step)
-        color = self._back_color+self._fore_color+style.CITALIC
-        composed_animal.append(color+"       "+style.CEND)
-        composed_animal.append(color+"  "+body+"  "+style.CEND)
-        composed_animal.append(color+"       "+style.CEND)
+        composed_animal.append(self._colorize("       "))
+        composed_animal.append(self._colorize("  "+body+"  "))
+        composed_animal.append(self._colorize("       "))
         return composed_animal
-
-
 
     def compose_animal(self, step: int):
         head = animal_render.head[step]

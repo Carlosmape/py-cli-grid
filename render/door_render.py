@@ -9,10 +9,7 @@ class door_render(base_render):
 
     def render(self):
         composed_wall = []
-        composed_wall.append(
-            " "+self._back_color+self._fore_color+style.CBOLD+"┼┼┼┼┼"+style.CEND+" ")
-        composed_wall.append(
-            " "+self._back_color+self._fore_color+style.CBOLD+"┼┼┼O┼"+style.CEND+" ")
-        composed_wall.append(
-            " "+self._back_color+self._fore_color+style.CBOLD+"┼┼┼┼┼"+style.CEND+" ")
+        composed_wall.append(" "+self._colorize(style.CBOLD+"┼┼┼┼┼")+" ")
+        composed_wall.append(" "+self._colorize(style.CBOLD+"┼┼┼O┼")+" ")
+        composed_wall.append(" "+self._colorize(style.CBOLD+"┼┼┼┼┼")+" ")
         return composed_wall

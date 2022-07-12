@@ -1,6 +1,8 @@
 import random
 from time import time
 
+from samples.cli_enhanced.ui.graphics.render.colors import style
+
 
 class base_render():
 
@@ -23,6 +25,9 @@ class base_render():
 
     def render(self):
         raise NotImplemented
+
+    def _colorize(self, string: str):
+        return self._back_color + self._fore_color + string + style.CEND
 
     def _fill_frame(self, part: str):
         part_size = len(part)

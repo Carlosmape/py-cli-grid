@@ -77,11 +77,12 @@ class character_render(base_render):
             self._sword = True
             self._staff = True
 
-    def update_state(self, to_east: bool, running: bool, attacking: bool, dead: bool):
+    def update_state(self, to_east: bool, running: bool, attacking: bool, beingattacked: bool, dead: bool):
         # Update state of the character, should be call just before render new frame
         self._to_east = to_east
         self._running = running
         self._attacking = attacking
+        self._beingattacked = beingattacked
         self._dead = dead
 
     def render(self):
@@ -110,11 +111,11 @@ class character_render(base_render):
 
     def composeDead(self):
         composed_str = []
-        composed_str.append(self._back_color+self._fore_color+" "*self._frame_width + style.CEND)
-        composed_str.append(self._back_color+self._fore_color+" "*self._frame_width + style.CEND)
-        composed_str.append(self._back_color+self._fore_color+ self._fill_frame(
+        composed_str.append(self._colorize(self._fill_frame(" ")))
+        composed_str.append(self._colorize(self._fill_frame(" ")))
+        composed_str.append(self._colorize( self._fill_frame(
                                 "==" + self.nude_torsos[self._torso] + self.heads_iddle[0][self._head]
-        ) + style.CEND)
+        )))
         return composed_str
 
     def composeHead(self, step):
@@ -131,9 +132,9 @@ class character_render(base_render):
                 sword = self.sword_iddle[step]
 
         if self._to_east:
-            return self._back_color+self._fore_color+"   " + head + sword+style.CEND
+            return self._colorize("   " + head + sword)
         else:
-            return self._back_color+self._fore_color+sword + head + "   "+style.CEND
+            return self._colorize(sword + head + "   ")
 
     def composeTorso(self, step):
         # We known that we have 7 chars to compose middle body
@@ -152,7 +153,7 @@ class character_render(base_render):
             if self._attacking or self._running:
                 l_hand = character_render.hands_action[step]
 
-        return self._back_color + self._fore_color + " " + l_hand + l_arm + torso + r_arm + r_hand + " " + style.CEND
+        return self._colorize(" " + l_hand + l_arm + torso + r_arm + r_hand + " ")
 
     def composeLegs(self, step):
         # We know that we have 7 chars to compose lower boddy
@@ -197,6 +198,6 @@ class character_render(base_render):
                     legs = character_render.nude_legs_run_w
 
         if self._to_east:
-            return self._back_color + self._fore_color + "  " + legs + staff + style.CEND
+            return self._colorize("  " + legs + staff)
         else:
-            return self._back_color+self._fore_color+staff + legs + "  "+style.CEND
+            return self._colorize(staff + legs + "  ")

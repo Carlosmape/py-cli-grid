@@ -9,10 +9,7 @@ class container_render(base_render):
 
     def render(self):
         composed_wall = []
-        composed_wall.append(
-            self._back_color+self._fore_color+style.CBOLD+"  /-\\  "+style.CEND)
-        composed_wall.append(self._back_color+self._fore_color +
-                             style.CBOLD+" |-x-| " + style.CEND)
-        composed_wall.append(
-            self._back_color+self._fore_color+style.CBOLD+"  \\-/  "+style.CEND)
+        composed_wall.append(self._colorize("  /-\\  "))
+        composed_wall.append(self._colorize(" |-x-| "))
+        composed_wall.append(self._colorize("  \\-/  "))
         return composed_wall
