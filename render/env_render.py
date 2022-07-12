@@ -53,5 +53,5 @@ class env_render(base_render):
     def fill_color(self, frame):
         """Fills frame with background and colors the grass elements"""
         for i in range(0, self._frame_height):
-            frame[i] = self._back_color+self._fore_color+frame[i] + style.CEND
+            frame[i] = self._colorize(frame[i])
         return frame
