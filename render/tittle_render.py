@@ -23,12 +23,12 @@ class tittle_render(base_render):
         if loaded:
             if curr_step % 2 == 0:
                 composed_env[0] = " PRESS "
-                composed_env[1] = "  ANY  "
+                composed_env[1] = " -ANY- "
                 composed_env[2] = "  KEY  "
         else:
-            composed_env[0] = "LOADING"
+            composed_env[0] = "GAME IS"
             composed_env[1] = "  "+tittle_render.LOAD[curr_step]+"  "
-            composed_env[2] = " GAME  "
+            composed_env[2] = "LOADING"
 
         return self.fill_color(composed_env)
 
