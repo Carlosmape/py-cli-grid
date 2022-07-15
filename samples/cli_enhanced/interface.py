@@ -3,7 +3,7 @@ import sys
 from time import sleep
 from traceback import format_exc
 from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines.defines import Position
+from engine.defines.Position import Position
 from engine.frame import Frame
 from engine.interface import GUI
 from samples.cli_enhanced.ui.game_process import game_process
