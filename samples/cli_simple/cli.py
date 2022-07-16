@@ -3,12 +3,12 @@ import time
 from traceback import format_exc
 
 from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines.defines import BodyParts, Position
+from engine.defines.defines import BodyParts
+from engine.defines.Position import Position
 from engine.frame import Frame
 from engine.interface import GUI
 from engine.items.interactives.containeritem import container_item
 from engine.items.interactives.WearableItem import WearableItem
-from engine.menu import MenuPause
 from engine.world.area_types import area_types
 
 from colors import style
