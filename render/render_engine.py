@@ -14,6 +14,7 @@ from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.DrinkableItem import DrinkableItem
 from engine.items.interactives.WearableItem import HandsWearable, WearableItem
 from engine.items.interactives.containeritem import container_item
+from samples.assets.items.equipment import Staff
 from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
 from .edible_render import edible_render
 from .animal_render import animal_render
@@ -96,8 +97,7 @@ class render_engine():
                 self._object_models[pj] = character_render(
                     render_engine.background_col, style.CBLACK)
 
-            weapon = pj.items[BodyParts.hands] != HandsWearable.Staff(
-            ) if pj.items[BodyParts.hands] else None
+            weapon = isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
             self._object_models[pj].update_equipment(
                 pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
 
