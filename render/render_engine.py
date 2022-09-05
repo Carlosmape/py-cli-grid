@@ -14,8 +14,9 @@ from engine.items.interactives.DrinkableItem import DrinkableItem
 from engine.items.interactives.WearableItem import WearableItem
 from engine.items.interactives.containeritem import container_item
 from samples.assets.items.equipment import Staff
-from samples.assets.items.terrain import Rock, Wall
+from samples.assets.items.terrain import Rock, RockWall, WoodWall
 from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
+from samples.cli_enhanced.ui.graphics.render.wood_wall_render import wood_wall_render
 from .edible_render import edible_render
 from .animal_render import animal_render
 from .decoration_render import decoration_render
@@ -60,9 +61,10 @@ class render_engine():
 
     def render_item(self, item: Item):
         if type(item) not in self._object_models:
-            if isinstance(item, Wall):
-                self._object_models[type(item)] = wall_render(
-                    render_engine.background_col, render_engine.wall_col)
+            if isinstance(item, RockWall):
+                self._object_models[type(item)] = wall_render()
+            elif isinstance(item, WoodWall):
+                self._object_models[type(item)] = wood_wall_render()
             elif isinstance(item, Rock):
                 self._object_models[type(item)] = rock_render(
                     render_engine.background_col, render_engine.wall_col)
