@@ -97,7 +97,7 @@ class render_engine():
                 self._object_models[pj] = character_render(
                     render_engine.background_col, style.CBLACK)
 
-            weapon = isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
+            weapon = not isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
             self._object_models[pj].update_equipment(
                 pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
 
@@ -118,7 +118,7 @@ class render_engine():
 
     def render_player(self, pj: PlayerCharacter):
         # Extract needed flags
-        weapon = isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
+        weapon = not isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
         beingattacked = isinstance(pj.last_action, BeingAttacked)
