@@ -3,9 +3,11 @@ import sys
 
 
 
+
 sys.path.append('../../')
 
 from engine.repositories.WearableItemRepository import WearableItemRepository
+from engine.repositories.CollectibleItemRepository import CollectibleItemRepository
 from engine.repositories.CharacterRepository import CharacterRepository
 from engine.repositories.CityRepository import CityRepository
 from engine.repositories.FactionRepository import FactionRepository
@@ -14,6 +16,7 @@ from engine.engine import Engine
 from interface import CommandLineInterface
 from samples.assets.lore import characters, factions, cities, dialogs
 from samples.assets.items.equipment import BACKWEARABLES, CHESTWEARABLES, FEETSWEARABLES, HANDSWEARABLES, HEADWEARABLES, LEGSWEARABLES, SHOULDERWEARABLES
+from samples.assets.items.collectibles import ALLDECORATION
 
 if __name__ == '__main__':
 
@@ -21,6 +24,7 @@ if __name__ == '__main__':
     # Game specific stuff
     #########
     equipment_repo = WearableItemRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES)
+    collectible_repo = CollectibleItemRepository(ALLDECORATION)
 
     #########
     # Run Engine
@@ -39,6 +43,7 @@ if __name__ == '__main__':
             dialogs.GENERIC_CONFIRMATIONS,
             dialogs.GAME_TIPS
         ),
-        equipment_repo
+        equipment_repo,
+        collectible_repo
     )
     engine.run()

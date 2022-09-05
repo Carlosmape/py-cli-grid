@@ -118,8 +118,7 @@ class render_engine():
 
     def render_player(self, pj: PlayerCharacter):
         # Extract needed flags
-        weapon = pj.items[BodyParts.hands] != HandsWearable.Staff(
-        ) if pj.items[BodyParts.hands] else None
+        weapon = isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
         beingattacked = isinstance(pj.last_action, BeingAttacked)
