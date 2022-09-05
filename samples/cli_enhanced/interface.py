@@ -6,7 +6,7 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Position import Position
 from engine.frame import Frame
 from engine.interface import GUI
-from engine.repositories.WearableItemRepository import WearableItemRepository
+from engine.repositories.GameRepository import GameRepository
 from samples.cli_enhanced.ui.game_process import game_process
 from samples.cli_enhanced.ui.input.KBHit import KBHit
 from engine.world.area import area
@@ -16,10 +16,10 @@ from samples.cli_enhanced.ui.loading_process import loading_process
 class CommandLineInterface(GUI):
     """Enhanced CLI interface sample for MotorRol"""
 
-    def __init__(self, equipment_repo: WearableItemRepository):
+    def __init__(self, game_repo: GameRepository):
         super().__init__()
         
-        self.equipment_repo = equipment_repo
+        self.game_repo = game_repo
 
         self.max_frame_rate = 25
 
@@ -41,7 +41,7 @@ class CommandLineInterface(GUI):
         # Create Game subprocess
         # Game's settings must be beforpe start subprocess
         # Loading subprocess
-        self.loading_process = loading_process(self.width, self.height, self.equipment_repo)
+        self.loading_process = loading_process(self.width, self.height, self.game_repo)
         self.loading_process.start()
         # Main subprocess
         self.game_process = game_process(self.height, self.width)

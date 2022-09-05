@@ -1,6 +1,7 @@
 from random import randint
 
-from engine.items.interactives.CollectibleItem import DecorationItem, DecorationItemFeather, DecorationItemLeaves, DecorationItemRock, DecorationItemStick
+from engine.items.interactives.CollectibleItem import DecorationItem
+from samples.assets.items.collectibles import Feather, Leaves, Rock, Stick
 from .base_render import base_render
 from .colors import style
 
@@ -33,13 +34,13 @@ class decoration_render(base_render):
 
         # Select rendering type depending on collectible item type
         self.type = 0
-        if isinstance(item, DecorationItemRock):
+        if isinstance(item, Rock):
             self.type = 0
-        elif isinstance(item, DecorationItemStick):
+        elif isinstance(item, Stick):
             self.type = 2
-        elif isinstance(item, DecorationItemLeaves):
+        elif isinstance(item, Leaves):
             self.type = 3
-        elif isinstance(item, DecorationItemFeather):
+        elif isinstance(item, Feather):
             self.type = 4
 
     def render(self):

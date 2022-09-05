@@ -43,7 +43,7 @@ if __name__ == '__main__':
     # Run Engine
     # Interface should be changed
     #########
-    interface = CommandLineInterface(game_repo.equipment_repo)
+    interface = CommandLineInterface(game_repo)
     engine = Engine(
         interface,
         game_repo
