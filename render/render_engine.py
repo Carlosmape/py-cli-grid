@@ -7,7 +7,6 @@ from engine.defines.Actions import AttackAny, Walk
 from engine.defines.CharacterActions import BeingAttacked
 from engine.defines.defines import BodyParts
 from engine.items.Item import Item
-from engine.items.impassables.ImpassableItem import Rock, Wall
 from engine.items.interactives.CollectibleItem import DecorationItem
 from engine.items.interactives.Portal import Portal
 from engine.items.interactives.EdibleItem import EdibleItem
@@ -15,6 +14,7 @@ from engine.items.interactives.DrinkableItem import DrinkableItem
 from engine.items.interactives.WearableItem import WearableItem
 from engine.items.interactives.containeritem import container_item
 from samples.assets.items.equipment import Staff
+from samples.assets.items.terrain import Rock, Wall
 from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
 from .edible_render import edible_render
 from .animal_render import animal_render
