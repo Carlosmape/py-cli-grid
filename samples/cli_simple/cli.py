@@ -7,7 +7,7 @@ from engine.defines.defines import BodyParts
 from engine.defines.Position import Position
 from engine.frame import Frame
 from engine.interface import GUI
-from engine.items.interactives.containeritem import container_item
+from engine.items.interactives.ContainerItem import ContainerItem
 from engine.items.interactives.WearableItem import WearableItem
 from engine.world.area_types import area_types
 
@@ -268,7 +268,7 @@ class CommandLineInterface(GUI):
                         item = frame.area.item(current_position)
                         if isinstance(item, WearableItem):
                             frame_str += self.strWearable
-                        elif isinstance(item, container_item):
+                        elif isinstance(item, ContainerItem):
                             frame_str += self.strContainer
                         else:
                             frame_str += self.strItem

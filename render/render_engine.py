@@ -12,7 +12,7 @@ from engine.items.interactives.Portal import Portal
 from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.DrinkableItem import DrinkableItem
 from engine.items.interactives.WearableItem import WearableItem
-from engine.items.interactives.containeritem import container_item
+from engine.items.interactives.ContainerItem import ContainerItem
 from samples.assets.items.equipment import Staff
 from samples.assets.items.terrain import Rock, RockWall, WoodWall
 from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
@@ -83,7 +83,7 @@ class render_engine():
             elif isinstance(item, WearableItem):
                 self._object_models[type(item)] = equipment_render(
                     render_engine.background_col, render_engine.wall_col, item)
-            elif isinstance(item, container_item):
+            elif isinstance(item, ContainerItem):
                 self._object_models[type(item)] = container_render(
                     render_engine.background_col, render_engine.wall_col)
             else:
