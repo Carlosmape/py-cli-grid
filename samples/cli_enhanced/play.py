@@ -12,6 +12,7 @@ from engine.repositories.CharacterRepository import CharacterRepository
 from engine.repositories.CityRepository import CityRepository
 from engine.repositories.FactionRepository import FactionRepository
 from engine.repositories.DialogRepository import DialogElements, DialogRepository
+from engine.repositories.GameRepository import GameRepository
 from engine.engine import Engine
 from interface import CommandLineInterface
 from samples.assets.lore import characters, factions, cities, dialogs
@@ -21,18 +22,9 @@ from samples.assets.items.collectibles import ALLDECORATION
 if __name__ == '__main__':
 
     #########
-    # Game specific stuff
+    # Game specific stuff... Repositories of all needed things
     #########
-    equipment_repo = WearableItemRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES)
-    collectible_repo = CollectibleItemRepository(ALLDECORATION)
-
-    #########
-    # Run Engine
-    # Interface should be changed
-    #########
-    interface = CommandLineInterface(equipment_repo)
-    engine = Engine(
-        interface,
+    game_repo = GameRepository(
         FactionRepository(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS),
         CityRepository(cities.NAMES),
         CharacterRepository(characters.NAMES),
@@ -43,7 +35,17 @@ if __name__ == '__main__':
             dialogs.GENERIC_CONFIRMATIONS,
             dialogs.GAME_TIPS
         ),
-        equipment_repo,
-        collectible_repo
+        WearableItemRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES),
+        CollectibleItemRepository(ALLDECORATION)
+    )
+
+    #########
+    # Run Engine
+    # Interface should be changed
+    #########
+    interface = CommandLineInterface(game_repo.equipment_repo)
+    engine = Engine(
+        interface,
+        game_repo
     )
     engine.run()
