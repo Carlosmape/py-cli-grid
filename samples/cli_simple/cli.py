@@ -262,7 +262,7 @@ class CommandLineInterface(GUI):
                         frame_str += self.strPlayer
                     elif frame.get_npc(current_position):
                         frame_str += self.strNPC
-                    elif current_position in frame.area.doors:
+                    elif current_position in frame.area.portals:
                         frame_str += self.strDoor
                     elif current_position in frame.area.items:
                         item = frame.area.item(current_position)
