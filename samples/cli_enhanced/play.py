@@ -7,7 +7,7 @@ import sys
 sys.path.append('../../')
 
 from engine.repositories.WearableItemRepository import WearableItemRepository
-from engine.repositories.CollectibleItemRepository import CollectibleItemRepository
+from engine.repositories.ItemRepository import ItemRepository
 from engine.repositories.CharacterRepository import CharacterRepository
 from engine.repositories.CityRepository import CityRepository
 from engine.repositories.FactionRepository import FactionRepository
@@ -36,7 +36,7 @@ if __name__ == '__main__':
             dialogs.GAME_TIPS
         ),
         WearableItemRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES),
-        CollectibleItemRepository(ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS)
+        ItemRepository(ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS)
     )
 
     #########
