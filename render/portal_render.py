@@ -2,7 +2,7 @@ from .colors import style
 from .base_render import base_render
 
 
-class door_render(base_render):
+class portal_render(base_render):
 
     def __init__(self, background, foreground):
         super().__init__(7, 3, background, foreground)

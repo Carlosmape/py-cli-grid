@@ -9,17 +9,17 @@ from engine.defines.defines import BodyParts
 from engine.items.Item import Item
 from engine.items.impassables.ImpassableItem import Rock, Wall
 from engine.items.interactives.CollectibleItem import DecorationItem
-from engine.items.interactives.Door import Door
+from engine.items.interactives.Portal import Portal
 from engine.items.interactives.EdibleItem import EdibleItem
 from engine.items.interactives.DrinkableItem import DrinkableItem
-from engine.items.interactives.WearableItem import HandsWearable, WearableItem
+from engine.items.interactives.WearableItem import WearableItem
 from engine.items.interactives.containeritem import container_item
 from samples.assets.items.equipment import Staff
 from samples.cli_enhanced.ui.graphics.render.rock_render import rock_render
 from .edible_render import edible_render
 from .animal_render import animal_render
 from .decoration_render import decoration_render
-from .door_render import door_render
+from .portal_render import portal_render
 from .equipment_render import equipment_render
 from .generic_render import generic_render
 from .potion_render import potion_render
@@ -66,8 +66,8 @@ class render_engine():
             elif isinstance(item, Rock):
                 self._object_models[type(item)] = rock_render(
                     render_engine.background_col, render_engine.wall_col)
-            elif isinstance(item, Door):
-                self._object_models[type(item)] = door_render(
+            elif isinstance(item, Portal):
+                self._object_models[type(item)] = portal_render(
                     style.CYELLOWBG, render_engine.wall_col) 
             elif isinstance(item, DrinkableItem):
                 self._object_models[type(item)] = potion_render(
