@@ -1,4 +1,5 @@
-from engine.items.interactives.DrinkableItem import AgilityPotion, HealthPotion, DrinkableItem, StrenghtPotion
+from engine.items.interactives.DrinkableItem import DrinkableItem
+from samples.assets.items.collectibles import AgilityPotion, HealthPotion, StrenghtPotion
 from .colors import style
 from .base_render import base_render
 

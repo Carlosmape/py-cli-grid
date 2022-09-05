@@ -17,7 +17,7 @@ from engine.engine import Engine
 from interface import CommandLineInterface
 from samples.assets.lore import characters, factions, cities, dialogs
 from samples.assets.items.equipment import BACKWEARABLES, CHESTWEARABLES, FEETSWEARABLES, HANDSWEARABLES, HEADWEARABLES, LEGSWEARABLES, SHOULDERWEARABLES
-from samples.assets.items.collectibles import ALLDECORATION
+from samples.assets.items.collectibles import ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS
 
 if __name__ == '__main__':
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
             dialogs.GAME_TIPS
         ),
         WearableItemRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES),
-        CollectibleItemRepository(ALLDECORATION)
+        CollectibleItemRepository(ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS)
     )
 
     #########
