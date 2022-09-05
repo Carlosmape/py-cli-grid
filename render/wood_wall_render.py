@@ -5,8 +5,8 @@ from .base_render import base_render
 class wood_wall_render(base_render):
 
     WALL = [
-        "¯¯¯¯¦¯¯",
-        "¯¯¦¯¯¯¯",
+        "¯¯¯¯¯¯¦",
+        "¯¯¯¦¯¯¯",
         "¦¯¯¯¯¯¯",
     ]
     def __init__(self):
