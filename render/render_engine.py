@@ -5,7 +5,7 @@ from engine.characters.NoPlayerCharacter import NoPlayerCharacter
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Actions import AttackAny, Walk
 from engine.defines.CharacterActions import BeingAttacked
-from engine.defines.defines import BodyParts
+from engine.defines.BodyParts import BodyParts
 from engine.items.Item import Item
 from engine.items.interactives.CollectibleItem import DecorationItem
 from engine.items.interactives.Portal import Portal
@@ -99,9 +99,9 @@ class render_engine():
                 self._object_models[pj] = character_render(
                     render_engine.background_col, style.CBLACK)
 
-            weapon = not isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
+            weapon = not isinstance(pj.items[BodyParts.HANDS], Staff) if pj.items[BodyParts.HANDS] else None
             self._object_models[pj].update_equipment(
-                pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
+                pj.items[BodyParts.CHEST], pj.items[BodyParts.LEGS], weapon)
 
         elif isinstance(pj, AnimalCharacter):
             if pj not in self._object_models:
@@ -120,12 +120,12 @@ class render_engine():
 
     def render_player(self, pj: PlayerCharacter):
         # Extract needed flags
-        weapon = not isinstance(pj.items[BodyParts.hands], Staff) if pj.items[BodyParts.hands] else None
+        weapon = not isinstance(pj.items[BodyParts.HANDS], Staff) if pj.items[BodyParts.HANDS] else None
         walking =   isinstance(pj.last_action, Walk)
         attacking = isinstance(pj.last_action, AttackAny)
         beingattacked = isinstance(pj.last_action, BeingAttacked)
         to_east = pj.last_direction == DIRECTIONS[DIRECTION_EAST]
 
-        self._reder_pj.update_equipment(pj.items[BodyParts.chest], pj.items[BodyParts.legs], weapon)
+        self._reder_pj.update_equipment(pj.items[BodyParts.CHEST], pj.items[BodyParts.LEGS], weapon)
         self._reder_pj.update_state(to_east, walking, attacking, beingattacked, pj.is_dead)
         return self._reder_pj.render()

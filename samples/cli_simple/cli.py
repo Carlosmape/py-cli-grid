@@ -4,7 +4,7 @@ from traceback import format_exc
 
 from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Cofiguration import Config
-from engine.defines.defines import BodyParts
+from engine.defines.BodyParts import BodyParts
 from engine.defines.Position import Position
 from engine.frame import Frame
 from engine.interface import GUI
@@ -209,16 +209,16 @@ class CommandLineInterface(GUI):
         # Player equipment
         pj_str = "\n" + style.CBOLD + "[> Equipment <]\n" + style.CEND
         # Prepare each part text
-        strHead = " Head(" + str(pj.items[BodyParts.head] or '-') + ") "
+        strHead = " Head(" + str(pj.items[BodyParts.HEAD] or '-') + ") "
         strShoulder = " Shoulders(" + \
-            str(pj.items[BodyParts.shoulder] or '-') + ") "
-        strChest = " Chest(" + str(pj.items[BodyParts.chest] or '-') + ") "
-        strBack = " Back(" + str(pj.items[BodyParts.back] or '-') + ") "
-        strArms = " Arms(" + str(pj.items[BodyParts.arms] or '-') + ") "
-        strHands = " Hands(" + str(pj.items[BodyParts.hands] or '-') + ") "
-        strCore = " Core(" + str(pj.items[BodyParts.core] or '-') + ") "
-        strLegs = " Legs(" + str(pj.items[BodyParts.legs] or '-') + ") "
-        strFeets = " Feets(" + str(pj.items[BodyParts.feets] or '-') + ") "
+            str(pj.items[BodyParts.SHOULDERS] or '-') + ") "
+        strChest = " Chest(" + str(pj.items[BodyParts.CHEST] or '-') + ") "
+        strBack = " Back(" + str(pj.items[BodyParts.BACK] or '-') + ") "
+        strArms = " Arms(" + str(pj.items[BodyParts.ARMS] or '-') + ") "
+        strHands = " Hands(" + str(pj.items[BodyParts.HANDS] or '-') + ") "
+        strCore = " Core(" + str(pj.items[BodyParts.CORE] or '-') + ") "
+        strLegs = " Legs(" + str(pj.items[BodyParts.LEGS] or '-') + ") "
+        strFeets = " Feets(" + str(pj.items[BodyParts.FEETS] or '-') + ") "
         strEmpty = " "
         # Calculate the properly position for each part at the left side
         max_space = max(len(strHead), len(strChest), len(
