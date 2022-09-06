@@ -29,6 +29,7 @@ class CommandLineInterface(GUI):
             Config.GameGuide.enabled = False
             Config.Area.min_height = Config.Area.max_height = int(self.height/3)
             Config.Area.min_width = Config.Area.max_width = int(self.width/7)
+            Config.Stats.movement_speed = 2
 
         # Initialize keyboard
         self.keyboard = KBHit()
