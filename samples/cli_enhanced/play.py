@@ -23,29 +23,24 @@ if __name__ == '__main__':
     #########
     # Game specific stuff... Repositories of all needed things
     #########
-    game_repo = GameRepository(
-        FactionRepository(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS),
-        CityRepository(cities.NAMES),
-        CharacterRepository(characters.NAMES),
-        DialogRepository(
-            DialogElements(dialogs.SUSPICIOUS_GREETINGS, dialogs.NEUTRAL_GREETINGS, dialogs.FRIENDLY_GREETINGS),
-            DialogElements(dialogs.SUSPICIOUS_GOODBYES, dialogs.NEUTRAL_GOODBYES, dialogs.FRIENDLY_GOODBYES),
-            DialogElements(dialogs.SUSPICIOUS_TALK, dialogs.NEUTRAL_TALK, dialogs.NEUTRAL_TALK),
-            dialogs.GENERIC_CONFIRMATIONS,
-            dialogs.GAME_TIPS
-        ),
-        EquipmentRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES),
-        ItemRepository(ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS),
-        TerrainRepository(TERRAINOBSTACLES, BUILDINGMATERIALS)
+    GameRepository.fact_repo = FactionRepository(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS)
+    GameRepository.city_repo = CityRepository(cities.NAMES)
+    GameRepository.char_repo = CharacterRepository(characters.NAMES)
+    GameRepository.dial_repo = DialogRepository(
+        DialogElements(dialogs.SUSPICIOUS_GREETINGS, dialogs.NEUTRAL_GREETINGS, dialogs.FRIENDLY_GREETINGS),
+        DialogElements(dialogs.SUSPICIOUS_GOODBYES, dialogs.NEUTRAL_GOODBYES, dialogs.FRIENDLY_GOODBYES),
+        DialogElements(dialogs.SUSPICIOUS_TALK, dialogs.NEUTRAL_TALK, dialogs.NEUTRAL_TALK),
+        dialogs.GENERIC_CONFIRMATIONS,
+        dialogs.GAME_TIPS
     )
+    GameRepository.equipment_repo = EquipmentRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES)
+    GameRepository.collectible_repo = ItemRepository(ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS)
+    GameRepository.terrain_repo = TerrainRepository(TERRAINOBSTACLES, BUILDINGMATERIALS)
 
     #########
     # Run Engine
     # Interface should be changed
     #########
-    interface = CommandLineInterface(game_repo)
-    engine = Engine(
-        interface,
-        game_repo
-    )
+    interface = CommandLineInterface()
+    engine = Engine(interface)
     engine.run()

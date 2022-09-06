@@ -3,6 +3,7 @@ import time
 from traceback import format_exc
 
 from engine.characters.PlayerCharacter import PlayerCharacter
+from engine.defines.Cofiguration import Config
 from engine.defines.defines import BodyParts
 from engine.defines.Position import Position
 from engine.frame import Frame
@@ -91,7 +92,7 @@ class CommandLineInterface(GUI):
         time.sleep(0.5)
 
         # Engine specific configs
-        Position.tolerance = 0
+        Config.Position.tolerance = 0
 
         # Clean user actions
         self.readUserAction()

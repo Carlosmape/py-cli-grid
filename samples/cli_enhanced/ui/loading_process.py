@@ -1,7 +1,6 @@
 import multiprocessing
 from time import sleep
 from multiprocessing.queues import Queue
-from engine.repositories.GameRepository import GameRepository
 
 from .graphics.cli_grid.loading_box import LoadingBox
 from .base_game_process import base_game_process
@@ -9,7 +8,7 @@ from .base_game_process import base_game_process
 
 class loading_process(base_game_process):
 
-    def __init__(self, width: int, height: int, game_repo: GameRepository):
+    def __init__(self, width: int, height: int):
         super().__init__()
 
         self.flag_queue: Queue[bool] = multiprocessing.Queue()
@@ -21,7 +20,7 @@ class loading_process(base_game_process):
         self.max_frame_rate = 20
 
         # Need to print rendered parts in whole screen
-        self.screen = LoadingBox(self.width, self.height, 7, 3, game_repo)
+        self.screen = LoadingBox(self.width, self.height, 7, 3)
 
     def complete(self, user_input: str | None):
         """Completes loading screen and ps"""

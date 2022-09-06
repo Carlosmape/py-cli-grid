@@ -3,24 +3,20 @@ import sys
 from time import sleep
 from traceback import format_exc
 from engine.characters.PlayerCharacter import PlayerCharacter
-from engine.defines.Position import Position
+from engine.defines.Cofiguration import Config
 from engine.frame import Frame
 from engine.interface import GUI
-from engine.repositories.GameRepository import GameRepository
 from samples.cli_enhanced.ui.game_process import game_process
 from samples.cli_enhanced.ui.input.KBHit import KBHit
-from engine.world.area import area
 from samples.cli_enhanced.ui.loading_process import loading_process
 
 
 class CommandLineInterface(GUI):
     """Enhanced CLI interface sample for MotorRol"""
 
-    def __init__(self, game_repo: GameRepository):
+    def __init__(self):
         super().__init__()
         
-        self.game_repo = game_repo
-
         self.max_frame_rate = 25
 
         # Get terminal size
@@ -30,18 +26,18 @@ class CommandLineInterface(GUI):
 
         # Read arguments
         if "debug" in sys.argv:
-            area.MIN_HEIGHT = area.MAX_HEIGHT = int(self.height/3)
-            area.MIN_WIDTH = area.MAX_WIDTH = int(self.width/7)
+            Config.Area.min_height = Config.Area.max_height = int(self.height/3)
+            Config.Area.min_width = Config.Area.max_width = int(self.width/7)
 
         # Initialize keyboard
         self.keyboard = KBHit()
         # Engine specific configurations
-        Position.tolerance = 0
+        Config.Position.tolerance = 0
 
         # Create Game subprocess
         # Game's settings must be beforpe start subprocess
         # Loading subprocess
-        self.loading_process = loading_process(self.width, self.height, self.game_repo)
+        self.loading_process = loading_process(self.width, self.height)
         self.loading_process.start()
         # Main subprocess
         self.game_process = game_process(self.height, self.width)
