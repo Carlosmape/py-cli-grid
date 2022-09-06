@@ -119,11 +119,15 @@ class character_render(base_render):
 
     def composeDead(self):
         composed_str = []
-        composed_str.append(self._colorize(self._fill_frame(" ")))
-        composed_str.append(self._colorize(self._fill_frame(" ")))
-        composed_str.append(self._colorize( self._fill_frame(
-                                "==" + self.nude_torsos[self._torso] + self.heads_iddle[0][self._head]
-        )))
+        composed_str.append(self._colorize(self._fill_frame("_.")))
+        torso = self.nude_torsos[self._torso]
+        if self._torso_armor:
+            torso = character_render.armor_torsos[self._torso]
+
+        composed_str.append(self._colorize(
+                "==C" + torso + self.heads_iddle[0][self._head] + "  "
+        ))
+        composed_str.append(self._colorize(self._fill_frame("¯´")))
         return composed_str
 
     def composeHead(self, step):
