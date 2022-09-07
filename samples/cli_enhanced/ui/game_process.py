@@ -18,4 +18,4 @@ class game_process(base_game_process):
     def run_specific(self, frame: Frame, show_map: bool):
         self.begin_process_frame = time()
         self.gui_process.render(show_map, frame,  self.frame_queue.qsize(), 0 if self.fps_avg is 0 else 1 / self.fps_avg)
-        self.sound_process.render(frame)
+        self.sound_process.render(show_map, frame)
