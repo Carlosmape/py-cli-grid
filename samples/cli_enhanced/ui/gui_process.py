@@ -29,8 +29,8 @@ class gui_process():
         self.area_container = AreaBox(
             self.width, 2*self.height/3, self.scale_width, self.scale_height)
         self.map_container = MapBox(self.width, 2*self.height/3)
-        self.status_container = PjStatsBox(self.width, self.height/4)
-        self.menu_container = MenuBox(self.width, self.height/12)
+        self.status_container = PjStatsBox(self.width, self.height/6)
+        self.menu_container = MenuBox(self.width, self.height/6)
         self.last_frame = time()
         self.max_frame_delay = 0
 
@@ -42,7 +42,7 @@ class gui_process():
             str_gui += self.map_container.render(f)
         else:
             str_gui += self.area_container.render(f)
-        str_gui += self.menu_container.render(f.menu, self.debug(f, q_size, fps))
+        str_gui += self.menu_container.render(f, self.debug(f, q_size, fps))
 
         print(self.screen.render(str_gui))
 

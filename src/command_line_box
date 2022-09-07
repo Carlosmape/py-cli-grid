@@ -1,4 +1,8 @@
 import re
+from engine.items.interactives.ContainerItem import ContainerItem
+
+from engine.items.interactives.WearableItem import WearableItem
+from samples.cli_enhanced.ui.graphics.render.colors import style
 
 
 class CommandLineBox():
@@ -15,6 +19,26 @@ class CommandLineBox():
     def _fill_box(self, string: str):
         self.height_margin = self.height - string.count("\n")
         return ("\n" * int(self.height_margin/2)) +string + ("\n" * int(self.height_margin/2))
+
+    def _equipment_stats(self, item: WearableItem):
+        eq_string = str(item)
+        sts = item.stats()
+        if sts.max_health() > 0:
+            eq_string += " " + style.CITALIC + style.CRED + \
+                str(sts.max_health()) + style.CEND
+        if sts.agility() > 0:
+            eq_string += " " + style.CITALIC + \
+                style.CYELLOW + str(sts.agility()) + style.CEND
+        if sts.strength() > 0:
+            eq_string += " " + style.CITALIC + \
+                style.CGREEN + str(sts.strength()) + style.CEND
+        if sts.movement_speed() > 0:
+            eq_string += " " + style.CITALIC + style.CBLUE2 + \
+                str(sts.movement_speed()) + style.CEND
+        if isinstance(item, ContainerItem):
+            eq_string += " "+style.CITALIC + \
+                str(item.load)+"/"+str(item.capacity)+" Kg" + style.CEND
+        return eq_string
 
     def render(self, string: str, vertically_filled=True):
         if vertically_filled:
