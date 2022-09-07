@@ -10,7 +10,7 @@ class base_game_process(multiprocessing.Process):
 
     def __init__(self, name="engine_sub_process"):
         super().__init__(name=name)
-        self.frame_queue: Queue[Frame] = multiprocessing.Queue()
+        self.frame_queue: Queue[tuple[Frame, bool]] = multiprocessing.Queue()
         self.is_started = False
         # Measurement related
         self.fps_avg = 0
@@ -23,9 +23,9 @@ class base_game_process(multiprocessing.Process):
     def stop(self):
         self.is_started = False
 
-    def update(self, frame: Frame):
+    def update(self, frame: Frame, show_map: bool):
         """Updates the process with given Frame"""
-        self.frame_queue.put(frame)
+        self.frame_queue.put((frame, show_map))
 
     def run(self):
         """Main loop method.
@@ -33,14 +33,14 @@ class base_game_process(multiprocessing.Process):
         and will call run_specific(frame)"""
         while self.is_started:
             begin_frame_process = time()
-            frame = self.frame_queue.get()
-            self.run_specific(frame)
+            (frame, show_map) = self.frame_queue.get()
+            self.run_specific(frame, show_map)
             frame_delta = time() - begin_frame_process
             self.frame_count += 1
             self.fps_avg += (frame_delta - self.fps_avg)/self.frame_count;
 
     @abstractmethod
-    def run_specific(self, frame: Frame):
+    def run_specific(self, frame: Frame, show_map):
         """This method must be overrided in derived class
         In this method will use engine's given frame to do actions"""
         pass

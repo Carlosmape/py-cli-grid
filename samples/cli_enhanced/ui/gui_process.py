@@ -4,10 +4,10 @@ from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
 from engine.world.area_types import area_types
-
 from .graphics.render.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
 from .graphics.cli_grid.area_box import AreaBox
+from .graphics.cli_grid.map_box import MapBox
 from .graphics.cli_grid.menu_box import MenuBox
 from .graphics.cli_grid.stats_box import PjStatsBox
 
@@ -28,16 +28,20 @@ class gui_process():
         # Calculate frame sizes for each part
         self.area_container = AreaBox(
             self.width, 2*self.height/3, self.scale_width, self.scale_height)
+        self.map_container = MapBox(self.width, 2*self.height/3)
         self.status_container = PjStatsBox(self.width, self.height/4)
         self.menu_container = MenuBox(self.width, self.height/12)
         self.last_frame = time()
         self.max_frame_delay = 0
 
-    def render(self, f: Frame, q_size, fps):
+    def render(self, show_map:bool, f: Frame, q_size, fps):
         # Compose entire screen output (str)
         str_gui: str
         str_gui = self.status_container.render(f.player, f.get_msg())
-        str_gui += self.area_container.render(f)
+        if show_map:
+            str_gui += self.map_container.render(f)
+        else:
+            str_gui += self.area_container.render(f)
         str_gui += self.menu_container.render(f.menu, self.debug(f, q_size, fps))
 
         print(self.screen.render(str_gui))

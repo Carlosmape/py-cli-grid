@@ -43,6 +43,7 @@ class CommandLineInterface(GUI):
         self.loading_process.start()
         # Main subprocess
         self.game_process = game_process(self.height, self.width)
+        self.show_map = False
 
         sleep(1)
         self.loading_process.complete(None)
@@ -57,8 +58,11 @@ class CommandLineInterface(GUI):
 
         self.game_process.start()
 
+    def toggle_map(self):
+        self.show_map = not self.show_map
+
     def render(self, frame: Frame):
-        self.game_process.update(frame)
+        self.game_process.update(frame, self.show_map)
 
     def readUserAction(self, blocking: bool = False):
         try:
@@ -84,6 +88,8 @@ class CommandLineInterface(GUI):
             player.active_action_menu(self.last_frame.area)
         elif action == ('j' or 'J'):
             player.attack(player.nearby_npcs)
+        elif action == ('m' or 'M'):
+            self.toggle_map()
         elif action and ord(action) == 27:
             player.active_pause_menu()
         elif action is None:
