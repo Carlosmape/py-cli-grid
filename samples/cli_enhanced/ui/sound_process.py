@@ -19,7 +19,7 @@ class sound_process():
         if frame.area:
             self.env_sounds.update(frame.area, frame.worldtime)
         if frame.player:
-            self.char_sounds.update(frame.player)
+            self.char_sounds.update(frame.player, frame.area.type)
 
     def stop_app(self):
         self.game_sounds.stop_all()
