@@ -43,3 +43,27 @@ class style():
     CVIOLETBG2 = '\33[105m'
     CBEIGEBG2 = '\33[106m'
     CWHITEBG2 = '\33[107m'
+
+class Color:
+    """New class to manage TRUE COLOR in terminals"""
+
+    @staticmethod
+    def rgb_to_color_scape(r, g, b, background=False):
+        """Transforms RGB code to terminal scape color"""
+        return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
+
+    # Predefined styles
+    RESET = '\33[0m'
+    BOLD = '\33[1m'
+    ITALIC = '\33[3m'
+    URL = '\33[4m'
+    BLINK = '\33[5m'
+    BLINK2 = '\33[6m'
+    SELECTED = '\33[7m'
+
+    # Generated TRUE COLORS
+    # TODO: Fill all needed colors for the game with naminfull names!!
+    GRASS = rgb_to_color_scape(52, 140, 49, True)
+    DIRT = rgb_to_color_scape(155, 118, 83, True)
+
+

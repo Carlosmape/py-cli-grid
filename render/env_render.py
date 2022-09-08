@@ -1,6 +1,5 @@
 from random import randint
 from .base_render import base_render
-from .colors import style
 
 
 class env_render(base_render):
