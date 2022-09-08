@@ -4,10 +4,10 @@ from .base_render import base_render
 
 class rock_render(base_render):
 
-    def __init__(self, background, foreground):
-        super().__init__(7, 3, background, foreground)
+    def __init__(self, foreground):
+        super().__init__(7, 3, foreground)
 
-    def render(self):
+    def render(self, bg):
         composed_wall = []
         for i in range(self._frame_height):
             # Compose each item row
@@ -16,5 +16,5 @@ class rock_render(base_render):
             # else:
             #    row = "█"*(self._frame_width-i)+"▓"*i
             row = "█"*self._frame_width
-            composed_wall.append(self._colorize(row + style.CEND))
+            composed_wall.append(self._colorize(row + style.CEND, bg))
         return composed_wall

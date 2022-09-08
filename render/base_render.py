@@ -6,7 +6,7 @@ from samples.cli_enhanced.ui.graphics.render.colors import style
 
 class base_render():
 
-    def __init__(self, frame_width, frame_height, back_color: str, fore_color: str, step_duration=1.0, max_steps=0, allow_reverse_animation=False):
+    def __init__(self, frame_width, frame_height, fore_color: str, step_duration=1.0, max_steps=0, allow_reverse_animation=False):
         # Base animation step
         # Initializes to random to avoid all animations synchronization
         self._animation_step = random.randint(
@@ -18,16 +18,15 @@ class base_render():
         # Sizing and stuff
         self._frame_width = frame_width
         self._frame_height = frame_height
-        self._back_color = back_color
         self._fore_color = fore_color
         self._allow_reverse = allow_reverse_animation
         self._reverse = False
 
-    def render(self):
+    def render(self, bg):
         raise NotImplemented
 
-    def _colorize(self, string: str):
-        return self._back_color + self._fore_color + string + style.CEND
+    def _colorize(self, string: str, bg):
+        return bg + self._fore_color + string + style.CEND
 
     def _fill_frame(self, part: str):
         part_size = len(part)

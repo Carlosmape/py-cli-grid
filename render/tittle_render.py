@@ -8,10 +8,10 @@ class tittle_render(base_render):
 
     MAX_STEPS = len(LOAD)
 
-    def __init__(self, background, foreground):
-        super().__init__(7, 3, background, foreground, 0.2, tittle_render.MAX_STEPS, False)
+    def __init__(self, foreground):
+        super().__init__(7, 3, foreground, 0.2, tittle_render.MAX_STEPS, False)
 
-    def render(self, loaded=False):
+    def render(self, loaded, bg):
         composed_env = []
         curr_step = self._get_curr_step()
         self._update_step()
@@ -30,10 +30,10 @@ class tittle_render(base_render):
             composed_env[1] = "  "+tittle_render.LOAD[curr_step]+"  "
             composed_env[2] = "LOADING"
 
-        return self.fill_color(composed_env)
+        return self.fill_color(composed_env, bg)
 
-    def fill_color(self, frame):
+    def fill_color(self, frame, bg):
         """Fills frame with background and colors the grass elements"""
         for i in range(0, self._frame_height):
-            frame[i] = self._colorize(style.CBOLD + frame[i])
+            frame[i] = self._colorize(style.CBOLD + frame[i], bg)
         return frame

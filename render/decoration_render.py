@@ -28,8 +28,8 @@ class decoration_render(base_render):
 
     MAX_STEPS = len(TYPES[0])
 
-    def __init__(self, background, foreground, item: DecorationItem):
-        super().__init__(7, 3, background, foreground, 1, decoration_render.MAX_STEPS, True)
+    def __init__(self, foreground, item: DecorationItem):
+        super().__init__(7, 3, foreground, 1, decoration_render.MAX_STEPS, True)
         self.height_pos = randint(0, self._frame_height-1)
 
         # Select rendering type depending on collectible item type
@@ -43,7 +43,7 @@ class decoration_render(base_render):
         elif isinstance(item, Feather):
             self.type = 4
 
-    def render(self):
+    def render(self, bg):
         composed_obj = []
 
         curr_step = self._get_curr_step()
@@ -56,15 +56,15 @@ class decoration_render(base_render):
         composed_obj[self.height_pos] = self.get_grass_type(curr_step)
 
         self._update_step()
-        return self.fill_color(composed_obj)
+        return self.fill_color(composed_obj, bg)
 
     def get_grass_type(self, step: int):
         """Returns corresponding grass type filled to _frame_width"""
         # Compose the environment element
         return "  " + decoration_render.TYPES[self.type][step] + "  "
 
-    def fill_color(self, frame):
+    def fill_color(self, frame, bg):
         """Fills frame with background and colors the grass elements"""
         for i in range(0, self._frame_height):
-            frame[i] = self._colorize(frame[i])
+            frame[i] = self._colorize(frame[i], bg)
         return frame

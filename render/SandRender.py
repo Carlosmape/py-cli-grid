@@ -2,7 +2,7 @@ from random import randint
 from .base_render import base_render
 
 
-class env_render(base_render):
+class SandRender(base_render):
     # Defined grass types. Take care about MAX_STEPS
     TYPES = [
         ['   ', '   ', '   ', '   ', '   ', '   '],
@@ -16,18 +16,16 @@ class env_render(base_render):
         [',  ', '.  ', ' , ', ' . ', '  .', '  ,'],
         ['· ·', '´ ´', '· ´', '. ´', '´ .', ' ¨´'],
         ['º  ', '´  ', ' · ', ' º ', '  ·', '  ´'],
-        [',ý,', '.ŷ,', '.ỳ.', ',v.', ';v.', '.ÿ.'],
-        [',w,', '.ẅ,', '.ẃ.', ',ŵ.', ',ẁ,', '.v.']
     ]
 
     MAX_STEPS = len(TYPES[0])
 
-    def __init__(self, background, foreground):
-        super().__init__(7, 3, background, foreground, 0.5, env_render.MAX_STEPS, True)
-        self.type = randint(0, len(env_render.TYPES)-1)
+    def __init__(self, foreground):
+        super().__init__(7, 3, foreground, 0.5, SandRender.MAX_STEPS, True)
+        self.type = randint(0, len(SandRender.TYPES)-1)
         self.height_pos = randint(0, self._frame_height-1)
 
-    def render(self):
+    def render(self, bg):
         composed_env = []
 
         # Calculate current step taking care about reverse animation
@@ -42,15 +40,15 @@ class env_render(base_render):
 
         self._update_step()
 
-        return self.fill_color(composed_env)
+        return self.fill_color(composed_env, bg)
 
     def get_grass_type(self, step: int):
         """Returns corresponding grass type filled to _frame_width"""
         # Compose the environment element
-        return "  " + env_render.TYPES[self.type][step] + "  "
+        return "  " + SandRender.TYPES[self.type][step] + "  "
 
-    def fill_color(self, frame):
+    def fill_color(self, frame, bg):
         """Fills frame with background and colors the grass elements"""
         for i in range(0, self._frame_height):
-            frame[i] = self._colorize(frame[i])
+            frame[i] = self._colorize(frame[i], bg)
         return frame

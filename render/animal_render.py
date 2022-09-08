@@ -10,10 +10,10 @@ class animal_render(base_render):
     tail = ["'", "´", "´"]
     MAX_STEPS = min(len(head), len(torso), len(tail))
 
-    def __init__(self, background, foreground, item_bg=style.CBLACKBG):
-        super().__init__(7, 3, background, foreground, 1, animal_render.MAX_STEPS, True)
-        self._alt_anim = base_render(7, 3, background, foreground, 0.7, animal_render.MAX_STEPS, True)
-        self._act_anim = base_render(7, 3, background, foreground, 0.2, animal_render.MAX_STEPS, True)
+    def __init__(self, foreground, item_bg=style.CBLACKBG):
+        super().__init__(7, 3, foreground, 1, animal_render.MAX_STEPS, True)
+        self._alt_anim = base_render(7, 3, foreground, 0.7, animal_render.MAX_STEPS, True)
+        self._act_anim = base_render(7, 3, foreground, 0.2, animal_render.MAX_STEPS, True)
         self._item_bg = item_bg
         self._to_east = True
         self._running = False
@@ -29,10 +29,10 @@ class animal_render(base_render):
         self._beingattacked = beingattacked
         self._dead = dead
 
-    def render(self):
-        return self.compose_alive()
+    def render(self, bg):
+        return self.compose_alive(bg)
 
-    def compose_alive(self):
+    def compose_alive(self, bg):
         composed_animal = []
 
         head_step = torso_step = self._get_curr_step()
@@ -43,9 +43,9 @@ class animal_render(base_render):
             head_step = self._act_anim._get_curr_step()
 
         body = self.compose_animal(head_step, torso_step, tail_step)
-        composed_animal.append(self._colorize("       "))
-        composed_animal.append(self._colorize("  "+body+"  "))
-        composed_animal.append(self._colorize("       "))
+        composed_animal.append(self._colorize("       ", bg))
+        composed_animal.append(self._colorize("  "+body+"  ", bg))
+        composed_animal.append(self._colorize("       ", bg))
 
         if not self._dead:
 
@@ -60,15 +60,6 @@ class animal_render(base_render):
                 for i in range(0, self._frame_height):
                     composed_animal[i] = style.CITALIC + composed_animal[i]
         return composed_animal
-
-    # def compose_dead(self):
-    #     composed_animal = []
-    #     curr_step = self._get_curr_step()
-    #     body = self.compose_animal(curr_step)
-    #     composed_animal.append(self._colorize("       "))
-    #     composed_animal.append(self._colorize("  "+body+"  "))
-    #     composed_animal.append(self._colorize("       "))
-    #     return composed_animal
 
     def compose_animal(self, headstep: int, torsostep: int, tailstep: int):
         head = animal_render.head[headstep]

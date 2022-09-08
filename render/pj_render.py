@@ -33,16 +33,12 @@ class character_render(base_render):
     # Define max steps
     MAX_STEPS = min(len(arms), len(hands_iddle), len(hands_action))
 
-    def __init__(self, background, foreground):
+    def __init__(self, foreground):
         # Initialize base class for iddle animation
-        super().__init__(7, 3, background, foreground,
-                         0.5, character_render.MAX_STEPS, True)
-        # Run animation
-        self._walk_render = base_render(
-            7, 3, background, foreground, 0.2, character_render.MAX_STEPS, False)
-
-        self._attack_render = base_render(
-            7, 3, background, foreground, 1, character_render.MAX_STEPS, False)
+        super().__init__(7, 3, foreground, 0.5, character_render.MAX_STEPS, True)
+        # Actions animation
+        self._walk_render = base_render(7, 3, foreground, 0.2, character_render.MAX_STEPS, False)
+        self._attack_render = base_render(7, 3, foreground, 1, character_render.MAX_STEPS, False)
 
         # Generate random parts
         self._head = random.randint(0, len(character_render.heads_iddle)-1)
@@ -86,10 +82,10 @@ class character_render(base_render):
         self._beingattacked = beingattacked
         self._dead = dead
 
-    def render(self):
+    def render(self, bg):
 
         if self._dead:
-            return self.composeDead()
+            return self.composeDead(bg)
 
         composed_str = []
 
@@ -104,9 +100,9 @@ class character_render(base_render):
         self._attack_render._update_step()
 
         # Compose the character
-        composed_str.append(self.composeHead(curr_step))
-        composed_str.append(self.composeTorso(curr_step))
-        composed_str.append(self.composeLegs(curr_step))
+        composed_str.append(self.composeHead(curr_step, bg))
+        composed_str.append(self.composeTorso(curr_step, bg))
+        composed_str.append(self.composeLegs(curr_step, bg))
         
         if self._beingattacked:
             for i in range(0, self._frame_height):
@@ -117,20 +113,20 @@ class character_render(base_render):
 
         return composed_str
 
-    def composeDead(self):
+    def composeDead(self, bg):
         composed_str = []
-        composed_str.append(self._colorize(self._fill_frame("_.")))
+        composed_str.append(self._colorize(self._fill_frame("_."), bg))
         torso = self.nude_torsos[self._torso]
         if self._torso_armor:
             torso = character_render.armor_torsos[self._torso]
 
         composed_str.append(self._colorize(
-                "==C" + torso + self.heads_iddle[0][self._head] + "  "
+                "==C" + torso + self.heads_iddle[0][self._head] + "  ", bg
         ))
-        composed_str.append(self._colorize(self._fill_frame("¯´")))
+        composed_str.append(self._colorize(self._fill_frame("¯´"), bg))
         return composed_str
 
-    def composeHead(self, step):
+    def composeHead(self, step, bg):
         # We known that we have 7 chars to compose upper body
         # sword(3),head(1) + 2 extra padding withespaces depending on character direction
         sword = "   "  # 3 chars by default
@@ -144,11 +140,11 @@ class character_render(base_render):
                 sword = self.sword_iddle[step]
 
         if self._to_east:
-            return self._colorize("   " + head + sword)
+            return self._colorize("   " + head + sword, bg)
         else:
-            return self._colorize(sword + head + "   ")
+            return self._colorize(sword + head + "   ", bg)
 
-    def composeTorso(self, step):
+    def composeTorso(self, step, bg):
         # We known that we have 7 chars to compose middle body
         # hands+arms+torso = 5 chars + 1 padding char on each side
         torso = character_render.nude_torsos[self._torso]
@@ -165,9 +161,9 @@ class character_render(base_render):
             if self._attacking or self._running:
                 l_hand = character_render.hands_action[step]
 
-        return self._colorize(" " + l_hand + l_arm + torso + r_arm + r_hand + " ")
+        return self._colorize(" " + l_hand + l_arm + torso + r_arm + r_hand + " ", bg)
 
-    def composeLegs(self, step):
+    def composeLegs(self, step, bg):
         # We know that we have 7 chars to compose lower boddy
         # legs(3)+staff(2) + 2 padding whitespace depending on character direction
         staff = "  "
@@ -210,6 +206,6 @@ class character_render(base_render):
                     legs = character_render.nude_legs_run_w
 
         if self._to_east:
-            return self._colorize("  " + legs + staff)
+            return self._colorize("  " + legs + staff, bg)
         else:
-            return self._colorize(staff + legs + "  ")
+            return self._colorize(staff + legs + "  ", bg)

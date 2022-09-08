@@ -41,8 +41,8 @@ class equipment_render(base_render):
         "   db  "
     ]
 
-    def __init__(self, background, foreground, item: WearableItem, item_bg=style.CBLACKBG):
-        super().__init__(7, 3, background, foreground)
+    def __init__(self, foreground, item: WearableItem, item_bg=style.CBLACKBG):
+        super().__init__(7, 3, foreground)
         self._item_bg = item_bg
         if isinstance(item, FeetsWearable):
             self.obj = equipment_render.FeetsObject
@@ -59,9 +59,9 @@ class equipment_render(base_render):
         else:
             self.obj = equipment_render.HeadObject
 
-    def render(self):
+    def render(self, bg):
         return [
-            self._colorize(self.obj[0]),
-            self._colorize(self.obj[1]),
-            self._colorize(self.obj[2]),
+            self._colorize(self.obj[0], bg),
+            self._colorize(self.obj[1], bg),
+            self._colorize(self.obj[2], bg),
         ]
