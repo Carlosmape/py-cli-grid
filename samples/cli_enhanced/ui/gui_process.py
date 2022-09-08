@@ -4,7 +4,7 @@ from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
 from engine.world.area_types import area_types
-from .graphics.render.colors import style
+from .graphics.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
 from .graphics.cli_grid.area_box import AreaBox
 from .graphics.cli_grid.map_box import MapBox

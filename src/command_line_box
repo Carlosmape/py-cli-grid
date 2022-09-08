@@ -2,7 +2,7 @@ import re
 from engine.items.interactives.ContainerItem import ContainerItem
 
 from engine.items.interactives.WearableItem import WearableItem
-from samples.cli_enhanced.ui.graphics.render.colors import style
+from samples.cli_enhanced.ui.graphics.colors import style
 
 
 class CommandLineBox():
