@@ -16,5 +16,5 @@ class rock_render(base_render):
             # else:
             #    row = "█"*(self._frame_width-i)+"▓"*i
             row = "█"*self._frame_width
-            composed_wall.append(self._colorize(row + style.CEND, bg))
-        return composed_wall
+            composed_wall.append(row + style.CEND)
+        return self.fill_color(composed_wall, bg)

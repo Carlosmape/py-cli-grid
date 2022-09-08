@@ -63,8 +63,4 @@ class decoration_render(base_render):
         # Compose the environment element
         return "  " + decoration_render.TYPES[self.type][step] + "  "
 
-    def fill_color(self, frame, bg):
-        """Fills frame with background and colors the grass elements"""
-        for i in range(0, self._frame_height):
-            frame[i] = self._colorize(frame[i], bg)
-        return frame
+

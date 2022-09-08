@@ -1,5 +1,6 @@
 import random
 from time import time
+from typing import List
 
 from samples.cli_enhanced.ui.graphics.render.colors import style
 
@@ -25,7 +26,18 @@ class base_render():
     def render(self, bg):
         raise NotImplemented
 
+    def fill_color(self, frame: List[str], bg):
+        """Fills given frame of size frame_height with background and foreground colors"""
+        if len(frame) > self._frame_height:
+            raise Exception("Received render model higher than expected")
+
+        for i in range(0, self._frame_height):
+            frame[i] = self._colorize(frame[i], bg)
+
+        return frame
+
     def _colorize(self, string: str, bg):
+        """Colorize a string"""
         return bg + self._fore_color + string + style.CEND
 
     def _fill_frame(self, part: str):

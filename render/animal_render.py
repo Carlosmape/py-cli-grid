@@ -43,9 +43,9 @@ class animal_render(base_render):
             head_step = self._act_anim._get_curr_step()
 
         body = self.compose_animal(head_step, torso_step, tail_step)
-        composed_animal.append(self._colorize("       ", bg))
-        composed_animal.append(self._colorize("  "+body+"  ", bg))
-        composed_animal.append(self._colorize("       ", bg))
+        composed_animal.append("       ")
+        composed_animal.append("  "+body+"  ")
+        composed_animal.append("       ")
 
         if not self._dead:
 
@@ -59,7 +59,7 @@ class animal_render(base_render):
             if self._attacking:
                 for i in range(0, self._frame_height):
                     composed_animal[i] = style.CITALIC + composed_animal[i]
-        return composed_animal
+        return self.fill_color(composed_animal, bg)
 
     def compose_animal(self, headstep: int, torsostep: int, tailstep: int):
         head = animal_render.head[headstep]

@@ -37,9 +37,3 @@ class edible_render(base_render):
         """Returns corresponding grass type filled to _frame_width"""
         # Compose the environment element
         return "  " + edible_render.TYPES[self.type][step] + "  "
-
-    def fill_color(self, frame, bg):
-        """Fills frame with background and colors the grass elements"""
-        for i in range(0, self._frame_height):
-            frame[i] = self._colorize(frame[i], bg)
-        return frame

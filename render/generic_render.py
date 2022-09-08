@@ -10,7 +10,7 @@ class generic_render(base_render):
 
     def render(self, bg):
         composed_wall = []
-        composed_wall.append(self._colorize("   _   ", bg))
-        composed_wall.append(self._colorize("  |?|  ", bg))
-        composed_wall.append(self._colorize("   ¨   ", bg))
-        return composed_wall
+        composed_wall.append("   _   ")
+        composed_wall.append("  |?|  ")
+        composed_wall.append("   ¨   ")
+        return self.fill_color(composed_wall, bg)
