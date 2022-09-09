@@ -1,4 +1,3 @@
-from multiprocessing import Lock
 from time import time
 from engine.frame import Frame
 from samples.cli_enhanced.ui.base_game_process import base_game_process
