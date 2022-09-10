@@ -1,3 +1,4 @@
+import threading
 from time import time
 from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
@@ -10,6 +11,24 @@ from .graphics.cli_grid.area_box import AreaBox
 from .graphics.cli_grid.map_box import MapBox
 from .graphics.cli_grid.menu_box import MenuBox
 from .graphics.cli_grid.stats_box import PjStatsBox
+
+class ReturnValueThread(threading.Thread):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.result: str = ''
+
+    def run(self):
+        if self._target is None:
+            return  # could alternatively raise an exception, depends on the use case
+        try:
+            self.result = self._target(*self._args, **self._kwargs)
+        except Exception as exc:
+            print(f'{type(exc).__name__}: {exc}', file=sys.stderr)  # properly handle the exception
+
+    def join(self, *args, **kwargs):
+        super().join(*args, **kwargs)
+        return self.result
+
 
 class gui_process():
 
@@ -37,12 +56,28 @@ class gui_process():
     def render(self, show_map:bool, f: Frame, q_size, fps):
         # Compose entire screen output (str)
         str_gui: str
-        str_gui = self.status_container.render(f.player, f.get_msg())
+
         if show_map:
-            str_gui += self.map_container.render(f)
+            area_th = ReturnValueThread(target=self.map_container.render, args=(f,))
         else:
-            str_gui += self.area_container.render(f)
-        str_gui += self.menu_container.render(f, self.debug(f, q_size, fps))
+            area_th = ReturnValueThread(target=self.area_container.render, args=(f,))
+        area_th.start()
+        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg()))
+        stats_th.start()
+        menu_th = ReturnValueThread(target=self.menu_container.render, args=(f, self.debug(f, q_size, fps)))
+        menu_th.start()
+
+        container = stats_th.join()
+        menu = menu_th.join()
+        area = area_th.join()
+        str_gui = container + area + menu
+
+        # str_gui = self.status_container.render(f.player, f.get_msg())
+        # if show_map:
+        #     str_gui += self.map_container.render(f)
+        # else:
+        #     str_gui += self.area_container.render(f)
+        # str_gui += self.menu_container.render(f, self.debug(f, q_size, fps))
 
         print(self.screen.render(str_gui))
 
