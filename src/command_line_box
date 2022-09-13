@@ -18,7 +18,8 @@ class CommandLineBox():
 
     def _fill_box(self, string: str):
         self.height_margin = self.height - string.count("\n")
-        return ("\n" * int(self.height_margin/2)) +string + ("\n" * int(self.height_margin/2))
+        marging = "\n"*int(self.height_margin/2) 
+        return "%s%s%s" % (marging, string, marging)
 
     def _equipment_stats(self, item: WearableItem):
         eq_string = str(item)
@@ -90,7 +91,4 @@ class CommandLineBox():
 
     def _non_printable_len(self, string: str):
         matches = re.findall("\x1b.[0-9]*m", string)
-        size = 0
-        for m in matches:
-            size += len(m)
-        return size
+        return sum([len(m) for m in matches])
