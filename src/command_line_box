@@ -15,6 +15,12 @@ class CommandLineBox():
         # Margin spaces to fill entire area with elements (and margins)
         self.width_margin = self.width
         self.height_margin = self.height
+        # Define styles per attribute
+        self.style_health = style.CITALIC + style.CRED 
+        self.style_agility = style.CITALIC + style.CYELLOW 
+        self.style_strength = style.CITALIC + style.CGREEN 
+        self.style_speed = style.CITALIC + style.CBLUE2
+        self.style_capacity = " " + style.CITALIC
 
     def _fill_box(self, string: str):
         self.height_margin = self.height - string.count("\n")
@@ -25,20 +31,15 @@ class CommandLineBox():
         eq_string = str(item)
         sts = item.stats()
         if sts.max_health() > 0:
-            eq_string += " " + style.CITALIC + style.CRED + \
-                str(sts.max_health()) + style.CEND
+            eq_string += " %s%s%s" % (self.style_health, sts.max_health(), style.CEND)
         if sts.agility() > 0:
-            eq_string += " " + style.CITALIC + \
-                style.CYELLOW + str(sts.agility()) + style.CEND
+            eq_string += " %s%s%s" % (self.style_agility, sts.agility(), style.CEND)
         if sts.strength() > 0:
-            eq_string += " " + style.CITALIC + \
-                style.CGREEN + str(sts.strength()) + style.CEND
+            eq_string += " %s%s%s" % (self.style_strength, sts.strength(), style.CEND)
         if sts.movement_speed() > 0:
-            eq_string += " " + style.CITALIC + style.CBLUE2 + \
-                str(sts.movement_speed()) + style.CEND
+            eq_string += " %s%s%s" % (self.style_speed, sts.movement_speed(), style.CEND)
         if isinstance(item, ContainerItem):
-            eq_string += " "+style.CITALIC + \
-                str(item.load)+"/"+str(item.capacity)+" Kg" + style.CEND
+            eq_string += " %s%s/%s Kg%s" % (style.CITALIC,item.load, item.capacity, style.CEND)
         return eq_string
 
     def render(self, string: str, vertically_filled=True):

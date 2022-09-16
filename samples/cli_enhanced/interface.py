@@ -6,6 +6,7 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Cofiguration import Config
 from engine.frame import Frame
 from engine.interface import GUI
+from samples.cli_enhanced.GameFrame import GameFrame
 from samples.cli_enhanced.ui.game_process import game_process
 from samples.cli_enhanced.ui.input.KBHit import KBHit
 from samples.cli_enhanced.ui.loading_process import loading_process
@@ -43,7 +44,7 @@ class CommandLineInterface(GUI):
         self.loading_process.start()
         # Main subprocess
         self.game_process = game_process(self.height, self.width)
-        self.show_map = False
+        self.showmap = False
 
         sleep(1)
         self.loading_process.complete(None)
@@ -59,10 +60,10 @@ class CommandLineInterface(GUI):
         self.game_process.start()
 
     def toggle_map(self):
-        self.show_map = not self.show_map
+        self.showmap = not self.showmap
 
     def render(self, frame: Frame):
-        self.game_process.update(frame, self.show_map)
+        self.game_process.update(GameFrame(frame, self.showmap))
 
     def readUserAction(self, blocking: bool = False):
         try:
