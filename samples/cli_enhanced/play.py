@@ -15,7 +15,7 @@ from samples.assets.lore import characters, factions, cities, dialogs
 from samples.assets.items.equipment import BACKWEARABLES, CHESTWEARABLES, FEETSWEARABLES, HANDSWEARABLES, HEADWEARABLES, LEGSWEARABLES, SHOULDERWEARABLES
 from samples.assets.items.collectibles import ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS
 from engine.repositories.TerrainRepository import TerrainRepository
-from samples.assets.items.terrain import BUILDINGMATERIALS, TERRAINOBSTACLES
+from samples.assets.items.terrain import BUILDINGMATERIALS, DOORBUILDINGMATERIALS, TERRAINOBSTACLES
 
 
 if __name__ == '__main__':
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     )
     GameRepository.equipment_repo = EquipmentRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES)
     GameRepository.collectible_repo = ItemRepository(ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS)
-    GameRepository.terrain_repo = TerrainRepository(TERRAINOBSTACLES, BUILDINGMATERIALS)
+    GameRepository.terrain_repo = TerrainRepository(TERRAINOBSTACLES, BUILDINGMATERIALS, DOORBUILDINGMATERIALS)
 
     #########
     # Run Engine
