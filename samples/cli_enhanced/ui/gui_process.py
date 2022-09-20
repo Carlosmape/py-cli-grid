@@ -4,7 +4,7 @@ from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
-from engine.world.area_types import area_types
+from engine.world.AreaTypes import AreaTypes
 from .graphics.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
 from .graphics.cli_grid.area_box import AreaBox
@@ -93,7 +93,7 @@ class gui_process():
             if frame.area:
                 a = frame.area
                 str_dbg += " | Area:" + \
-                    area_types.NAMES[a.type] + " " + \
+                    AreaTypes.NAMES[a.type] + " " + \
                     str(a.width) + "x" + str(a.height) + " " + \
                     "%2.2fºC" % frame.area.weather.temperature
 
