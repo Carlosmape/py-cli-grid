@@ -6,6 +6,7 @@ from engine.characters.PlayerCharacter import PlayerCharacter
 from engine.defines.Cofiguration import Config
 from engine.frame import Frame
 from engine.interface import GUI
+from engine.world.AreaTypes import AreaTypes
 from samples.cli_enhanced.GameFrame import GameFrame
 from samples.cli_enhanced.ui.game_process import game_process
 from samples.cli_enhanced.ui.input.KBHit import KBHit
@@ -28,9 +29,9 @@ class CommandLineInterface(GUI):
         # Read arguments
         if "debug" in sys.argv:
             Config.GameGuide.enabled = False
-            # Config.Area.min_height = Config.Area.max_height = int(self.height/3)
-            # Config.Area.min_width = Config.Area.max_width = int(self.width/7)
             Config.Stats.movement_speed = 3
+            # Config.Area.default_initial = AreaTypes.RUINS
+
 
         # Initialize keyboard
         self.keyboard = KBHit()
