@@ -32,11 +32,8 @@ class base_game_process(multiprocessing.Process):
         and will call run_specific(frame)"""
         while self.is_started:
             begin_frame_process = time()
-            try:
-                frame = self.frame_queue.get()
-                self.run_specific(frame)
-            except:
-                pass
+            frame = self.frame_queue.get()
+            self.run_specific(frame)
             frame_delta = time() - begin_frame_process
             self.frame_count += 1
             self.fps_avg += (frame_delta - self.fps_avg)/self.frame_count;
