@@ -30,7 +30,7 @@ class CommandLineInterface(GUI):
         if "debug" in sys.argv:
             Config.GameGuide.enabled = False
             Config.Stats.movement_speed = 3
-            # Config.Area.default_initial = AreaTypes.RUINS
+            Config.Area.default_initial = AreaTypes.CITY
 
 
         # Initialize keyboard
