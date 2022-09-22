@@ -7,6 +7,13 @@ from samples.cli_enhanced.ui.graphics.colors import style
 
 class CommandLineBox():
     """This class represents a box inside a terminal (TODO just vertical boxes currently)"""
+    # Define styles per attribute
+    STY_HEALTH = style.CBOLD + style.CRED 
+    STY_AGILITY = style.CBOLD + style.CYELLOW 
+    STY_STRENGTH = style.CBOLD + style.CGREEN 
+    STY_SPEED = style.CBOLD + style.CBLUE2
+    STY_CAPACITY = style.CBOLD
+    STY_INTELIGENCE = style.CBOLD + style.CBEIGE
 
     def __init__(self, width: int, height: int):
         self.width = width
@@ -15,12 +22,6 @@ class CommandLineBox():
         # Margin spaces to fill entire area with elements (and margins)
         self.width_margin = self.width
         self.height_margin = self.height
-        # Define styles per attribute
-        self.style_health = style.CITALIC + style.CRED 
-        self.style_agility = style.CITALIC + style.CYELLOW 
-        self.style_strength = style.CITALIC + style.CGREEN 
-        self.style_speed = style.CITALIC + style.CBLUE2
-        self.style_capacity = " " + style.CITALIC
 
     def _fill_box(self, string: str):
         self.height_margin = self.height - string.count("\n")
@@ -31,15 +32,15 @@ class CommandLineBox():
         eq_string = str(item)
         sts = item.stats()
         if sts.max_health() > 0:
-            eq_string += " %s%s%s" % (self.style_health, sts.max_health(), style.CEND)
+            eq_string += " %s%s%s" % (CommandLineBox.STY_HEALTH, sts.max_health(), style.CEND)
         if sts.agility() > 0:
-            eq_string += " %s%s%s" % (self.style_agility, sts.agility(), style.CEND)
+            eq_string += " %s%s%s" % (CommandLineBox.STY_AGILITY, sts.agility(), style.CEND)
         if sts.strength() > 0:
-            eq_string += " %s%s%s" % (self.style_strength, sts.strength(), style.CEND)
+            eq_string += " %s%s%s" % (CommandLineBox.STY_STRENGTH, sts.strength(), style.CEND)
         if sts.movement_speed() > 0:
-            eq_string += " %s%s%s" % (self.style_speed, sts.movement_speed(), style.CEND)
+            eq_string += " %s%s%s" % (CommandLineBox.STY_SPEED, sts.movement_speed(), style.CEND)
         if isinstance(item, ContainerItem):
-            eq_string += " %s%s/%s Kg%s" % (style.CITALIC,item.load, item.capacity, style.CEND)
+            eq_string += " %s%s/%s Kg%s" % (CommandLineBox.STY_CAPACITY, item.load, item.capacity, style.CEND)
         return eq_string
 
     def render(self, string: str, vertically_filled=True):
