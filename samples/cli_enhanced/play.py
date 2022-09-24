@@ -28,7 +28,7 @@ if __name__ == '__main__':
     #########
     GameRepository.fact_repo = FactionRepository(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS)
     GameRepository.city_repo = CityRepository(cities.NAMES)
-    GameRepository.char_repo = CharacterRepository(characters.NAMES)
+    GameRepository.char_repo = CharacterRepository(characters.MALE_NAMES, characters.FEMALE_NAMES, False)
     GameRepository.prof_repo = ProfessionRepository(UNEMPLOYEDS, PRODUCERS, TRADERS, MILITARIES)
     GameRepository.dial_repo = DialogRepository(
         DialogElements(dialogs.SUSPICIOUS_GREETINGS, dialogs.NEUTRAL_GREETINGS, dialogs.FRIENDLY_GREETINGS),
