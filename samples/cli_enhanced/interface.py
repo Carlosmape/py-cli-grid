@@ -38,6 +38,8 @@ class CommandLineInterface(GUI):
             Config.GameGuide.enabled = False
             Config.Stats.movement_speed = 3
             Config.Area.default_initial = AreaTypes.CITY
+            Config.WorldTime.time_speed *= 10
+            Config.WorldTime.initial_hour = 10
 
 
         # Initialize keyboard
