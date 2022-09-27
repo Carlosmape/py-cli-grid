@@ -4,7 +4,7 @@ from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
-from engine.world.area_types import area_types
+from engine.world.AreaTypes import AreaTypes
 from .graphics.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
 from .graphics.cli_grid.area_box import AreaBox
@@ -55,31 +55,22 @@ class gui_process():
 
     def render(self, show_map:bool, f: Frame, q_size, fps):
         # Compose entire screen output (str)
-        str_gui: str
 
         if show_map:
             area_th = ReturnValueThread(target=self.map_container.render, args=(f,))
         else:
             area_th = ReturnValueThread(target=self.area_container.render, args=(f,))
         area_th.start()
-        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg()))
-        stats_th.start()
         menu_th = ReturnValueThread(target=self.menu_container.render, args=(f, self.debug(f, q_size, fps)))
         menu_th.start()
+        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg()))
+        stats_th.start()
 
-        container = stats_th.join()
+        stats = stats_th.join()
         menu = menu_th.join()
         area = area_th.join()
-        str_gui = container + area + menu
-
-        # str_gui = self.status_container.render(f.player, f.get_msg())
-        # if show_map:
-        #     str_gui += self.map_container.render(f)
-        # else:
-        #     str_gui += self.area_container.render(f)
-        # str_gui += self.menu_container.render(f, self.debug(f, q_size, fps))
-
-        print(self.screen.render(str_gui))
+        
+        print(self.screen.render("%s%s%s" % (stats, area, menu)))
 
     def debug(self, frame: Frame, q_size, fps):
         str_dbg = str()
@@ -93,7 +84,7 @@ class gui_process():
             if frame.area:
                 a = frame.area
                 str_dbg += " | Area:" + \
-                    area_types.NAMES[a.type] + " " + \
+                    AreaTypes.NAMES[a.type] + " " + \
                     str(a.width) + "x" + str(a.height) + " " + \
                     "%2.2fºC" % frame.area.weather.temperature
 
