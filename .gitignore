@@ -3,4 +3,4 @@ __pycache__
 *.egg-info/
 dist/
 build/
-samples/cli_enhanced/error.log
+samples/*/*.log
