@@ -4,7 +4,9 @@ from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
+from engine.menu import EquipmentMenu
 from engine.world.AreaTypes import AreaTypes
+from samples.cli_enhanced.ui.graphics.cli_grid.equipment_box import EquipmentBox
 from .graphics.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
 from .graphics.cli_grid.area_box import AreaBox
@@ -48,14 +50,18 @@ class gui_process():
         self.area_container = AreaBox(
             self.width, 2*self.height/3, self.scale_width, self.scale_height)
         self.map_container = MapBox(self.width, 2*self.height/3)
+        self.equipment_container = EquipmentBox(self.width, 2*self.height/3)
+
         self.status_container = PjStatsBox(self.width, self.height/6)
         self.menu_container = MenuBox(self.width, self.height/6)
         self.last_frame = time()
         self.max_frame_delay = 0
 
-    def render(self, show_map:bool, f: Frame, q_size, fps):
+    def render(self, show_map:bool, show_help:bool, stats_mode: int, f: Frame, q_size, fps):
         # Compose entire screen output (str)
 
+        # if f.menu and isinstance(f.menu, EquipmentMenu):
+        #     area_th = ReturnValueThread(target=self.equipment_container.render, args=(f,))
         if show_map:
             area_th = ReturnValueThread(target=self.map_container.render, args=(f,))
         else:
@@ -63,14 +69,20 @@ class gui_process():
         area_th.start()
         menu_th = ReturnValueThread(target=self.menu_container.render, args=(f, self.debug(f, q_size, fps)))
         menu_th.start()
-        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg()))
+        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg(), stats_mode))
         stats_th.start()
 
         stats = stats_th.join()
         menu = menu_th.join()
         area = area_th.join()
         
-        print(self.screen.render("%s%s%s" % (stats, area, menu)))
+        print(self.screen.render("%s%s%s%s" % (stats, area, menu, self.help(show_help) if f.area else str())))
+
+    def help(self, show_help):
+        if show_help:
+            return style.CITALIC + "(?) HELP: (F) = Action Menu | (ESC) Pause Menu | (A,S,W,D) Move | (J) Attack | (M) Toggle Map | (,) Change status bar mode"
+        else:
+            return style.CITALIC + "(?) HELP toggle"
 
     def debug(self, frame: Frame, q_size, fps):
         str_dbg = str()

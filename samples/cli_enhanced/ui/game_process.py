@@ -16,7 +16,7 @@ class game_process(base_game_process):
 
     def run_specific(self, frame: GameFrame):
         self.begin_process_frame = time()
-        self.gui_process.render(frame.showmap, frame.frame,  self.frame_queue.qsize(), 0 if self.fps_avg is 0 else 1 / self.fps_avg)
+        self.gui_process.render(frame.showmap, frame.showhelp, frame.statsmode, frame.frame, self.frame_queue.qsize(), 0 if self.fps_avg is 0 else 1 / self.fps_avg)
         self.sound_process.render(frame.showmap, frame.frame)
 
     def terminate(self) -> None:

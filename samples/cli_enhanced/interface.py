@@ -16,6 +16,7 @@ from engine.world.AreaTypes import AreaTypes
 from engine.world.world import World
 from samples.cli_enhanced.GameFrame import GameFrame
 from samples.cli_enhanced.ui.game_process import game_process
+from samples.cli_enhanced.ui.graphics.cli_grid.stats_box import PjStatsBox
 from samples.cli_enhanced.ui.input.KBHit import KBHit
 from samples.cli_enhanced.ui.loading_process import loading_process
 
@@ -42,7 +43,6 @@ class CommandLineInterface(GUI):
             Config.WorldTime.initial_hour = 10
             Config.log_enabled = True
 
-
         # Initialize keyboard
         self.keyboard = KBHit()
         # Engine specific configurations
@@ -55,7 +55,10 @@ class CommandLineInterface(GUI):
         self.loading_process.start()
         # Main subprocess
         self.game_process = game_process(self.height, self.width)
+        # Visualization flags
         self.showmap = False
+        self.showhelp = False
+        self.statsmode = 0
 
         sleep(1)
         self.loading_process.complete(None)
@@ -70,14 +73,16 @@ class CommandLineInterface(GUI):
 
         self.game_process.start()
 
-    def toggle_map(self):
-        self.showmap = not self.showmap
-
     def initialize(self) -> World:
         return self.loadGame()
 
     def render(self, frame: Frame):
-        self.game_process.update(GameFrame(frame, self.showmap))
+        self.game_process.update(GameFrame(frame, self.showmap, self.showhelp, self.statsmode))
+
+    def toggle_statsmode(self):
+        self.statsmode += 1
+        if self.statsmode > PjStatsBox.MAX_MODE:
+            self.statsmode = PjStatsBox.MIN_MODE
 
     def readUserAction(self, blocking: bool = False):
         try:
@@ -104,7 +109,11 @@ class CommandLineInterface(GUI):
         elif action == ('j' or 'J'):
             player.attack(player.nearby_npcs)
         elif action == ('m' or 'M'):
-            self.toggle_map()
+            self.showmap = not self.showmap
+        elif action == ('?'):
+            self.showhelp = not self.showhelp
+        elif action == (','):
+            self.toggle_statsmode()
         elif action and ord(action) == 27:
             player.active_pause_menu()
         elif action is None:
