@@ -9,9 +9,10 @@ from engine.repositories.CharacterRepository import CharacterRepository
 from engine.repositories.ProfessionRepository import ProfessionRepository
 from engine.repositories.CityRepository import CityRepository
 from engine.repositories.FactionRepository import FactionRepository
-from engine.repositories.DialogRepository import DialogElements, DialogRepository
+from engine.repositories.DialogRepository import DialogRepository
 from engine.repositories.TerrainRepository import TerrainRepository
 from engine.repositories.GameRepository import GameRepository
+from engine.lore.dialogs.DialogElements import DialogElements
 from engine.engine import Engine
 from interface import CommandLineInterface
 from samples.assets.lore import characters, factions, cities, dialogs
@@ -19,7 +20,6 @@ from samples.assets.items.equipment import BACKWEARABLES, CHESTWEARABLES, FEETSW
 from samples.assets.items.collectibles import ALLDECORATION, DRINKABLEITEMS, EDIBLEITEMS, PORTALS
 from samples.assets.lore.professions import MILITARIES, PRODUCERS, TRADERS, UNEMPLOYEDS
 from samples.assets.items.terrain import BUILDINGMATERIALS, DOORBUILDINGMATERIALS, MINERALPRODUCTORS, VEGETABLEPRODUCTORS, TERRAINOBSTACLES
-
 
 if __name__ == '__main__':
 
