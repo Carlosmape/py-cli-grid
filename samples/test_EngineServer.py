@@ -1,6 +1,10 @@
 #!/bin/python
 
+import sys
+sys.path.append('../')
+
 from engine.EngineServer import EngineServer
+from engine.defines.Cofiguration import Config
 from engine.lore.dialogs.DialogElements import DialogElements
 from engine.repositories.CharacterRepository import CharacterRepository
 from engine.repositories.CityRepository import CityRepository
@@ -18,7 +22,7 @@ from samples.assets.lore.professions import MILITARIES, PRODUCERS, TRADERS, UNEM
 from samples.assets.items.terrain import BUILDINGMATERIALS, DOORBUILDINGMATERIALS, MINERALPRODUCTORS, VEGETABLEPRODUCTORS, TERRAINOBSTACLES
 
 if __name__ == "__main__":
-        #########
+    #########
     # Game specific stuff... Repositories of all needed things
     #########
     GameRepository.fact_repo = FactionRepository(factions.NAMES, factions.DESCRIPTIONS, factions.SLOGANS)
@@ -36,6 +40,8 @@ if __name__ == "__main__":
     GameRepository.collectible_repo = ItemRepository(ALLDECORATION, PORTALS, DRINKABLEITEMS, EDIBLEITEMS)
     GameRepository.terrain_repo = TerrainRepository(TERRAINOBSTACLES, VEGETABLEPRODUCTORS, MINERALPRODUCTORS, BUILDINGMATERIALS, DOORBUILDINGMATERIALS)
     
+    Config.log_enabled = True
+    Config.log_to_std_io = True
     server = EngineServer()
     server.run()
 
