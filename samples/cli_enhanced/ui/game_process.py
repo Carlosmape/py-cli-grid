@@ -6,7 +6,7 @@ from samples.cli_enhanced.ui.sound_process import sound_process
 
 
 class game_process(base_game_process):
-    def __init__(self, height, width):
+    def __init__(self, height:int , width: int):
         super().__init__("GameProcess")
         self.gui_process = gui_process(height, width)
         self.sound_process = sound_process()

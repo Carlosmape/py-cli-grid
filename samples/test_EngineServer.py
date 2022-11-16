@@ -1,10 +1,13 @@
 #!/bin/python
 
 import sys
+
 sys.path.append('../')
 
 from engine.EngineServer import EngineServer
+from engine.Logger import Logger
 from engine.defines.Cofiguration import Config
+from engine.world.AreaTypes import AreaTypes
 from engine.lore.dialogs.DialogElements import DialogElements
 from engine.repositories.CharacterRepository import CharacterRepository
 from engine.repositories.CityRepository import CityRepository
@@ -39,9 +42,18 @@ if __name__ == "__main__":
     GameRepository.equipment_repo = EquipmentRepository(HEADWEARABLES, SHOULDERWEARABLES, CHESTWEARABLES, BACKWEARABLES, HANDSWEARABLES, LEGSWEARABLES, FEETSWEARABLES)
     GameRepository.collectible_repo = ItemRepository(ALLDECORATION, PORTALS, DRINKABLEITEMS, EDIBLEITEMS)
     GameRepository.terrain_repo = TerrainRepository(TERRAINOBSTACLES, VEGETABLEPRODUCTORS, MINERALPRODUCTORS, BUILDINGMATERIALS, DOORBUILDINGMATERIALS)
-    
-    Config.log_enabled = True
-    Config.log_to_std_io = True
+
+    # Read arguments
+    if "debug" in sys.argv:
+        Config.GameGuide.enabled = False
+        Config.Stats.movement_speed = 3
+        Config.Area.default_initial = AreaTypes.CITY
+        Config.WorldTime.time_speed *= 10
+        Config.WorldTime.initial_hour = 10
+        Config.log_enabled = True
+        Config.log_to_std_io = True
+        Logger.initialize()
+
     server = EngineServer()
     server.run()
 

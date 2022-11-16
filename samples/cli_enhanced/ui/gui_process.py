@@ -1,11 +1,12 @@
 import threading
 from time import time
+import sys
 from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
 from engine.frame import Frame
-from engine.menu import EquipmentMenu
 from engine.world.AreaTypes import AreaTypes
+from samples.cli_enhanced.InteractionKeys import ACTION_MENU, ATTACK, DISPLAY_MODE, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, SHOW_HELP, SHOW_MAP
 from samples.cli_enhanced.ui.graphics.cli_grid.equipment_box import EquipmentBox
 from .graphics.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
@@ -33,6 +34,9 @@ class ReturnValueThread(threading.Thread):
 
 
 class gui_process():
+    
+    EXPANDED_HELP = style.CITALIC + f"({SHOW_HELP}) HELP: ({ACTION_MENU}) = Action Menu | () Pause Menu | ({MOVE_LEFT},{MOVE_DOWN},{MOVE_UP},{MOVE_RIGHT}) Move | ({ATTACK}) Attack | ({SHOW_MAP}) Toggle Map | ({DISPLAY_MODE}) Change status bar mode"
+    COLLAPSED_HELP = style.CITALIC + f"({SHOW_HELP}) HELP toggle"
 
     def __init__(self, height, width):
         super().__init__()
@@ -60,6 +64,9 @@ class gui_process():
     def render(self, show_map:bool, show_help:bool, stats_mode: int, f: Frame, q_size, fps):
         # Compose entire screen output (str)
 
+        dbg_th = ReturnValueThread(target=self.debug, args=(f, q_size, fps))
+        dbg_th.start()
+
         # if f.menu and isinstance(f.menu, EquipmentMenu):
         #     area_th = ReturnValueThread(target=self.equipment_container.render, args=(f,))
         if show_map:
@@ -67,10 +74,13 @@ class gui_process():
         else:
             area_th = ReturnValueThread(target=self.area_container.render, args=(f,))
         area_th.start()
-        menu_th = ReturnValueThread(target=self.menu_container.render, args=(f, self.debug(f, q_size, fps)))
+
+        menu_th = ReturnValueThread(target=self.menu_container.render, args=(f, dbg_th.join()))
         menu_th.start()
+
         stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg(), stats_mode))
         stats_th.start()
+
 
         stats = stats_th.join()
         menu = menu_th.join()
@@ -80,9 +90,9 @@ class gui_process():
 
     def help(self, show_help):
         if show_help:
-            return style.CITALIC + "(?) HELP: (F) = Action Menu | (ESC) Pause Menu | (A,S,W,D) Move | (J) Attack | (M) Toggle Map | (,) Change status bar mode"
+            return gui_process.EXPANDED_HELP
         else:
-            return style.CITALIC + "(?) HELP toggle"
+            return gui_process.COLLAPSED_HELP
 
     def debug(self, frame: Frame, q_size, fps):
         str_dbg = str()
@@ -103,17 +113,16 @@ class gui_process():
             if frame.player:
                 pj = frame.player
                 str_dbg += "\nPJ:" + str(pj.position)
-                str_dbg += " act:" + str(pj.last_action)
-                if pj.last_action:
-                    if isinstance(pj.last_action, Walk):
-                        str_dbg += " d:%.1f" % (pj.last_distance)
-                        str_dbg += " t:%.1f" % (pj.delta_time)
-                        str_dbg += " s:%.1f" % (pj.last_distance /
-                                            pj.delta_time if pj.last_distance and pj.delta_time else 0)
-                    elif isinstance(pj.last_action, AttackCharacter):
-                        str_dbg += " to " + pj.last_action.target.name + (" %.2f" % pj.last_action.target.stats().health())
-                    elif isinstance(pj.last_action, AttackItem):
-                        str_dbg += " to " + pj.last_action.item.name
+                str_dbg += " act:" + str(pj.last_action[0]) + "res:" + str(pj.last_action[1].done) + " " +pj.last_action[1].message
+                if isinstance(pj.last_action[0], Walk) and pj.last_action[1].done:
+                    str_dbg += " d:%.1f" % (pj.last_distance)
+                    str_dbg += " t:%.1f" % (pj.delta_time)
+                    str_dbg += " s:%.1f" % (pj.last_distance /
+                                        pj.delta_time if pj.last_distance and pj.delta_time else 0)
+                elif isinstance(pj.last_action[0], AttackCharacter) and pj.last_action[1].done:
+                    str_dbg += " to " + pj.last_action[0].target.name + (" %.2f" % pj.last_action[0].target.stats().health())
+                elif isinstance(pj.last_action[0], AttackItem) and pj.last_action[1].done:
+                    str_dbg += " to " + pj.last_action[0].item.name
 
             str_dbg += "\nWorldTime:%d/%d %2d:%2d:%2d" % (frame.worldtime.day, frame.worldtime.year, frame.worldtime.hour, frame.worldtime.minute, frame.worldtime.second)
             str_dbg += " Night" if frame.worldtime.is_night() else " Day"
