@@ -4,3 +4,4 @@ __pycache__
 dist/
 build/
 samples/*/*.log
+samples/*.log
