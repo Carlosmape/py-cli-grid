@@ -43,6 +43,9 @@ if __name__ == "__main__":
     GameRepository.collectible_repo = ItemRepository(ALLDECORATION, PORTALS, DRINKABLEITEMS, EDIBLEITEMS)
     GameRepository.terrain_repo = TerrainRepository(TERRAINOBSTACLES, VEGETABLEPRODUCTORS, MINERALPRODUCTORS, BUILDINGMATERIALS, DOORBUILDINGMATERIALS)
 
+    # Setting disable decimal tolerace
+    Config.Position.tolerance = 0 
+
     # Read arguments
     if "debug" in sys.argv:
         Config.GameGuide.enabled = False
