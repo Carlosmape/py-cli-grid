@@ -4,6 +4,7 @@ import sys
 from engine.defines.Actions import Walk
 from engine.defines.CharacterActions import AttackCharacter
 from engine.defines.ItemActions import AttackItem
+from engine.defines.Translator import Translator
 from engine.frame import Frame
 from engine.world.AreaTypes import AreaTypes
 from samples.cli_enhanced.InteractionKeys import ACTION_MENU, ATTACK, DISPLAY_MODE, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, SHOW_HELP, SHOW_MAP
@@ -38,8 +39,10 @@ class gui_process():
     EXPANDED_HELP = style.CITALIC + f"({SHOW_HELP}) HELP: ({ACTION_MENU}) = Action Menu | () Pause Menu | ({MOVE_LEFT},{MOVE_DOWN},{MOVE_UP},{MOVE_RIGHT}) Move | ({ATTACK}) Attack | ({SHOW_MAP}) Toggle Map | ({DISPLAY_MODE}) Change status bar mode"
     COLLAPSED_HELP = style.CITALIC + f"({SHOW_HELP}) HELP toggle"
 
-    def __init__(self, height, width):
+    def __init__(self, height, width, translator: Translator):
         super().__init__()
+        # Translator
+        self.translator = translator
 
         # Assign console sizes
         self.height = height
@@ -54,10 +57,10 @@ class gui_process():
         self.area_container = AreaBox(
             self.width, 2*self.height/3, self.scale_width, self.scale_height)
         self.map_container = MapBox(self.width, 2*self.height/3)
-        self.equipment_container = EquipmentBox(self.width, 2*self.height/3)
+        self.equipment_container = EquipmentBox(self.width, 2*self.height/3, translator)
 
         self.status_container = PjStatsBox(self.width, self.height/6)
-        self.menu_container = MenuBox(self.width, self.height/6)
+        self.menu_container = MenuBox(self.width, self.height/6, translator)
         self.last_frame = time()
         self.max_frame_delay = 0
 
@@ -78,7 +81,7 @@ class gui_process():
         menu_th = ReturnValueThread(target=self.menu_container.render, args=(f, dbg_th.join()))
         menu_th.start()
 
-        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.get_msg(), stats_mode))
+        stats_th = ReturnValueThread(target=self.status_container.render, args=(f.player, f.public_msg + f.client_msg, stats_mode))
         stats_th.start()
 
 
@@ -113,7 +116,8 @@ class gui_process():
             if frame.player:
                 pj = frame.player
                 str_dbg += "\nPJ:" + str(pj.position)
-                str_dbg += " act:" + str(pj.last_action[0]) + "res:" + str(pj.last_action[1].done) + " " +pj.last_action[1].message
+                # str_dbg += " act:" + str(pj.last_action[0]) + "res:" + str(pj.last_action[1].done) + " " +pj.last_action[1].message
+                str_dbg += " act:" + self.translator.get().traduce(pj.last_action[0], pj.last_action[1].done)
                 if isinstance(pj.last_action[0], Walk) and pj.last_action[1].done:
                     str_dbg += " d:%.1f" % (pj.last_distance)
                     str_dbg += " t:%.1f" % (pj.delta_time)
@@ -122,7 +126,7 @@ class gui_process():
                 elif isinstance(pj.last_action[0], AttackCharacter) and pj.last_action[1].done:
                     str_dbg += " to " + pj.last_action[0].target.name + (" %.2f" % pj.last_action[0].target.stats().health())
                 elif isinstance(pj.last_action[0], AttackItem) and pj.last_action[1].done:
-                    str_dbg += " to " + pj.last_action[0].item.name
+                    str_dbg += " to " + self.translator.get().traduce_item_name(pj.last_action[0].item)
 
             str_dbg += "\nWorldTime:%d/%d %2d:%2d:%2d" % (frame.worldtime.day, frame.worldtime.year, frame.worldtime.hour, frame.worldtime.minute, frame.worldtime.second)
             str_dbg += " Night" if frame.worldtime.is_night() else " Day"
