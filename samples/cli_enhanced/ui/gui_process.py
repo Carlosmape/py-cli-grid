@@ -7,7 +7,7 @@ from engine.defines.ItemActions import AttackItem
 from engine.defines.Translator import Translator
 from engine.frame import Frame
 from engine.world.AreaTypes import AreaTypes
-from samples.cli_enhanced.InteractionKeys import ACTION_MENU, ATTACK, DISPLAY_MODE, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, SHOW_HELP, SHOW_MAP
+from samples.cli_enhanced.InteractionKeys import ACTIONS, MENUS, MOVEMENT
 from samples.cli_enhanced.ui.graphics.cli_grid.equipment_box import EquipmentBox
 from .graphics.colors import style
 from .graphics.cli_grid.command_line_box import CommandLineBox
@@ -36,8 +36,8 @@ class ReturnValueThread(threading.Thread):
 
 class gui_process():
     
-    EXPANDED_HELP = style.CITALIC + f"({SHOW_HELP}) HELP: ({ACTION_MENU}) = Action Menu | () Pause Menu | ({MOVE_LEFT},{MOVE_DOWN},{MOVE_UP},{MOVE_RIGHT}) Move | ({ATTACK}) Attack | ({SHOW_MAP}) Toggle Map | ({DISPLAY_MODE}) Change status bar mode"
-    COLLAPSED_HELP = style.CITALIC + f"({SHOW_HELP}) HELP toggle"
+    EXPANDED_HELP = style.CITALIC + f"({MENUS.SHOW_HELP}) HELP: {MOVEMENT.ALL} | {ACTIONS.ALL} | {MENUS.ALL}"
+    COLLAPSED_HELP = style.CITALIC + f"({MENUS.SHOW_HELP}) HELP toggle"
 
     def __init__(self, height, width, translator: Translator):
         super().__init__()
