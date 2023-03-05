@@ -30,7 +30,7 @@ class CommandLineBox():
         return "%s%s%s" % (marging, string, marging)
 
     def _equipment_stats(self, item: WearableItem, translator: Translator):
-        eq_string = translator.get().traduce_item_name(item)
+        eq_string = translator.selected_lang().traduce_item_name(item)
         sts = item.stats()
         if sts.max_health() > 0:
             eq_string += " %s%s%s" % (CommandLineBox.STY_HEALTH, sts.max_health(), style.CEND)

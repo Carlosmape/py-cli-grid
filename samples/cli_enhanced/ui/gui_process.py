@@ -36,7 +36,7 @@ class ReturnValueThread(threading.Thread):
 
 class gui_process():
     
-    EXPANDED_HELP = style.CITALIC + f"({MENUS.SHOW_HELP}) HELP: {MOVEMENT.ALL} | {ACTIONS.ALL} | {MENUS.ALL}"
+    EXPANDED_HELP = style.CITALIC + f"({MENUS.SHOW_HELP}) HELP: Movement: {MOVEMENT.ALL} | Actions: {ACTIONS.ALL} | Menus: {MENUS.ALL}"
     COLLAPSED_HELP = style.CITALIC + f"({MENUS.SHOW_HELP}) HELP toggle"
 
     def __init__(self, height, width, translator: Translator):
@@ -59,7 +59,7 @@ class gui_process():
         self.map_container = MapBox(self.width, 2*self.height/3)
         self.equipment_container = EquipmentBox(self.width, 2*self.height/3, translator)
 
-        self.status_container = PjStatsBox(self.width, self.height/6)
+        self.status_container = PjStatsBox(self.width, self.height/6, translator)
         self.menu_container = MenuBox(self.width, self.height/6, translator)
         self.last_frame = time()
         self.max_frame_delay = 0
@@ -117,7 +117,7 @@ class gui_process():
                 pj = frame.player
                 str_dbg += "\nPJ:" + str(pj.position)
                 # str_dbg += " act:" + str(pj.last_action[0]) + "res:" + str(pj.last_action[1].done) + " " +pj.last_action[1].message
-                str_dbg += " act:" + self.translator.get().traduce(pj.last_action[0], pj.last_action[1].done)
+                str_dbg += " act:" + self.translator.selected_lang().traduce(pj.last_action[0], pj.last_action[1].done)
                 if isinstance(pj.last_action[0], Walk) and pj.last_action[1].done:
                     str_dbg += " d:%.1f" % (pj.last_distance)
                     str_dbg += " t:%.1f" % (pj.delta_time)
@@ -126,7 +126,7 @@ class gui_process():
                 elif isinstance(pj.last_action[0], AttackCharacter) and pj.last_action[1].done:
                     str_dbg += " to " + pj.last_action[0].target.name + (" %.2f" % pj.last_action[0].target.stats().health())
                 elif isinstance(pj.last_action[0], AttackItem) and pj.last_action[1].done:
-                    str_dbg += " to " + self.translator.get().traduce_item_name(pj.last_action[0].item)
+                    str_dbg += " to " + self.translator.selected_lang().traduce_item_name(pj.last_action[0].item)
 
             str_dbg += "\nWorldTime:%d/%d %2d:%2d:%2d" % (frame.worldtime.day, frame.worldtime.year, frame.worldtime.hour, frame.worldtime.minute, frame.worldtime.second)
             str_dbg += " Night" if frame.worldtime.is_night() else " Day"
