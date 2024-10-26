@@ -1,7 +1,3 @@
-# Class of different styles
-from engine.lore.Faction import FactionColor
-
-
 class style():
     CEND = '\33[0m'
     CBOLD = '\33[1m'
@@ -55,11 +51,6 @@ class Color:
         """Transforms RGB code to terminal scape color"""
         return '\033[{};2;{};{};{}m'.format(48 if background else 38, r, g, b)
     
-    @staticmethod
-    def color_to_color_scape(c: FactionColor):
-        """Convert Engine's FactionColor to scape color"""
-        return Color.rgb_to_color_scape(c.r, c.g, c.b)
-
     # Predefined styles
     RESET = '\33[0m'
     BOLD = '\33[1m'
@@ -73,5 +64,4 @@ class Color:
     # TODO: Fill all needed colors for the game with naminfull names!!
     GRASS = rgb_to_color_scape(52, 140, 49, True)
     DIRT = rgb_to_color_scape(155, 118, 83, True)
-
 
