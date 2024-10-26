@@ -1,5 +1,5 @@
 import os
-from command_line_box import CommandLineBox
+from py_cli_grid import CommandLineBox
 
 size = os.get_terminal_size()
 print("Current terminal size:")
