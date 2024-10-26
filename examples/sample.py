@@ -2,15 +2,17 @@ import os
 from py_cli_grid import CommandLineBox
 
 size = os.get_terminal_size()
-print("Current terminal size:")
-print(f" - Width:{size.columns}")
-print(f" - Height: {size.lines}")
-screen = CommandLineBox(size.columns, size.lines-6)
-sample_box = CommandLineBox(int(size.columns/2), size.lines-6)
 
-print(screen.render_cols([
-        sample_box.render("I am\nA text\nOn\nColumn"),\
-        sample_box.render("I am\nAnother text\nOn\nAnother Column"),\
-    ], False)
-)
+screen = CommandLineBox(size.columns, size.lines)
+horizontal_box = CommandLineBox(size.columns, int(size.lines/2))
+
+horizontal_text=horizontal_box.render("""Current terminal size:
+ - Width:{size.columns}
+ - Height: {size.lines}""")
+
+column_text = horizontal_box.render_cols([
+    ("1"*int(size.columns/2-1)+"\n")*int(size.lines/2),
+    ("2"*int(size.columns/2-1)+"\n")*int(size.lines/2)])
+
+print(horizontal_text + column_text)
 
