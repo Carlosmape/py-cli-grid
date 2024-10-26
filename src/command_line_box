@@ -1,20 +1,7 @@
 import re
-from engine.defines.Translator import Translator
-from engine.items.interactives.ContainerItem import ContainerItem
-
-from engine.items.interactives.WearableItem import WearableItem
-from samples.cli_enhanced.ui.graphics.colors import style
-
 
 class CommandLineBox():
     """This class represents a box inside a terminal (TODO just vertical boxes currently)"""
-    # Define styles per attribute
-    STY_HEALTH = style.CBOLD + style.CRED 
-    STY_AGILITY = style.CBOLD + style.CYELLOW 
-    STY_STRENGTH = style.CBOLD + style.CGREEN 
-    STY_SPEED = style.CBOLD + style.CBLUE2
-    STY_CAPACITY = style.CBOLD
-    STY_INTELIGENCE = style.CBOLD + style.CBEIGE
 
     def __init__(self, width: int, height: int):
         self.width = width
@@ -28,21 +15,6 @@ class CommandLineBox():
         self.height_margin = self.height - string.count("\n")
         marging = "\n"*int(self.height_margin/2) 
         return "%s%s%s" % (marging, string, marging)
-
-    def _equipment_stats(self, item: WearableItem, translator: Translator):
-        eq_string = translator.selected_lang().traduce_item_name(item)
-        sts = item.stats()
-        if sts.max_health() > 0:
-            eq_string += " %s%s%s" % (CommandLineBox.STY_HEALTH, sts.max_health(), style.CEND)
-        if sts.agility() > 0:
-            eq_string += " %s%s%s" % (CommandLineBox.STY_AGILITY, sts.agility(), style.CEND)
-        if sts.strength() > 0:
-            eq_string += " %s%s%s" % (CommandLineBox.STY_STRENGTH, sts.strength(), style.CEND)
-        if sts.movement_speed() > 0:
-            eq_string += " %s%s%s" % (CommandLineBox.STY_SPEED, sts.movement_speed(), style.CEND)
-        if isinstance(item, ContainerItem):
-            eq_string += " %s%s/%s Kg%s" % (CommandLineBox.STY_CAPACITY, item.load, item.capacity, style.CEND)
-        return eq_string
 
     def render(self, string: str, vertically_filled=True):
         if vertically_filled:
