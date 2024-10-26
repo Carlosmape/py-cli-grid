@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "py-cli-grid-carlosmape"
+name = "py-cli-grid"
 version = "0.0.1"
 authors = [
   { name="Carlos G. Martín Pérez", email="cagrmape@gmail.com" },
 ]
-description="Package to manage CLI as a grid",
+description="Package to manage CLI as a grid"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
@@ -20,3 +20,4 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/Carlosmape/py-cli-grid"
 Issues = "https://github.com/Carlosmape/py-cli-grid/issues"
+
