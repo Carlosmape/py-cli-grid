@@ -1,4 +1,64 @@
 import re
+from typing import List
+
+class Box():
+    """Represents a box inside the CLI"""
+
+    def __init__(self, width: int, height: int, wrap: bool):
+        """Initiaizes the Box with desired configuration
+        :param width:   horizontal size of the box 
+        :param height:  vertical size of the box
+        :param wrap:    indicates if it should try to wrap long 
+                        content in the box, otherwise it will be truncated
+        """
+        assert width > 0 and height > 0
+        self._width = width
+        self._height = height
+        self._wrap = wrap
+        self._content: List[str] = []
+
+    
+    def setContent(self, content:str):
+        """Stablish the content of the box ensuring it fits inside the box (depending on it configuration)"""
+        if self._wrap:
+            self.__wrap_content_to_width(content)
+        else:
+            self.conent = content.split("\n")
+            self.__truncate_content_width()
+
+        self.__truncate_or_fill_content_height()
+
+    def __wrap_content_to_width(self, content: str):
+        """Wraps the content of given line in Box width"""
+        for line in content.split("\n"):
+            self._content = [line[i:i + self._width] for i in range(0, len(line), self._width)]
+
+    def __truncate_content_width(self):
+        """Truncates each content line in to Box's width"""
+        self._content = [line[:self._width] for line in self._content]
+
+    def __truncate_or_fill_content_height(self):
+        """Truncates content size (height) to Box's height"""
+        if len(self._content) > self._height:
+            self._content = self._content[:self._height]
+        elif len(self._content) < self._height:
+            self._content += [" "*self._width] * (self._height - len(self._content))
+
+    def getLines(self) -> List[str]:
+        return self._content
+
+    def join(self, box):
+        assert type(self) == type(box)
+        new_box = Box(self._width + box._width, max(self._height, box._height), self._wrap or box._wrap)
+        content = ""
+        for i in range(new_box._height):
+            content += self._content[i]+"\n" if i < self._height else " "*new_box._width+"\n"
+            content += box._content[i]+"\n" if i < box._height else " "*new_box._width+"\n"
+
+        new_box.setContent(content)
+        return new_box
+
+
 
 class CommandLineBox():
     """This class represents a box inside a terminal (TODO just vertical boxes currently)"""
