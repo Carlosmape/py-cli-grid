@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "py-cli-grid"
-version = "0.1.1"
+dynamic = ["version"]
 authors = [
   { name="Carlos G. Martín Pérez", email="cagrmape@gmail.com" },
 ]
@@ -20,4 +20,9 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/Carlosmape/py-cli-grid"
 Issues = "https://github.com/Carlosmape/py-cli-grid/issues"
+
+[tool.setuptools_scm]
+# Version format when not on a tag: {tag}.dev{distance}+g{commit}
+version_scheme = "post-release"
+local_scheme = "no-local-version"
 
